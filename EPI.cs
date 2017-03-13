@@ -12,7 +12,10 @@ namespace My_Training_Pad
         {
             Console.Write("test git");
         }
-        
+         public static void TEST_GIT_from_Web()
+        {
+            Console.Write("test git");
+        }
         public static int Parity(int x)
         {
             int count = 0;
