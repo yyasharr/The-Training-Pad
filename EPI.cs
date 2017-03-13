@@ -8,14 +8,7 @@ namespace My_Training_Pad
 {
     class EPI //Questions from the book: Elements of Programming Interview
     {
-        public static void TEST_GIT()
-        {
-            Console.Write("test git");
-        }
-         public static void TEST_GIT_from_Web()
-        {
-            Console.Write("test git");
-        }
+        
         public static int Parity(int x)
         {
             int count = 0;
