@@ -604,7 +604,7 @@ namespace My_Training_Pad
         }
         static void Main(string[] args)
         {
-            
+            Console.Write( LeetCode.NumberToWords(1002000000));
             Console.ReadLine();
         }
     }
