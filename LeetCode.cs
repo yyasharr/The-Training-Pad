@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Drawing;
 
 namespace My_Training_Pad
 {
@@ -43,7 +44,7 @@ namespace My_Training_Pad
         {
             string result = "";
             if (num == 0) return "Zero";
-            if (num < 0) return "minus "+NumberToWords(Math.Abs(-num));
+            if (num < 0) return "minus " + NumberToWords(Math.Abs(-num));
             int mod = 0;
             //for billions
             mod = num / 1000000000;
@@ -53,12 +54,12 @@ namespace My_Training_Pad
             //for millions
             mod = num / 1000000;
             if (mod > 0)
-                result += NumberToWords_per_thousand(num/1000000) + " million ";
+                result += NumberToWords_per_thousand(num / 1000000) + " million ";
             num = num - (num / 1000000) * 1000000;
             //for thousands
             mod = num / 1000;
             if (mod > 0)
-                result += NumberToWords_per_thousand(num/1000)+ " thousand ";
+                result += NumberToWords_per_thousand(num / 1000) + " thousand ";
             num = num - (num / 1000) * 1000;
             //for last three digits if they exist
             if (num > 0)
@@ -97,7 +98,85 @@ namespace My_Training_Pad
             }
             return result;
         }
-        ////////////////////////////Q/////////////////////////////////////////////////////////////
+        ////////////////////////////Q455/////////////////////////////////////////////////////////////
+        public static Node AddTwoNumbers(Node l1, Node l2) //Add Two Numbers II
+        {
+            Node revl1 = Reverse_Iterative(l1);
+            Node revl2 = Reverse_Iterative(l2);
+            int carry = 0;
+            int sum = revl1.data + revl2.data;
+            if (sum > 9)
+            {
+                carry = 1;
+                sum %= 10;
+            }
+            Node result = new Node(sum);
+            while (revl1.next != null || revl2.next != null)
+            {
+                sum = 0;
+                if (revl1.next != null)
+                {
+                    sum += revl1.next.data;
+                    revl1 = revl1.next;
+                }
+                if (revl2.next != null)
+                {
+                    sum += revl2.next.data;
+                    revl2 = revl2.next;
+                }
+                sum += carry;
+                carry = 0;
+                if (sum > 9)
+                {
+                    carry = 1;
+                    sum %= 10;
+                }
+                result.AddToEnd(sum);
+            }
+            if (carry == 1)
+                result.AddToEnd(1);
+
+            return Reverse_Iterative(result);
+        }
+        ////////////////////////////Q200/////////////////////////////////////////////////////////////        
+        public static int NumIslands(char[,] grid) //solved using graphs DFS traversal
+        {
+            int count = 0;
+            int m = grid.GetLength(0);
+            int n = grid.GetLength(1);
+            bool[,] visited = new bool[m, n];
+            for (int i = 0; i < m; i++)
+            {
+                for (int j = 0; j < n; j++)
+                {
+                    if (visited[i, j] == false && grid[i, j] == '1')
+                    {
+                        count++;
+                        CheckAdjecent(i, j, grid,visited);
+                    }
+                    visited[i, j] = true;
+                }
+
+            }
+            return count;
+        }
+        private static void CheckAdjecent(int i, int j,char[,] grid, bool[,] visited)
+        {
+            int m = visited.GetLength(0);
+            int n = visited.GetLength(1);
+            Point[] adj = { new Point(0, 1), new Point(1, 0), new Point(-1, 0), new Point(0, -1) };
+            for(int k=0; k<=3; k++)
+            {
+                int new_i = i + adj[k].X;
+                int new_j = j + adj[k].Y;
+                if (new_i >= 0 && new_i < m && new_j>= 0 && new_j<n && visited[new_i,new_j]==false && grid[new_i,new_j]=='1')
+                {
+                    visited[new_i, new_j] = true;
+                    CheckAdjecent(new_i, new_j, grid, visited);
+                }
+
+            }
+        }
     }
 
 
