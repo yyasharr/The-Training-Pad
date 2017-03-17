@@ -177,6 +177,30 @@ namespace My_Training_Pad
 
             }
         }
+        ////////////////////////////Q186/////////////////////////////////////////////////////////////
+        public static void reverseWords(char[] str)
+        {
+            reverse(str, 0, str.Length - 1);  // reverse the whole string first
+            int r = 0;
+            while (r < str.Length)
+            {
+                int l = r;
+                while (r < str.Length && str[r] != ' ')
+                    r++;
+                reverse(str, l, r - 1);  // reverse each word
+                r++;
+            }
+        }
+
+        private static void reverse(char[] s, int l, int r)
+        {
+            while (l < r)
+            {
+                char tmp = s[l];
+                s[l++] = s[r];
+                s[r--] = tmp;
+            }
+        }
     }
 
 
