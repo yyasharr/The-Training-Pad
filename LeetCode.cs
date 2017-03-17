@@ -191,7 +191,6 @@ namespace My_Training_Pad
                 r++;
             }
         }
-
         private static void reverse(char[] s, int l, int r)
         {
             while (l < r)
@@ -201,6 +200,59 @@ namespace My_Training_Pad
                 s[r--] = tmp;
             }
         }
+        ////////////////////////////Q218/////////////////////////////////////////////////////////////
+        public static IList<int[]>GetSkyline(int[,] buildings)//The Skyline Problem (Perfect job by me)
+        {
+            //buildings[,] is list of buildings, each represented by 3 numbers. So
+            //it will be actually buildings=new int [n,3] where n is number of buildings
+            int width = MostRightBuilding(buildings) + 2; //MostRightBuilding gives out where the last building finishes
+            int[] silhouette = new int[width];  //built the array with 1 element longer than we need to
+                                                //check for the last building's right point, if it's the last element and 
+                                                //make sure we check if it's getting to zero for the last element
+            FillSilhouette(buildings, silhouette);
+            int flow = 0;
+            IList<int[]> result = new List<int[]>();
+            for(int i=0; i<silhouette.Length; i++)
+            {
+                if(silhouette[i]>flow)
+                {
+                    result.Add(new int[] { i,silhouette[i] });
+                    flow = silhouette[i];
+                }
+                if(silhouette[i]<flow)
+                {
+                    result.Add(new int[] { i - 1, silhouette[i] });
+                    flow = silhouette[i];
+                }
+            }
+            return result;
+
+
+        }
+        private static int MostRightBuilding(int[,]buildings) //finding where the last building finishes
+        {
+            int max = 0;
+            int n = buildings.GetLength(0); //number of buildings
+            for(int i=0; i<n; i++)
+            {
+                int right = buildings[i, 1]; //the middle element of each building which is its right point
+                if (right > max) max = right;
+            }
+            return max;
+        }
+        private static void FillSilhouette(int[,] buildings, int[] silhouette)
+        {
+            int n = buildings.GetLength(0);
+            for(int i=0; i<n; i++)
+            {
+                for(int j=buildings[i,0]; j<=buildings[i,1]; j++)
+                {
+                    if(silhouette[j]<buildings[i,2])
+                        silhouette[j] = buildings[i, 2];
+                }
+            }
+        }
+        
     }
 
 
