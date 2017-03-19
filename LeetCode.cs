@@ -39,7 +39,6 @@ namespace My_Training_Pad
         private static string[] ones = { "zero", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine" }; //0-9
         private static string[] tens = { "", "", "twenty", "thirty", "fourty", "fifty", "sixty", "seventy", "eighty", "niny" }; //2x-9x
         private static string[] teens = { "ten", "eleven", "twelve", "thirteen", "fourteen", "fifteen", "sixteen", "seventeen", "eighteen", "nineteen" }; //10-19
-
         public static string NumberToWords(int num)
         {
             string result = "";
@@ -252,7 +251,30 @@ namespace My_Training_Pad
                 }
             }
         }
-        
+        ////////////////////////////Q53/////////////////////////////////////////////////////////////        
+        public static int MaxSubArray(int[] nums)
+        {
+            int sum = 0; int min_sum = 0; int max_sum = 0;
+
+            for(int i=0; i<nums.Length; i++)
+            {
+                sum += nums[i];
+                if(sum<min_sum)
+                {
+                    min_sum = sum;
+                }
+                if(sum-min_sum>max_sum)
+                {
+                    max_sum = sum-min_sum;
+                }
+            }
+            return max_sum;
+        }
+        ////////////////////////////Q103/////////////////////////////////////////////////////////////
+        public static List<List<int>>ZigzaglevelOrder(Treenode root)
+        {
+
+        }
     }
 
 
