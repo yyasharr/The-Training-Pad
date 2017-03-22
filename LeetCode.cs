@@ -271,8 +271,40 @@ namespace My_Training_Pad
             return max_sum;
         }
         ////////////////////////////Q103/////////////////////////////////////////////////////////////
-        public static List<List<int>>ZigzaglevelOrder(Treenode root)
+        public static List<Node> ZigzaglevelOrder(Treenode root)
         {
+            List<Node> result = new List<Node>();
+            ZigzaglevelOrder(root, 0, result);
+            return result;
+        }
+        static void ZigzaglevelOrder(Treenode root, int level, List<Node> result)
+        {
+            if (root == null) return;
+
+            Node current;
+
+            if (level == result.Count)
+            {
+                current = new Node(root.data);
+                result.Add(current);
+            }
+            else
+            {
+                current = result[level];
+                if (level % 2 == 0)
+                {
+                    current.AddToEnd(root.data);
+                }
+                else
+                {
+                    Node temp = new Node(root.data);
+                    temp.next = current;
+                    result[level] = temp;
+                }
+            }
+
+            ZigzaglevelOrder(root.left, level + 1, result);
+            ZigzaglevelOrder(root.right, level + 1, result);
 
         }
     }
