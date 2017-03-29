@@ -307,6 +307,30 @@ namespace My_Training_Pad
             ZigzaglevelOrder(root.right, level + 1, result);
 
         }
+        ////////////////////////////Q20/////////////////////////////////////////////////////////////
+        public static bool IsValid (string s)
+        {
+            Stack<char> stack = new Stack<char>();
+            
+            for(int i=0; i<s.Length; i++)
+            {
+                if (s[i] == '(' || s[i] == '{' || s[i] == '[')
+                {
+                    if (i == s.Length - 1) return false;
+                    stack.Push(s[i]);
+                }
+
+                else if (!stack.Any()) return false;
+
+                else if (s[i] == ')' && stack.Pop() != '(') return false;
+                else if (s[i] == '}' && stack.Pop() != '{') return false;
+                else if (s[i] == ']' && stack.Pop() != '[') return false;
+
+
+            }
+            if (stack.Any()) return false;
+            return true;
+        }
     }
 
 

@@ -604,8 +604,8 @@ namespace My_Training_Pad
         }
         static void Main(string[] args)
         {
-            int[] test = { -2, 1, -3, 4, -1, 2, 1, -5, 4 };
-            Console.Write(LeetCode.MaxSubArray(test));
+            string test = "([]";
+            Console.WriteLine(LeetCode.IsValid(test));
             Console.ReadLine();
         }
     }
