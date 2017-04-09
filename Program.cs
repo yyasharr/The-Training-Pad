@@ -604,8 +604,10 @@ namespace My_Training_Pad
         }
         static void Main(string[] args)
         {
-            string test = "([]";
-            Console.WriteLine(LeetCode.IsValid(test));
+            int[] arr = { 1, 2, 3 };
+            List<List<int>> res = LeetCode.Permute(arr);
+            Prints.ListofLists(res);
+            Console.WriteLine("done?");
             Console.ReadLine();
         }
     }

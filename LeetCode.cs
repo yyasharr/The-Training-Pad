@@ -151,7 +151,7 @@ namespace My_Training_Pad
                     if (visited[i, j] == false && grid[i, j] == '1')
                     {
                         count++;
-                        CheckAdjecent(i, j, grid,visited);
+                        CheckAdjecent(i, j, grid, visited);
                     }
                     visited[i, j] = true;
                 }
@@ -159,16 +159,16 @@ namespace My_Training_Pad
             }
             return count;
         }
-        private static void CheckAdjecent(int i, int j,char[,] grid, bool[,] visited)
+        private static void CheckAdjecent(int i, int j, char[,] grid, bool[,] visited)
         {
             int m = visited.GetLength(0);
             int n = visited.GetLength(1);
             Point[] adj = { new Point(0, 1), new Point(1, 0), new Point(-1, 0), new Point(0, -1) };
-            for(int k=0; k<=3; k++)
+            for (int k = 0; k <= 3; k++)
             {
                 int new_i = i + adj[k].X;
                 int new_j = j + adj[k].Y;
-                if (new_i >= 0 && new_i < m && new_j>= 0 && new_j<n && visited[new_i,new_j]==false && grid[new_i,new_j]=='1')
+                if (new_i >= 0 && new_i < m && new_j >= 0 && new_j < n && visited[new_i, new_j] == false && grid[new_i, new_j] == '1')
                 {
                     visited[new_i, new_j] = true;
                     CheckAdjecent(new_i, new_j, grid, visited);
@@ -200,7 +200,7 @@ namespace My_Training_Pad
             }
         }
         ////////////////////////////Q218/////////////////////////////////////////////////////////////
-        public static IList<int[]>GetSkyline(int[,] buildings)//The Skyline Problem (Perfect job by me)
+        public static IList<int[]> GetSkyline(int[,] buildings)//The Skyline Problem (Perfect job by me)
         {
             //buildings[,] is list of buildings, each represented by 3 numbers. So
             //it will be actually buildings=new int [n,3] where n is number of buildings
@@ -211,14 +211,14 @@ namespace My_Training_Pad
             FillSilhouette(buildings, silhouette);
             int flow = 0;
             IList<int[]> result = new List<int[]>();
-            for(int i=0; i<silhouette.Length; i++)
+            for (int i = 0; i < silhouette.Length; i++)
             {
-                if(silhouette[i]>flow)
+                if (silhouette[i] > flow)
                 {
-                    result.Add(new int[] { i,silhouette[i] });
+                    result.Add(new int[] { i, silhouette[i] });
                     flow = silhouette[i];
                 }
-                if(silhouette[i]<flow)
+                if (silhouette[i] < flow)
                 {
                     result.Add(new int[] { i - 1, silhouette[i] });
                     flow = silhouette[i];
@@ -228,11 +228,11 @@ namespace My_Training_Pad
 
 
         }
-        private static int MostRightBuilding(int[,]buildings) //finding where the last building finishes
+        private static int MostRightBuilding(int[,] buildings) //finding where the last building finishes
         {
             int max = 0;
             int n = buildings.GetLength(0); //number of buildings
-            for(int i=0; i<n; i++)
+            for (int i = 0; i < n; i++)
             {
                 int right = buildings[i, 1]; //the middle element of each building which is its right point
                 if (right > max) max = right;
@@ -242,11 +242,11 @@ namespace My_Training_Pad
         private static void FillSilhouette(int[,] buildings, int[] silhouette)
         {
             int n = buildings.GetLength(0);
-            for(int i=0; i<n; i++)
+            for (int i = 0; i < n; i++)
             {
-                for(int j=buildings[i,0]; j<=buildings[i,1]; j++)
+                for (int j = buildings[i, 0]; j <= buildings[i, 1]; j++)
                 {
-                    if(silhouette[j]<buildings[i,2])
+                    if (silhouette[j] < buildings[i, 2])
                         silhouette[j] = buildings[i, 2];
                 }
             }
@@ -256,20 +256,37 @@ namespace My_Training_Pad
         {
             int sum = 0; int min_sum = 0; int max_sum = 0;
 
-            for(int i=0; i<nums.Length; i++)
+            for (int i = 0; i < nums.Length; i++)
             {
                 sum += nums[i];
-                if(sum<min_sum)
+                if (sum < min_sum)
                 {
                     min_sum = sum;
                 }
-                if(sum-min_sum>max_sum)
+                if (sum - min_sum > max_sum)
                 {
-                    max_sum = sum-min_sum;
+                    max_sum = sum - min_sum;
                 }
             }
             return max_sum;
         }
+        public static int MaxSubArrayII(int[] nums) //thought2
+        {
+            int current = nums[0];
+            int max = nums[0];
+
+            for (int i = 1; i < nums.Length; i++)
+            {
+                if (current > 0)
+                    current = nums[i] + current;
+                else current = nums[i];
+
+                if (current > max)
+                    max = current;
+            }
+            return max;
+        }
+
         ////////////////////////////Q103/////////////////////////////////////////////////////////////
         public static List<Node> ZigzaglevelOrder(Treenode root)
         {
@@ -308,11 +325,11 @@ namespace My_Training_Pad
 
         }
         ////////////////////////////Q20/////////////////////////////////////////////////////////////
-        public static bool IsValid (string s)
+        public static bool IsValid(string s)
         {
             Stack<char> stack = new Stack<char>();
-            
-            for(int i=0; i<s.Length; i++)
+
+            for (int i = 0; i < s.Length; i++)
             {
                 if (s[i] == '(' || s[i] == '{' || s[i] == '[')
                 {
@@ -331,8 +348,170 @@ namespace My_Training_Pad
             if (stack.Any()) return false;
             return true;
         }
-    }
+        ////////////////////////////Q153/////////////////////////////////////////////////////////////
+        public static int FindMin(int[] nums) //Find minimum from a sorted rotated array without duplicates
+        {
+            return FindMin(nums, 0, nums.Length - 1);
+        }
+        static int FindMin(int[] nums, int left, int right)
+        {
+            if (left == right)
+                return nums[left];
 
+            int mid = left + (right - left) / 2;
+
+            if (mid > 0 && nums[mid - 1] > nums[mid])
+                return nums[mid];
+
+            else if (nums[left] < nums[mid] && nums[right] < nums[mid])
+                return FindMin(nums, mid + 1, right);
+
+            else
+                return FindMin(nums, left, mid);
+        }
+        ////////////////////////////Q174/////////////////////////////////////////////////////////////
+        public static int CalculateMinimumHP(int[,] dungeon) //brute force
+        {
+            if (dungeon.GetLength(0) == 0 && dungeon.GetLength(1) == 0)
+                throw new NullReferenceException();
+            return CalculateMinimumHP(dungeon, 0, 0, dungeon[0, 0], int.MaxValue);
+        }
+        static int CalculateMinimumHP(int[,] dungeon, int i, int j, int cur_value, int min)
+        {
+            int[,] dir = { { 0, 1 }, { 1, 0 } };
+            int m = dungeon.GetLength(0);
+            int n = dungeon.GetLength(1);
+
+            //if (i==m-1 && j==n-1)
+            //{
+            //    Console.WriteLine("i'm in\t"+cur_value+"\t");
+            //    if (cur_value < min)
+            //        min = cur_value;
+            //}
+
+            for (int k = 0; k < 2; k++)
+            {
+                int next_i = i + dir[k, 0];
+                int next_j = j + dir[k, 1];
+
+                if (next_i < m && next_j < n)
+                {
+                    int new_cur_value = cur_value + dungeon[next_i, next_j];
+                    if (next_i == m - 1 && next_j == n - 1 && new_cur_value < min)
+                        min = new_cur_value;
+                    CalculateMinimumHP(dungeon, next_i, next_j, new_cur_value, min);
+                }
+            }
+            return min;
+        }
+        ////////////////////////////Q32/////////////////////////////////////////////////////////////
+        public static int LongestValidParentheses(string s)
+        {
+            Stack<int> stack = new Stack<int>();
+            for (int i = 0; i < s.Length; i++)
+            {
+                if (s[i] == ')')
+                {
+                    if (!stack.Any() || s[stack.Peek()] != '(')
+                    {
+                        stack.Push(i);
+                    }
+                    if (s[stack.Peek()] == '(')
+                    {
+                        stack.Pop();
+                    }
+                }
+                else //if(s[i]=='(')
+                {
+                    stack.Push(i);
+                }
+            }
+            int max = 0;
+            int current = 0;
+            int prev_index = s.Length;
+            int curr_index = 0;
+
+            if (!stack.Any())
+                max = s.Length;
+            else
+            {
+                while (stack.Any())
+                {
+                    curr_index = stack.Pop();
+                    current = prev_index - curr_index - 1;
+                    if (current > max)
+                        max = current;
+                    prev_index = curr_index;
+                }
+                current = prev_index;
+                if (current > max)
+                    max = current;
+            }
+            return max;
+        }
+        ////////////////////////////Q24/////////////////////////////////////////////////////////////
+        public static Node SwapPairs(Node head)
+        {
+            if (head == null || head.next == null)
+                return head;
+            Node Next = head.next;
+            Node NextNext = head.next.next;
+            Next.next = head;
+            head.next = SwapPairs(NextNext);
+            return Next;
+        }
+        ////////////////////////////Q5/////////////////////////////////////////////////////////////
+        public static String longestPalindrome(String s)
+        {
+            string longest = "";
+            int left = 0;
+            int right = s.Length - 1;
+            for (int i = 0; i < s.Length; i++)
+            {
+                left = i - 1;
+                right = i + 1;
+                string current = s[i].ToString();
+                while (right < s.Length && s[i] == s[right])
+                {
+                    current += s[right];
+                    right++;
+                }
+                
+                while (left >= 0 && right <= s.Length - 1 && s[left] == s[right])
+                {
+                    current = s[left] + current + s[right];
+                    left--;
+                    right++;
+                }
+                if (current.Length >= longest.Length)
+                    longest = current;
+            }
+            return longest;
+        }
+        ////////////////////////////Q46/////////////////////////////////////////////////////////////
+        public static List<List<int>> Permute(int[] nums)
+        {
+            List<int> input = nums.ToList<int>();
+            List<List<int>> result = new List<List<int>>();
+            Permute(input, new List<int>(), result);
+            return result;
+        }
+        static void Permute(List<int> input, List<int> output, List<List<int>> result)
+        {
+            if (input.Count==0)
+                result.Add(output);
+            else
+                for(int i=0; i<input.Count; i++)
+                {
+                    List<int> next_output = output;
+                    next_output.Add(input[i]);
+                    List<int> next_input = input;
+                    next_input.RemoveAt(i);
+                    Permute(next_input, next_output, result);
+                }
+        }
+
+    }
 
 }
 ////////////////////////////Q/////////////////////////////////////////////////////////////
