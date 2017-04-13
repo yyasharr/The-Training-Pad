@@ -476,7 +476,7 @@ namespace My_Training_Pad
                     current += s[right];
                     right++;
                 }
-                
+
                 while (left >= 0 && right <= s.Length - 1 && s[left] == s[right])
                 {
                     current = s[left] + current + s[right];
@@ -493,25 +493,165 @@ namespace My_Training_Pad
         {
             List<int> input = nums.ToList<int>();
             List<List<int>> result = new List<List<int>>();
-            Permute(input, new List<int>(), result);
+            return Permute(nums, new List<int>(), result);
+        }
+        static List<List<int>> Permute(int[] nums, List<int> output, List<List<int>> result)
+        {
+            if (output.Count == nums.Length)
+            {
+                result.Add(new List<int>(output));
+            }
+            else
+            {
+                IList<IList<int>> test = new List<IList<int>>();
+                for (int i = 0; i < nums.Length; i++)
+                {
+                    if (output.Contains(nums[i])) continue;
+                    output.Add(nums[i]);
+                    Permute(nums, output, result);
+                    output.RemoveAt(output.Count - 1);
+                }
+            }
+            return result;
+
+        }
+        ////////////////////////////Q94/////////////////////////////////////////////////////////////
+        public static List<int> InorderTraversal(Treenode root)
+        {
+            List<int> result = new List<int>();
+            if (root == null)
+                return result;
+
+            Stack<Treenode> stack = new Stack<Treenode>();
+            stack.Push(root);
+
+            while (stack.Any())
+            {
+                Treenode curr = stack.Pop();
+                if (curr.left != null)
+                {
+                    stack.Push(curr);
+                    stack.Push(curr.left);
+                    curr.left = null;
+                }
+                else
+                {
+                    result.Add(curr.data);
+                    if (curr.right != null)
+                        stack.Push(curr.right);
+                }
+            }
             return result;
         }
-        static void Permute(List<int> input, List<int> output, List<List<int>> result)
+        ////////////////////////////Q56/////////////////////////////////////////////////////////////
+        public class Interval
         {
-            if (input.Count==0)
-                result.Add(output);
-            else
-                for(int i=0; i<input.Count; i++)
+            public int start;
+            public int end;
+            public Interval() { start = 0; end = 0; }
+            public Interval(int s, int e) { start = s; end = e; }
+        }
+        public static IList<Interval> Merge(IList<Interval> intervals)
+        {
+            if (intervals.Count < 2) return intervals;
+
+            int index = 1;
+            Interval prev = intervals.ElementAt(0);
+            while (true)
+            {
+                Interval curr = intervals.ElementAt(index);
+
+                if (prev.end >= curr.start)
                 {
-                    List<int> next_output = output;
-                    next_output.Add(input[i]);
-                    List<int> next_input = input;
-                    next_input.RemoveAt(i);
-                    Permute(next_input, next_output, result);
+                    prev.end = curr.end;
+                    intervals.RemoveAt(index);
                 }
+                else
+                {
+                    index++;
+                    prev = curr;
+                }
+                if (index >= intervals.Count - 1)
+                    break;
+            }
+            return intervals;
+        }
+        ////////////////////////////Q114/////////////////////////////////////////////////////////////
+        public static void Flatten(Treenode root)
+        {
+            Flatten_helper(root);
+        }
+        public static Treenode Flatten_helper(Treenode root)
+        {
+            if (root == null || (root.left == null & root.right == null))
+                return root;
+
+            if (root.left == null)
+                return Flatten_helper(root.right);
+
+            if (root.right == null)
+            {
+                root.right = root.left;
+                root.left = null;
+                return Flatten_helper(root.right);
+            }
+
+            else
+            {
+                Treenode temp = root.right;
+                root.right = root.left;
+                root.left = null;
+                temp = Flatten_helper(temp);
+                Flatten_helper(root.right).right = temp;
+            }
+            while (root.right != null)
+                root = root.right;
+            return root;
+        }
+        ////////////////////////////Q55/////////////////////////////////////////////////////////////
+        public static bool CanJump(int[] nums)
+        {
+            return CanJump(nums, 0);
+        }
+        public static bool CanJump(int[] nums, int index)
+        {
+            if (index == nums.Length - 1)
+                return true;
+
+            for (int i = 1; i <= nums[index]; i++)
+            {
+                if (index + i <= nums.Length - 1)
+                    return CanJump(nums, index + i);
+            }
+            return false;
+        }
+        ////////////////////////////Q513/////////////////////////////////////////////////////////////
+         class storage
+        {
+            public static int maxlevel=0;
+            public static int bottomleftvalue = 0;
+        }
+        public static int FindBottomLeftValue(Treenode root)
+        {
+            FindBottomLeftValue(root, 1);
+            return storage.bottomleftvalue;
+        }
+        public static void FindBottomLeftValue(Treenode root, int currLevel)
+        {
+
+            if (currLevel > storage.maxlevel)
+            {
+                storage.bottomleftvalue= root.data;
+                storage.maxlevel++;
+                //Console.WriteLine("here"+root.data+"-"+maxLevel);
+            }
+            if (root.left != null)
+                FindBottomLeftValue(root.left, currLevel + 1);
+
+            if (root.right != null)
+                FindBottomLeftValue(root.right, currLevel + 1);
         }
 
     }
-
 }
 ////////////////////////////Q/////////////////////////////////////////////////////////////

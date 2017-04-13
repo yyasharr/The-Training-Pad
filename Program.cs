@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 using System.Drawing;
@@ -604,9 +605,25 @@ namespace My_Training_Pad
         }
         static void Main(string[] args)
         {
-            int[] arr = { 1, 2, 3 };
-            List<List<int>> res = LeetCode.Permute(arr);
-            Prints.ListofLists(res);
+            Treenode one = new Treenode(1);
+            Treenode two = new Treenode(2);
+            Treenode three = new Treenode(3);
+            Treenode four = new Treenode(4);
+            Treenode five = new Treenode(5);
+            Treenode six = new Treenode(6);
+            Treenode seven = new Treenode(7);
+            Treenode eight = new Treenode(8);
+
+            one.left = two;
+            one.right = three;
+            two.left = four;
+            three.left = five;
+            three.right = six;
+            five.left = seven;
+            
+            
+            
+
             Console.WriteLine("done?");
             Console.ReadLine();
         }

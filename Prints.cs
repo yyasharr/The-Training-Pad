@@ -24,6 +24,13 @@ namespace My_Training_Pad
             foreach (string s in input)
                 Console.WriteLine(s);
         }
+        public static void ListofIntegers(List<int> input)
+        {
+            foreach(int n in input)
+            {
+                Console.WriteLine(n);
+            }
+        }
         public static void ArrayofIntegers(int[] array)
         {
             for (int i = 0; i < array.Length; i++)
