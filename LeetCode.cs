@@ -626,9 +626,9 @@ namespace My_Training_Pad
             return false;
         }
         ////////////////////////////Q513/////////////////////////////////////////////////////////////
-         class storage
+        class storage
         {
-            public static int maxlevel=0;
+            public static int maxlevel = 0;
             public static int bottomleftvalue = 0;
         }
         public static int FindBottomLeftValue(Treenode root)
@@ -641,7 +641,7 @@ namespace My_Training_Pad
 
             if (currLevel > storage.maxlevel)
             {
-                storage.bottomleftvalue= root.data;
+                storage.bottomleftvalue = root.data;
                 storage.maxlevel++;
                 //Console.WriteLine("here"+root.data+"-"+maxLevel);
             }
@@ -651,7 +651,99 @@ namespace My_Training_Pad
             if (root.right != null)
                 FindBottomLeftValue(root.right, currLevel + 1);
         }
+        ////////////////////////////Q91/////////////////////////////////////////////////////////////
+        public static int numDecodings(String s)
+        {
+            if (s[0] == '0' || s.Length == 0) return 0;
+            if (s.Length == 1) return 1;
 
+            int[] DP = new int[s.Length];
+
+            DP[0] = 1;
+
+            for (int i = 1; i < s.Length; i++)
+            {
+                if (s[i] == '0')
+                {
+                    if (int.Parse(s.Substring(i - 1, 2)) <= 26)
+                        DP[i] = DP[i - 1] - 1;
+                    else
+                        DP[i] = 0;
+                }
+                else
+                {
+
+                    if (int.Parse(s.Substring(i - 1, 2)) <= 26)
+                        DP[i] = DP[i - 1] + 1;
+                    else
+                        DP[i] = DP[i - 1];
+                }
+            }
+            return DP[DP.Length - 1];
+        }
+        ////////////////////////////Q494/////////////////////////////////////////////////////////////
+        static int count = 0;
+        public static int FindTargetSumWays(int[] nums, int S)
+        {
+            int[] signs = { -1, 1 };
+            FindTargetSumWays(nums, 0, 0, S, signs);
+            return count;
+            
+        }
+        static int FindTargetSumWays(int[] nums, int index, int sum, int target, int[] signs)
+        {
+            if (index == nums.Length)
+            {
+                if (target == sum)
+                    count++;
+            }
+            else
+            {
+                for (int i = 0; i < signs.Length; i++)
+                {
+                    sum += signs[i] * nums[index];
+                    FindTargetSumWays(nums, index + 1, sum, target, signs);
+                    sum -= signs[i] * nums[index];
+                }
+            }
+            return count;
+        }
     }
+    ////////////////////////////Q384/////////////////////////////////////////////////////////////
+    public class Shuffling
+    {
+        int[] input;
+        public Shuffling(int[] nums)
+        {
+            input = nums;
+        }
+
+        /** Resets the array to its original configuration and return it. */
+        public int[] Reset()
+        {
+            return input;
+        }
+
+        /** Returns a random shuffling of the array. */
+        public int[] Shuffle()
+        {
+            List<int> inputlist = new List<int>(input);
+            return shuffle_helper(inputlist, new int[input.Count()], 0);
+        }
+        int[] shuffle_helper(List<int> inputlist, int[] output, int index)
+        {
+            if (inputlist.Count == 0)
+                return output;
+            Random rnd = new Random();
+            int num = rnd.Next(0, inputlist.Count - 1);
+
+            output[index] = inputlist[num];
+            inputlist.RemoveAt(num);
+            shuffle_helper(inputlist, output, index + 1);
+
+            return output;
+        }
+    }
+    
 }
 ////////////////////////////Q/////////////////////////////////////////////////////////////

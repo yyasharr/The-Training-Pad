@@ -605,24 +605,10 @@ namespace My_Training_Pad
         }
         static void Main(string[] args)
         {
-            Treenode one = new Treenode(1);
-            Treenode two = new Treenode(2);
-            Treenode three = new Treenode(3);
-            Treenode four = new Treenode(4);
-            Treenode five = new Treenode(5);
-            Treenode six = new Treenode(6);
-            Treenode seven = new Treenode(7);
-            Treenode eight = new Treenode(8);
+            int[] input = { 1, 1,1,1,1 };
+            int n=LeetCode.FindTargetSumWays(input, 3);
+            Console.Write(n);
 
-            one.left = two;
-            one.right = three;
-            two.left = four;
-            three.left = five;
-            three.right = six;
-            five.left = seven;
-            
-            
-            
 
             Console.WriteLine("done?");
             Console.ReadLine();
