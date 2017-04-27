@@ -52,19 +52,7 @@ namespace My_Training_Pad
             return false;
 
         }
-        static Node Reverse(Node head)
-        {
-            if (head == null || head.next == null)
-            {
-                return head;
-            }
-            Node Next = head.next;
-            head.next = null;
-            Node rest = Reverse(Next);
-            Next.next = head;
-            return rest;
-        }
-
+        
         ///////////////////////////////Linked Lists/////////////////////////////////////////
         static void remove_duplicate(Node head)
         {
@@ -86,7 +74,20 @@ namespace My_Training_Pad
                 head = head.next;
             }
         }
-
+        static Node Reverse(Node head)
+        {
+            if (head == null || head.next == null)
+            {
+                return head;
+            }
+            Node Next = head.next;
+            head.next = null;
+            Node rest = Reverse(Next);
+            Next.next = head;
+            return rest;
+        }
+        //Swap 2 nodes given as int values
+        
         ///////////////////////////////Trees/////////////////////////////////////////
         //↓Find Path: find the path between root and a given node in binary tree, empty list if doesn't exist
         static bool FindPath(Treenode root, int val, List<Treenode> path)
@@ -605,11 +606,9 @@ namespace My_Training_Pad
         }
         static void Main(string[] args)
         {
-            int[] input = { 1, 1,1,1,1 };
-            int n=LeetCode.FindTargetSumWays(input, 3);
-            Console.Write(n);
-
-
+            
+            for (int i = 0; i < args.Length; i++)
+                Console.WriteLine(args[i]);
             Console.WriteLine("done?");
             Console.ReadLine();
         }
