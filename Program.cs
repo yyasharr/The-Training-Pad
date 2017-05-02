@@ -606,9 +606,9 @@ namespace My_Training_Pad
         }
         static void Main(string[] args)
         {
-            
-            for (int i = 0; i < args.Length; i++)
-                Console.WriteLine(args[i]);
+
+            string st = "Let's take LeetCode contest";
+            Console.WriteLine(LeetCode.ReverseWords(st));
             Console.WriteLine("done?");
             Console.ReadLine();
         }

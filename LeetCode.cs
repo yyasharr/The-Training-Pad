@@ -7,6 +7,41 @@ using System.Drawing;
 
 namespace My_Training_Pad
 {
+    ////////////////////////////Q384/////////////////////////////////////////////////////////////
+    public class Shuffling
+    {
+        int[] input;
+        public Shuffling(int[] nums)
+        {
+            input = nums;
+        }
+
+        /** Resets the array to its original configuration and return it. */
+        public int[] Reset()
+        {
+            return input;
+        }
+
+        /** Returns a random shuffling of the array. */
+        public int[] Shuffle()
+        {
+            List<int> inputlist = new List<int>(input);
+            return shuffle_helper(inputlist, new int[input.Count()], 0);
+        }
+        int[] shuffle_helper(List<int> inputlist, int[] output, int index)
+        {
+            if (inputlist.Count == 0)
+                return output;
+            Random rnd = new Random();
+            int num = rnd.Next(0, inputlist.Count - 1);
+
+            output[index] = inputlist[num];
+            inputlist.RemoveAt(num);
+            shuffle_helper(inputlist, output, index + 1);
+
+            return output;
+        }
+    }
     class LeetCode //Questions from Leetcode.com
     {
         ////////////////////////////Q206/////////////////////////////////////////////////////////////
@@ -688,7 +723,7 @@ namespace My_Training_Pad
             int[] signs = { -1, 1 };
             FindTargetSumWays(nums, 0, 0, S, signs);
             return count;
-            
+
         }
         static int FindTargetSumWays(int[] nums, int index, int sum, int target, int[] signs)
         {
@@ -708,42 +743,60 @@ namespace My_Training_Pad
             }
             return count;
         }
+        ////////////////////////////Q563/////////////////////////////////////////////////////////////
+        public static int FindTilt(Treenode root)
+        {
+            int sum = 0;
+            FindTilt(root, sum);
+            return sum;
+        }
+        static int FindTilt(Treenode root, int sum)
+        {
+            if (root == null) return 0;
+
+            int left = FindTilt(root.left, sum);
+            int right = FindTilt(root.right, sum);
+
+            sum += Math.Abs(left - right);
+            return left + right + root.data;
+        }
+        ////////////////////////////Q557/////////////////////////////////////////////////////////////
+        public static string ReverseWords(string s)
+        {
+            int i = 0; int j = 0;
+            char[] chars = s.ToCharArray();
+            while (j <= s.Length)
+            {
+                if(j==s.Length)
+                {
+                    Reverse_helper(chars, i, j-1);
+                    j++;
+                }
+                else if (s[j] == ' ')
+                {
+                    Reverse_helper(chars, i, j - 1);
+                    j++;
+                    i = j;
+                }
+                else
+                {
+                    j++;
+                }
+            }
+            return new string(chars);
+        }
+        static void Reverse_helper(char[] chars, int i, int j)
+        {
+            while (i < j)
+            {
+                char temp = chars[i];
+                chars[i] = chars[j];
+                chars[j] = temp;
+                i++; j--;
+            }
+        }
     }
-    ////////////////////////////Q384/////////////////////////////////////////////////////////////
-    public class Shuffling
-    {
-        int[] input;
-        public Shuffling(int[] nums)
-        {
-            input = nums;
-        }
 
-        /** Resets the array to its original configuration and return it. */
-        public int[] Reset()
-        {
-            return input;
-        }
 
-        /** Returns a random shuffling of the array. */
-        public int[] Shuffle()
-        {
-            List<int> inputlist = new List<int>(input);
-            return shuffle_helper(inputlist, new int[input.Count()], 0);
-        }
-        int[] shuffle_helper(List<int> inputlist, int[] output, int index)
-        {
-            if (inputlist.Count == 0)
-                return output;
-            Random rnd = new Random();
-            int num = rnd.Next(0, inputlist.Count - 1);
-
-            output[index] = inputlist[num];
-            inputlist.RemoveAt(num);
-            shuffle_helper(inputlist, output, index + 1);
-
-            return output;
-        }
-    }
-    
 }
 ////////////////////////////Q/////////////////////////////////////////////////////////////
