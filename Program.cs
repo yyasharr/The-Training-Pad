@@ -606,9 +606,10 @@ namespace My_Training_Pad
         }
         static void Main(string[] args)
         {
-
-            string st = "Let's take LeetCode contest";
-            Console.WriteLine(LeetCode.ReverseWords(st));
+            //Console.WriteLine(LeetCode.CheckInclusion_optimize("hello", "ooolleoooleh"));
+            Dictionary<int, int> dict = new Dictionary<int, int>();
+            dict.Add(2, 7);
+            Console.Write(dict.TryGetValue(0));
             Console.WriteLine("done?");
             Console.ReadLine();
         }

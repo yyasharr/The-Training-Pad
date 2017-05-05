@@ -767,9 +767,9 @@ namespace My_Training_Pad
             char[] chars = s.ToCharArray();
             while (j <= s.Length)
             {
-                if(j==s.Length)
+                if (j == s.Length)
                 {
-                    Reverse_helper(chars, i, j-1);
+                    Reverse_helper(chars, i, j - 1);
                     j++;
                 }
                 else if (s[j] == ' ')
@@ -795,8 +795,65 @@ namespace My_Training_Pad
                 i++; j--;
             }
         }
+        ////////////////////////////Q567 - Brute Force/////////////////////////////////////////////////////////////
+        public static bool CheckInclusion_brute(string s1, string s2)
+        {
+            if (s2.Length < s1.Length || s1.Length == 0 || s2.Length == 0) return false;
+            int n = s1.Length;
+            for (int i = 0; i <= s2.Length - n; i++)
+            {
+                if (CheckInclusion_brute_helper(s2.Substring(i, n), s1) == true)
+                    return true;
+            }
+            return false;
+        }
+        private static bool CheckInclusion_brute_helper(string s1, string substr)
+        {
+            int[] count = new int[26];
+            for (int i = 0; i < s1.Length; i++)
+            {
+                count[s1[i] - 'a']++;
+            }
+            for (int i = 0; i < substr.Length; i++)
+            {
+                count[substr[i] - 'a']--;
+            }
+            for (int i = 0; i < count.Length; i++)
+            {
+                if (count[i] != 0)
+                    return false;
+            }
+            return true;
+        }
+        ////////////////////////////Q567 - Optimized/////////////////////////////////////////////////////////////
+        public static bool CheckInclusion_optimize(string s1, string s2)
+        {
+            if (s1.Length > s2.Length || s1.Length == 0 || s1 == "") return false;
+            int[] count = new int[26];
+            for (int i = 0; i < s1.Length; i++)
+            {
+                count[s1[i] - 'a']++;
+                count[s2[i] - 'a']--;
+            }
+            int j = 0;
+            while (j <= s2.Length - s1.Length)
+            {
+                if (CheckInclusion_optimize_helper(count) == true) return true;
+                if (j == s2.Length - s1.Length) break;
+                count[s2[j] - 'a']++;
+                count[s2[j + s1.Length] - 'a']--;
+                j++;
+            }
+            return false;
+        }
+        private static bool CheckInclusion_optimize_helper(int[] count)
+        {
+            for (int i = 0; i < count.Length; i++)
+                if (count[i] != 0)
+                    return false;
+            return true;
+        }
     }
-
 
 }
 ////////////////////////////Q/////////////////////////////////////////////////////////////
