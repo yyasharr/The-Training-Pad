@@ -48,6 +48,7 @@
     <Compile Include="EPI.cs" />
     <Compile Include="Graph.cs" />
     <Compile Include="LeetCode.cs" />
+    <Compile Include="MinHeap.cs" />
     <Compile Include="Node.cs" />
     <Compile Include="Prints.cs" />
     <Compile Include="Program.cs" />

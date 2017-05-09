@@ -853,6 +853,62 @@ namespace My_Training_Pad
                     return false;
             return true;
         }
+        ////////////////////////////Q560/////////////////////////////////////////////////////////////
+        public static int SubarraySum(int[] nums, int k)
+        {
+            if (nums == null) return 0;
+            int sum = 0; int count = 0;
+            Dictionary<int, int> map = new Dictionary<int, int>();
+            map.Add(0, 1);
+            for (int i = 0; i < nums.Length; i++)
+            {
+                sum += nums[i];
+                if (map.ContainsKey(sum - k))
+                    count += map[sum - k];
+                AddorUpdateDict(map, sum);
+            }
+            return count;
+        }
+        static void AddorUpdateDict(Dictionary<int, int> map, int sum)
+        {
+            if (map.ContainsKey(sum))
+                map[sum]++;
+            else
+                map.Add(sum, 1);
+        }
+        ////////////////////////////Q554/////////////////////////////////////////////////////////////
+        public static int LeastBricks(List<List<int>> wall)
+        {
+            int stopAt = 0;
+            int max = 0;
+            //storing number of times we stop at each spot
+            Dictionary<int, int> Count = new Dictionary<int, int>();
+            for(int i=0; i<wall.Count; i++)
+            {
+                List<int> row = wall[i];
+                for(int j=0; j<row.Count; j++)
+                {
+                    stopAt += row[j];
+                    if(j==row.Count-1)
+                        stopAt = 0;
+                    else
+                    {
+                        if(Count.ContainsKey(stopAt))
+                        {
+                            Count[stopAt]++;
+                        }
+                        else
+                        {
+                            Count.Add(stopAt, 1);
+                        }
+                        max = Math.Max(max, Count[stopAt]);
+                    }
+                }
+            }
+            return wall.Count-max;
+        }
+
+        
     }
 
 }

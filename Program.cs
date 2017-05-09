@@ -606,10 +606,31 @@ namespace My_Training_Pad
         }
         static void Main(string[] args)
         {
-            //Console.WriteLine(LeetCode.CheckInclusion_optimize("hello", "ooolleoooleh"));
-            Dictionary<int, int> dict = new Dictionary<int, int>();
-            dict.Add(2, 7);
-            Console.Write(dict.TryGetValue(0));
+            MinHeap mh = new MinHeap();
+            mh.Insert(12);
+            mh.Insert(15);
+            mh.Insert(3);
+            mh.Insert(5);
+            mh.Insert(7);
+            mh.Insert(13);
+            mh.Insert(20);
+            mh.Insert(31);
+            Console.WriteLine("Min: " + mh.ExtractMin());
+            Console.WriteLine("Min: " + mh.ExtractMin());
+            Console.WriteLine("Min: " + mh.ExtractMin());
+            Console.WriteLine("Min: " + mh.ExtractMin());
+            Console.WriteLine("Min: " + mh.ExtractMin());
+            Console.WriteLine("Min: " + mh.ExtractMin());
+            Console.WriteLine("Min: " + mh.ExtractMin());
+            Console.WriteLine("Min: " + mh.ExtractMin());
+            Console.WriteLine("Min: " + mh.ExtractMin());
+
+
+
+
+            Console.WriteLine("count= " + mh.Count);
+            Console.WriteLine("List:");
+            Prints.ListofIntegers(mh.GetHeap());
             Console.WriteLine("done?");
             Console.ReadLine();
         }
