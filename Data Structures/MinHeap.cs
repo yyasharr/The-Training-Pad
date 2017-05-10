@@ -31,7 +31,7 @@ namespace My_Training_Pad
         }
 
         /// <summary>
-        /// Create an empty Min Heap.
+        /// Constructs an empty Min Heap.
         /// </summary>
         public MinHeap()
         {
@@ -56,7 +56,7 @@ namespace My_Training_Pad
         }
     
         /// <summary>
-        /// Returns the minimum integar of the Min Heap, remove the min and reforms the heap. Throws an error if empty.
+        /// Returns the minimum integar of the Min Heap, removes the min and reforms the heap. Throws an error if empty.
         /// </summary>
         /// <returns></returns>
         public int ExtractMin()

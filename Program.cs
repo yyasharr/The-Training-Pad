@@ -606,7 +606,7 @@ namespace My_Training_Pad
         }
         static void Main(string[] args)
         {
-            MinHeap mh = new MinHeap();
+            MaxHeap mh = new MaxHeap();
             mh.Insert(12);
             mh.Insert(15);
             mh.Insert(3);
@@ -615,15 +615,13 @@ namespace My_Training_Pad
             mh.Insert(13);
             mh.Insert(20);
             mh.Insert(31);
-            Console.WriteLine("Min: " + mh.ExtractMin());
-            Console.WriteLine("Min: " + mh.ExtractMin());
-            Console.WriteLine("Min: " + mh.ExtractMin());
-            Console.WriteLine("Min: " + mh.ExtractMin());
-            Console.WriteLine("Min: " + mh.ExtractMin());
-            Console.WriteLine("Min: " + mh.ExtractMin());
-            Console.WriteLine("Min: " + mh.ExtractMin());
-            Console.WriteLine("Min: " + mh.ExtractMin());
-            Console.WriteLine("Min: " + mh.ExtractMin());
+            Console.WriteLine("max: " + mh.ExtractMin());
+            Console.WriteLine("max: " + mh.ExtractMin());
+            //Console.WriteLine("max: " + mh.ExtractMin());
+            //Console.WriteLine("max: " + mh.ExtractMin());
+            //Console.WriteLine("max: " + mh.ExtractMin());
+            //Console.WriteLine("max: " + mh.ExtractMin());
+            
 
 
 
