@@ -883,17 +883,17 @@ namespace My_Training_Pad
             int max = 0;
             //storing number of times we stop at each spot
             Dictionary<int, int> Count = new Dictionary<int, int>();
-            for(int i=0; i<wall.Count; i++)
+            for (int i = 0; i < wall.Count; i++)
             {
                 List<int> row = wall[i];
-                for(int j=0; j<row.Count; j++)
+                for (int j = 0; j < row.Count; j++)
                 {
                     stopAt += row[j];
-                    if(j==row.Count-1)
+                    if (j == row.Count - 1)
                         stopAt = 0;
                     else
                     {
-                        if(Count.ContainsKey(stopAt))
+                        if (Count.ContainsKey(stopAt))
                         {
                             Count[stopAt]++;
                         }
@@ -905,10 +905,87 @@ namespace My_Training_Pad
                     }
                 }
             }
-            return wall.Count-max;
+            return wall.Count - max;
         }
+        ////////////////////////////Q547/////////////////////////////////////////////////////////////
+        public static int FindCircleNum(int[,] M)
+        {
+            int n = M.GetLength(0);
+            int[] visited = new int[n];
+            int count = 0;
+            for (int i = 0; i < n; i++)
+            {
+                if (visited[i] == 0)
+                {
+                    visited[i] = 1;
+                    count++;
+                    DFS(M, i, visited);
+                }
+            }
+            return count;
+        }
+        private static void DFS(int[,] M, int i, int[] visited)
+        {
+            for (int j = 0; j < visited.Length; j++)
+            {
+                if (visited[j] == 0 && M[i, j] == 1)
+                {
+                    visited[j] = 1;
+                    DFS(M, j, visited);
+                }
+            }
+        }
+        ////////////////////////////Q545/////////////////////////////////////////////////////////////
+        public static List<int> BoundaryOfBinaryTree(Treenode root)
+        {
+            if (root == null) return new List<int>();
+            int level = 0;
+            Queue<Treenode> queue = new Queue<Treenode>();
+            Stack<int> rightSide = new Stack<int>();
+            List<int> leaves = new List<int>();
+            List<int> res = new List<int>();
+            queue.Enqueue(root);
+            while (queue.Any())
+            {
+                int level_size = queue.Count;
+                for (int i = 0; i < level_size; i++)
+                {
+                    Treenode temp = queue.Dequeue();
 
-        
+
+                    if (temp.left != null)
+                        queue.Enqueue(temp.left);
+                    if (temp.right != null)
+                        queue.Enqueue(temp.right);
+                    if (temp.left == null && temp.right == null)
+                        leaves.Add(temp.data);
+                    else
+                    {
+                        if (i == 0)
+                        {
+                            res.Add(temp.data);
+                        }
+                        else if (i == level_size - 1)
+                        {
+                            rightSide.Push(temp.data);
+                        }
+                    }
+                }
+                
+                
+            }
+
+            while (leaves.Any())
+            {
+                res.Add(leaves[0]);
+                leaves.RemoveAt(0);
+            }
+            while (rightSide.Any())
+            {
+                res.Add(rightSide.Pop());
+            }
+            return res;
+        }
     }
 
 }

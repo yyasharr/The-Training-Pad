@@ -606,29 +606,26 @@ namespace My_Training_Pad
         }
         static void Main(string[] args)
         {
-            MaxHeap mh = new MaxHeap();
-            mh.Insert(12);
-            mh.Insert(15);
-            mh.Insert(3);
-            mh.Insert(5);
-            mh.Insert(7);
-            mh.Insert(13);
-            mh.Insert(20);
-            mh.Insert(31);
-            Console.WriteLine("max: " + mh.ExtractMin());
-            Console.WriteLine("max: " + mh.ExtractMin());
-            //Console.WriteLine("max: " + mh.ExtractMin());
-            //Console.WriteLine("max: " + mh.ExtractMin());
-            //Console.WriteLine("max: " + mh.ExtractMin());
-            //Console.WriteLine("max: " + mh.ExtractMin());
-            
+            Treenode one = new Treenode(1);
+            Treenode two = new Treenode(2);
+            Treenode three = new Treenode(3);
+            Treenode four = new Treenode(4);
+            Treenode five = new Treenode(5);
+            Treenode six = new Treenode(6);
+            Treenode seven = new Treenode(7);
+            Treenode eight = new Treenode(8);
 
+            five.left = three;
+            five.right = seven;
+            three.left = two;
+            three.right = four;
+            seven.left = six;
+            seven.right = eight;
+            six.left = one;
 
+            List<int> res = LeetCode.BoundaryOfBinaryTree(five);
+            Prints.ListofIntegers(res);
 
-
-            Console.WriteLine("count= " + mh.Count);
-            Console.WriteLine("List:");
-            Prints.ListofIntegers(mh.GetHeap());
             Console.WriteLine("done?");
             Console.ReadLine();
         }
