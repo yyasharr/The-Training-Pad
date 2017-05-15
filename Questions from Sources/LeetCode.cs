@@ -936,7 +936,7 @@ namespace My_Training_Pad
             }
         }
         ////////////////////////////Q545/////////////////////////////////////////////////////////////
-        public static List<int> BoundaryOfBinaryTree(Treenode root)
+        public static List<int> BoundaryOfBinaryTree1(Treenode root) //Has bug
         {
             if (root == null) return new List<int>();
             int level = 0;
@@ -971,8 +971,8 @@ namespace My_Training_Pad
                         }
                     }
                 }
-                
-                
+
+
             }
 
             while (leaves.Any())
@@ -985,8 +985,139 @@ namespace My_Training_Pad
                 res.Add(rightSide.Pop());
             }
             return res;
+        } //This version has a bug
+        public static List<int> BoundaryOfBinaryTree(Treenode root) //Also has bug
+        {
+            List<int> result = new List<int>();
+            //step1: finding the left side view and directly add the values to the result!
+            LeftSideView(root, result, 0, 0);
+            //step2: finding the leaves and directly add them to the result!
+            FindLeaves(root, result);
+            //step3: finding the right side of the tree and store it in a stack.
+            Stack<int> stack = new Stack<int>();
+            ReversedRightSideView(root, stack, 0);
+            //step4: adding right side view to the result and done!
+            while (stack.Count > 1) //we let the last element remain in the stack, which is our root and already printed!
+            {
+                result.Add(stack.Pop());
+            }
+            return result;
         }
-    }
+        private static void LeftSideView(Treenode root, List<int> result, int level, int count)
+        {
+            if (root == null)
+                return;
+            if (count == level)
+            {
+                if (root.left != null || root.right != null)
+                    result.Add(root.data);
+                count++;
+            }
+            LeftSideView(root.left, result, level + 1, count);
+            LeftSideView(root.right, result, level + 1, count);
+        }
+        private static void FindLeaves(Treenode root, List<int> result)
+        {
+            if (root == null) return;
+            if (root.left == null && root.right == null)
+                result.Add(root.data);
+            FindLeaves(root.left, result);
+            FindLeaves(root.right, result);
+        }
+        private static void ReversedRightSideView(Treenode root, Stack<int> stack, int level)
+        {
+            if (root == null || (root.left == null && root.right == null)) return;
+            if (stack.Count == level)
+            {
+                stack.Push(root.data);
+            }
+            ReversedRightSideView(root.right, stack, level + 1);
+            ReversedRightSideView(root.left, stack, level + 1);
+        }
+        ////////////////////////////Q543/////////////////////////////////////////////////////////////
+        static int maxDistance = 0;
+        public static int DiameterOfBinaryTree(Treenode root)
+        {
+            if (root == null)
+                return 0;
+            int leftDepth = Treenode.Height(root.left)+1;
+            int rightDepth = Treenode.Height(root.right)+1;
 
+            maxDistance = Math.Max(maxDistance, leftDepth + rightDepth);
+            DiameterOfBinaryTree(root.left);
+            DiameterOfBinaryTree(root.right);
+
+            return maxDistance;
+        }
+        ////////////////////////////Q538/////////////////////////////////////////////////////////////
+        static int sum = 0;
+        public static Treenode ConvertBST(Treenode root)
+        {
+            ConvertBST_helper(root);
+            return root;
+        }
+        static void ConvertBST_helper(Treenode root)
+        {
+            if (root == null)
+                return;
+
+            ConvertBST_helper(root.right);
+            sum += root.data;
+            root.data = sum;
+            ConvertBST(root.left);
+        }
+        public static Treenode Str2tree(string s)
+        {
+            if (s == "") return null;
+            Treenode root;
+            int first_par = s.IndexOf('('); //finding the first parentheses.
+            if(first_par==-1)
+            {
+                root = new Treenode(int.Parse(s));
+                return root;
+            }
+            int value = int.Parse(s.Substring(0, first_par));
+            root = new Treenode(value);
+            string leftchild = "";
+            string rightchild = "";
+            //Finding string for left child
+            int left_par = 1;
+            int i= first_par + 1;
+            while(i<s.Length)
+            {
+                if (s[i] == '(') left_par++;
+                if(s[i]==')')
+                {
+                    left_par--;
+                    if (left_par == 0)
+                    {
+                        i++;
+                        break;
+                    }
+                }
+                leftchild += s[i];
+                i++;
+            }
+            //Finding string for right child
+            left_par = 1;
+            i++;
+            while(i<s.Length)
+            {
+                if(s[i] == '(') left_par++;
+                if(s[i] == ')')
+                {
+                    left_par--;
+                    if (left_par == 0)
+                        break;
+                }
+                rightchild += s[i];
+                i++;
+            }
+            root.left = Str2tree(leftchild);
+            root.right = Str2tree(rightchild);
+
+            return root;
+        }
+    }   
 }
 ////////////////////////////Q/////////////////////////////////////////////////////////////

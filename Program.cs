@@ -614,18 +614,30 @@ namespace My_Training_Pad
             Treenode six = new Treenode(6);
             Treenode seven = new Treenode(7);
             Treenode eight = new Treenode(8);
+            Treenode nine = new Treenode(9);
+            Treenode ten= new Treenode(10);
+            Treenode eleven= new Treenode(11);
+            Treenode twelve= new Treenode(12);
+            Treenode thirteen= new Treenode(13);
+            Treenode fourteen = new Treenode(14);
+
 
             five.left = three;
             five.right = seven;
-            three.left = two;
-            three.right = four;
             seven.left = six;
             seven.right = eight;
             six.left = one;
+            six.right = nine;
+            //nine.right = ten;
+            //ten.right = two;
+            //two.right = thirteen;
+            //one.left = eleven;
+            //eleven.left = twelve;
+            //twelve.left = four;
 
-            List<int> res = LeetCode.BoundaryOfBinaryTree(five);
-            Prints.ListofIntegers(res);
-
+            Treenode res = LeetCode.Str2tree("5(3(2)(4))(7(6(1))(8))");
+            
+            
             Console.WriteLine("done?");
             Console.ReadLine();
         }
