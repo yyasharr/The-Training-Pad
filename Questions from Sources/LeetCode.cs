@@ -1040,8 +1040,8 @@ namespace My_Training_Pad
         {
             if (root == null)
                 return 0;
-            int leftDepth = Treenode.Height(root.left)+1;
-            int rightDepth = Treenode.Height(root.right)+1;
+            int leftDepth = Treenode.Height(root.left) + 1;
+            int rightDepth = Treenode.Height(root.right) + 1;
 
             maxDistance = Math.Max(maxDistance, leftDepth + rightDepth);
             DiameterOfBinaryTree(root.left);
@@ -1066,12 +1066,13 @@ namespace My_Training_Pad
             root.data = sum;
             ConvertBST(root.left);
         }
+        ////////////////////////////Q536/////////////////////////////////////////////////////////////
         public static Treenode Str2tree(string s)
         {
             if (s == "") return null;
             Treenode root;
             int first_par = s.IndexOf('('); //finding the first parentheses.
-            if(first_par==-1)
+            if (first_par == -1)
             {
                 root = new Treenode(int.Parse(s));
                 return root;
@@ -1082,11 +1083,11 @@ namespace My_Training_Pad
             string rightchild = "";
             //Finding string for left child
             int left_par = 1;
-            int i= first_par + 1;
-            while(i<s.Length)
+            int i = first_par + 1;
+            while (i < s.Length)
             {
                 if (s[i] == '(') left_par++;
-                if(s[i]==')')
+                if (s[i] == ')')
                 {
                     left_par--;
                     if (left_par == 0)
@@ -1101,10 +1102,10 @@ namespace My_Training_Pad
             //Finding string for right child
             left_par = 1;
             i++;
-            while(i<s.Length)
+            while (i < s.Length)
             {
-                if(s[i] == '(') left_par++;
-                if(s[i] == ')')
+                if (s[i] == '(') left_par++;
+                if (s[i] == ')')
                 {
                     left_par--;
                     if (left_par == 0)
@@ -1118,6 +1119,59 @@ namespace My_Training_Pad
 
             return root;
         }
-    }   
+        ////////////////////////////Q531/////////////////////////////////////////////////////////////
+        public static int FindLonelyPixel(char[,] picture)
+        {
+
+            if (picture == null || (picture.GetLength(0) == 0 && picture.GetLength(1) == 0)) return 0;
+            int n = picture.GetLength(0);
+            int m = picture.GetLength(1);
+
+            int[] rows = new int[n];
+            int[] cols = new int[m];
+
+            for (int i = 0; i < n; i++)
+            {
+                for (int j = 0; j < m; j++)
+                {
+                    if (picture[i, j] == 'B')
+                    {
+                        rows[i]++; cols[j]++;
+                    }
+                }
+            }
+            int count = 0;
+            for (int i = 0; i < n; i++)
+            {
+                for (int j = 0; j < m; j++)
+                {
+                    if (picture[i, j] == 'B' && rows[i] == 1 && cols[j] == 1)
+                        count++;
+                }
+            }
+            return count;
+        }
+        ////////////////////////////Q530/////////////////////////////////////////////////////////////
+        static int min = int.MaxValue;
+        static bool SeenFirst = false;//need to fill prev first.
+        static int prev = 0;
+        public static int GetMinimumDifference(Treenode root)
+        {
+            if (root == null) return min;
+
+            GetMinimumDifference(root.left);
+
+            if (SeenFirst == true)
+                min = Math.Min(min, root.data - prev);
+
+            SeenFirst = true;
+            prev = root.data;
+
+            GetMinimumDifference(root.right);
+
+            return min;
+        }
+
+    }
 }
 ////////////////////////////Q/////////////////////////////////////////////////////////////
