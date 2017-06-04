@@ -606,40 +606,22 @@ namespace My_Training_Pad
         }
         static void Main(string[] args)
         {
-            Treenode one = new Treenode(1);
-            Treenode two = new Treenode(2);
-            Treenode three = new Treenode(3);
-            Treenode four = new Treenode(4);
-            Treenode five = new Treenode(5);
-            Treenode six = new Treenode(6);
-            Treenode seven = new Treenode(7);
-            Treenode eight = new Treenode(8);
-            Treenode nine = new Treenode(9);
-            Treenode ten= new Treenode(10);
-            Treenode eleven= new Treenode(11);
-            Treenode twelve= new Treenode(12);
-            Treenode thirteen= new Treenode(13);
-            Treenode fourteen = new Treenode(14);
+            Node head = new Node(1);
+            head.next = new Node(2);
+            head.next.next = new Node(3);
+            head.next.next.next = new Node(4);
+            head.next.next.next.next = new Node(5);
+            head.next.next.next.next.next = new Node(6);
+            //head= [1]->[2]->[3]->[4]->[5]->[6]->null
 
+            DateTime start = DateTime.Now;
 
-            five.left = three;
-            five.right = seven;
-            seven.left = six;
-            seven.right = eight;
-            six.left = one;
-            six.right = nine;
-            //nine.right = ten;
-            //ten.right = two;
-            //two.right = thirteen;
-            //one.left = eleven;
-            //eleven.left = twelve;
-            //twelve.left = four;
+            head.Reverse().Print();
 
-            Treenode res = LeetCode.Str2tree("5(3(2)(4))(7(6(1))(8))");
-            
-            
             Console.WriteLine("done?");
-            Console.ReadLine();
+            Console.WriteLine("time: "+(DateTime.Now-start).TotalSeconds);
+            Console.ReadKey();
+           
         }
     }
 }

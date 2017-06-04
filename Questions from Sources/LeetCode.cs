@@ -1171,7 +1171,178 @@ namespace My_Training_Pad
 
             return min;
         }
-        //TEST
+        ////////////////////////////Q385/////////////////////////////////////////////////////////////        
+        public NestedInteger Deserialize(string s) //I supposed there is no [] as an input as isn't there any [[]], [[[]]], etc.
+        {
+            if (s == "" || s == null)
+                return null;
+            int value;
+            NestedInteger NI;
+            if (s[0] == '[')
+            {
+                int i = 1;
+                while (char.IsDigit(s[i]))
+                {
+                    i++;
+                }
+                value = int.Parse(s.Substring(1, i));
+                s = s.Substring(i + 2, s.Length - i - 3);//removing the number, the comma after the number and open and closing brackets ([]).
+                NI = new NestedInteger(value);
+                NI.Add(Deserialize(s));
+            }
+            else
+            {
+                NI = new NestedInteger(int.Parse(s));
+            }
+            return NI;
+        }
+        ////////////////////////////Q588/////////////////////////////////////////////////////////////
+        public static int FindUnsortedSubarray(int[] nums)
+        {
+            if (nums.Length == 0 || nums == null) return 0;
+
+            int[] SortedNums = new int[nums.Length];
+            Array.Copy(nums, SortedNums, nums.Length);
+            Array.Sort(SortedNums);
+
+            int left = 0; int right = nums.Length - 1;
+
+            while (left <= nums.Length - 1)
+            {
+                if (nums[left] == SortedNums[left])
+                    left++;
+                else break;
+            }
+            while (right >= 0)
+            {
+                if (nums[right] == SortedNums[right])
+                    right--;
+                else break;
+            }
+
+            return (right < left) ? 0 : right - left + 1;
+        }
+        ////////////////////////////Q582/////////////////////////////////////////////////////////////
+
+        public static IList<int> KillProcess(IList<int> pid, IList<int> ppid, int kill)
+        {
+            if (pid.Count == 0 || pid == null) return null;
+            IList<int> res = new List<int>();
+            DFS582(pid, ppid, kill, res);
+            return res;
+        }
+        static void DFS582(IList<int> pid, IList<int> ppid, int current, IList<int> res)
+        {
+            res.Add(current);
+            for (int i = 0; i < ppid.Count; i++)
+            {
+                if (ppid[i] == current)
+                    DFS582(pid, ppid, pid[i], res);
+            }
+        }
+        ////////////////////////////Q64/////////////////////////////////////////////////////////////
+        public static int MinPathSum(int[,] grid) //Dynamic Programming
+        {
+            int row = grid.GetLength(0);
+            int col = grid.GetLength(1);
+
+            int[,] DP = new int[row, col];
+            DP[row - 1, col - 1] = grid[row - 1, col - 1];//filling the lower right most cell.
+
+            for (int i = col - 2; i >= 0; i--) //filling last row
+            {
+                DP[row - 1, i] = DP[row - 1, i + 1] + grid[row - 1, i];
+            }
+            for (int i = row - 2; i >= 0; i--) //filling last column
+            {
+                DP[i, col - 1] = DP[i + 1, col - 1] + grid[i, col - 1];
+            }
+
+            for (int i = row - 2; i >= 0; i--)
+            {
+                for (int j = col - 2; j >= 0; j--)
+                {
+                    DP[i, j] = grid[i, j] + Math.Min(DP[i, j + 1], DP[i + 1, j]);
+                }
+            }
+            return DP[0, 0];
+        }
+        ////////////////////////////280/////////////////////////////////////////////////////////////
+        public void WiggleSort(int[] nums)
+        {
+            Array.Sort(nums);
+            if (nums.Length <= 2) return;
+
+            int i = 1;
+            while (i <= nums.Length - 2)
+            {
+                int temp = nums[i];
+                nums[i] = nums[i + 1];
+                nums[i + 1] = temp;
+                i += 2;
+            }
+        }
+        ////////////////////////////Q593/////////////////////////////////////////////////////////////
+        public bool ValidSquare(int[] p1, int[] p2, int[] p3, int[] p4)
+        {
+            int[,] points = { };
+            points[0, 0] = p1[0];
+            points[0, 1] = p1[1];
+            points[1, 0] = p2[0];
+            points[1, 1] = p2[1];
+            points[2, 0] = p3[0];
+            points[2, 1] = p3[1];
+            points[3, 0] = p4[0];
+            points[3, 1] = p4[1];
+
+            bool[,] visited = new bool[4, 2];
+
+            int row = 0;
+            int col = 0;
+            int count = 0;
+
+            while (count < 8)
+            {
+                if (visited[row, col] == true) return false;
+                else visited[row, col] = true;
+
+                count++;
+                if (count == 8) return true;
+
+                col = (col == 1) ? 0 : 1;
+
+                int lookingfor = points[row, col];
+                visited[row, col] = true;
+
+                count++;
+                if (count == 8) return true;
+
+                for (int j = 0; j < 4; j++)
+                {
+                    if (visited[j, col] == false && points[j, col] == lookingfor)
+                    {
+                        row = j;
+                        break;
+                    }
+                    if (j == 3) return false;
+                }
+            }
+            return true;
+        }
+        ////////////////////////////Q598/////////////////////////////////////////////////////////////
+        public static int MaxCount(int m, int n, int[,] ops)
+        {
+            int minrow = m;
+            int mincol = n;
+
+            for (int i = 0; i < ops.GetLength(0); i++)
+            {
+                minrow = Math.Min(minrow, ops[i, 0]);
+                mincol = Math.Min(mincol, ops[i, 1]);
+            }
+            return minrow * mincol;
+        }
+
     }
 }
 ////////////////////////////Q/////////////////////////////////////////////////////////////

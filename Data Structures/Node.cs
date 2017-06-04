@@ -10,18 +10,20 @@ namespace My_Training_Pad
     {
         public int data;
         public Node next = null;
-
-
-public void print()
+        
+        /// <summary>
+        /// Prints the LinkedList
+        /// </summary>
+        public void Print()
         {
             Console.Write(data + "->");
             if (next != null)
             {
-                next.print();
+                next.Print();
             }
             else
             {
-                Console.Write("null");
+                Console.WriteLine("null");
             }
         }
         public Node(int d)
@@ -29,7 +31,22 @@ public void print()
             data = d;
         }
 
-        
+        public Node Reverse()
+        {
+            Node head = this;
+            if (head == null || head.next == null) return head;
+
+            Node prev = null;
+
+            while(head!=null)
+            {
+                Node next = head.next;
+                head.next = prev;
+                prev = head;
+                head = next;
+            }
+            return prev;
+        }
         public void RemoveKthFromEnd(int k)
         {
             if (k == 0) return;
