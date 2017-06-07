@@ -1171,31 +1171,6 @@ namespace My_Training_Pad
 
             return min;
         }
-        ////////////////////////////Q385/////////////////////////////////////////////////////////////        
-        public NestedInteger Deserialize(string s) //I supposed there is no [] as an input as isn't there any [[]], [[[]]], etc.
-        {
-            if (s == "" || s == null)
-                return null;
-            int value;
-            NestedInteger NI;
-            if (s[0] == '[')
-            {
-                int i = 1;
-                while (char.IsDigit(s[i]))
-                {
-                    i++;
-                }
-                value = int.Parse(s.Substring(1, i));
-                s = s.Substring(i + 2, s.Length - i - 3);//removing the number, the comma after the number and open and closing brackets ([]).
-                NI = new NestedInteger(value);
-                NI.Add(Deserialize(s));
-            }
-            else
-            {
-                NI = new NestedInteger(int.Parse(s));
-            }
-            return NI;
-        }
         ////////////////////////////Q588/////////////////////////////////////////////////////////////
         public static int FindUnsortedSubarray(int[] nums)
         {
@@ -1342,7 +1317,58 @@ namespace My_Training_Pad
             }
             return minrow * mincol;
         }
+        ////////////////////////////Q148/////////////////////////////////////////////////////////////
+        public static Node SortList(Node head)
+        {
+            if (head == null || head.next == null) return head;
 
+            //cut the linkedlist in half.
+            //one half= head, other half= slow
+            Node slow = head; Node fast = head; Node prev = null;
+            while (fast.next != null && fast != null)
+            {
+                prev = slow;
+                slow = slow.next;
+                fast = fast.next;
+            }
+            prev.next = null;
+
+            Node N1 = SortList(head);
+            Node N2 = SortList(slow);
+
+            return MergeList(N1, N2);
+        }
+        private static Node MergeList(Node h1, Node h2)
+        {
+            Node res = new Node(0);
+            Node temp = res;
+
+            while (h1 != null && h2 != null)
+            {
+                if (h1.data < h2.data)
+                {
+                    res.next = h1;
+                    res = res.next;
+                    h1 = h1.next;
+                }
+                else
+                {
+                    res.next = h2;
+                    res = res.next;
+                    h2 = h2.next;
+                }
+            }
+            if (h1 != null)
+            {
+                res.next = h1;
+            }
+            if (h2 != null)
+            {
+                res.next = h2;
+            }
+
+            return temp.next;
+        }
     }
 }
 ////////////////////////////Q/////////////////////////////////////////////////////////////

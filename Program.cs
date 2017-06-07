@@ -52,7 +52,7 @@ namespace My_Training_Pad
             return false;
 
         }
-        
+
         ///////////////////////////////Linked Lists/////////////////////////////////////////
         static void remove_duplicate(Node head)
         {
@@ -87,7 +87,7 @@ namespace My_Training_Pad
             return rest;
         }
         //Swap 2 nodes given as int values
-        
+
         ///////////////////////////////Trees/////////////////////////////////////////
         //↓Find Path: find the path between root and a given node in binary tree, empty list if doesn't exist
         static bool FindPath(Treenode root, int val, List<Treenode> path)
@@ -604,24 +604,49 @@ namespace My_Training_Pad
             if (root.data >= maxValue || root.data < minValue) return false;
             return (ValidateBST(root.left, minValue, root.data) && ValidateBST(root.right, root.data, maxValue));
         }
+        ///////////////////////////////////////////////////////////////////////////////////////////////////
+        static void AllCombinations(int Sum, int n) //Question: https://www.careercup.com/question?id=4917596202729472
+        {
+            AllCombinations(Sum, n, "");
+        }
+        private static void AllCombinations(int sum, int n, string output)
+        {
+            if (n == 1)
+            {
+                Console.WriteLine(output + sum);
+            }
+            else
+            {
+                for (int i = sum; i >= 0; i--)
+                {
+                    string new_output = output + i + ",";
+                    AllCombinations(sum - i, n - 1, new_output);
+                }
+            }
+        }
+
+        
+
         static void Main(string[] args)
         {
-            Node head = new Node(1);
-            head.next = new Node(2);
-            head.next.next = new Node(3);
-            head.next.next.next = new Node(4);
-            head.next.next.next.next = new Node(5);
-            head.next.next.next.next.next = new Node(6);
-            //head= [1]->[2]->[3]->[4]->[5]->[6]->null
-
+            /////////////////////////initializers Below///////////////////////////
+            Node head = new Node(5);
+            head.next = new Node(1);
+            head.next.next = new Node(2);
+            head.next.next.next = new Node(7);
+            head.next.next.next.next = new Node(4);
+            head.next.next.next.next.next = new Node(3);
+            head.next.next.next.next.next.next = new Node(6);
+            head.next.next.next.next.next.next.next = new Node(8);
+            /////////////////////////Start Time Below//////////////////////////////
             DateTime start = DateTime.Now;
+            /////////////////////////Functions Below//////////////////////////////
+            LeetCode.SortList(head).Print();
+            /////////////////////////End Time Below///////////////////////////////
+            Console.WriteLine("time: " + (DateTime.Now - start).TotalSeconds);
 
-            head.Reverse().Print();
-
-            Console.WriteLine("done?");
-            Console.WriteLine("time: "+(DateTime.Now-start).TotalSeconds);
             Console.ReadKey();
-           
+
         }
     }
 }

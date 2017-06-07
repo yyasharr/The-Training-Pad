@@ -85,3 +85,14 @@ namespace My_Training_Pad
 //head.next.next.next.next= new Node(5);
 //head.next.next.next.next.next = new Node(6);
 ////head= [1]->[2]->[3]->[4]->[5]->[6]->null
+
+/////////////////////////////////Sample initializer 2////////////////////////////////////////////
+//Node head = new Node(5);
+//head.next = new Node(1);
+//head.next.next = new Node(2);
+//head.next.next.next = new Node(7);
+//head.next.next.next.next = new Node(4);
+//head.next.next.next.next.next = new Node(3);
+//head.next.next.next.next.next.next = new Node(6);
+//head.next.next.next.next.next.next.next = new Node(8);
+////head= [5]->[1]->[2]->[7]->[4]->[3]->[6]->[8]->null

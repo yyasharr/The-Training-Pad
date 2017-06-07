@@ -46,7 +46,6 @@
   <ItemGroup>
     <Compile Include="Data Structures\DoublyNode.cs" />
     <Compile Include="Temp or Misc. Classes\Frame.cs" />
-    <Compile Include="Temp or Misc. Classes\NestedInteger.cs" />
     <Compile Include="Questions from Sources\EPI.cs" />
     <Compile Include="Data Structures\Graph.cs" />
     <Compile Include="Questions from Sources\LeetCode.cs" />
