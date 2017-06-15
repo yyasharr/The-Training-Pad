@@ -624,27 +624,56 @@ namespace My_Training_Pad
                 }
             }
         }
+        /////////////////////////////////Remove a node from BST/////////////////////////////////////////////
+        static Treenode DeleteNode(Treenode root,int key) //removes the given node and return the new head
+        {
+            if (root == null) return null;
 
-        
+            if (key > root.data)
+                root.right = DeleteNode(root.right, key);
+            else if (key < root.data)
+                root.left = DeleteNode(root.left, key);
+
+            else
+            {
+                if (root.left == null)
+                    return root.right;
+                else if (root.right == null)
+                    return root.left;
+
+                //if the code reaches here, it means the root has two children!
+                //we can either find biggest node of left or smallest node on right, and upadte root's value with that and remove it.
+                //here we do it with left's biggest
+                root.data = FindBiggest(root.left);
+
+                //recursively remove the biggest node on left
+                root.left = DeleteNode(root.left, root.data);
+
+            }
+            return root;
+        }
+        private static int FindBiggest(Treenode root)
+        {
+            if (root.right == null)
+                return root.data;
+
+            return FindBiggest(root.right);
+        }
 
         static void Main(string[] args)
         {
             /////////////////////////initializers Below///////////////////////////
-            Node head = new Node(5);
-            head.next = new Node(1);
-            head.next.next = new Node(2);
-            head.next.next.next = new Node(7);
-            head.next.next.next.next = new Node(4);
-            head.next.next.next.next.next = new Node(3);
-            head.next.next.next.next.next.next = new Node(6);
-            head.next.next.next.next.next.next.next = new Node(8);
+            IList<int> list = new List<int>();
+            
             /////////////////////////Start Time Below//////////////////////////////
             DateTime start = DateTime.Now;
+
             /////////////////////////Functions Below//////////////////////////////
-            LeetCode.SortList(head).Print();
+            list = LeetCode.DiffWaysToCompute("1+2-3*4");
             /////////////////////////End Time Below///////////////////////////////
             Console.WriteLine("time: " + (DateTime.Now - start).TotalSeconds);
-
+            Prints.Print(list);
+            
             Console.ReadKey();
 
         }

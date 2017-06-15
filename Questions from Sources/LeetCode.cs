@@ -15,13 +15,11 @@ namespace My_Training_Pad
         {
             input = nums;
         }
-
         /** Resets the array to its original configuration and return it. */
         public int[] Reset()
         {
             return input;
         }
-
         /** Returns a random shuffling of the array. */
         public int[] Shuffle()
         {
@@ -321,7 +319,6 @@ namespace My_Training_Pad
             }
             return max;
         }
-
         ////////////////////////////Q103/////////////////////////////////////////////////////////////
         public static List<Node> ZigzaglevelOrder(Treenode root)
         {
@@ -1198,7 +1195,6 @@ namespace My_Training_Pad
             return (right < left) ? 0 : right - left + 1;
         }
         ////////////////////////////Q582/////////////////////////////////////////////////////////////
-
         public static IList<int> KillProcess(IList<int> pid, IList<int> ppid, int kill)
         {
             if (pid.Count == 0 || pid == null) return null;
@@ -1368,6 +1364,165 @@ namespace My_Training_Pad
             }
 
             return temp.next;
+        }
+        ////////////////////////////Q48/////////////////////////////////////////////////////////////
+        public static void Rotate(int[,] matrix)
+        {
+            if (matrix == null) return;
+
+            int low = 0;
+            int high = matrix.GetLength(0) - 1;
+
+            while (high > low)
+            {
+                for (int i = 0; i <= high - low - 1; i++)
+                {
+                    int temp1 = matrix[low + i, high];
+                    matrix[low + i, high] = matrix[low, low + i];
+
+                    int temp2 = matrix[high, high - i];
+                    matrix[high, high - i] = temp1;
+
+                    temp1 = matrix[high - i, low];
+                    matrix[high - i, low] = temp2;
+
+                    matrix[low, low + i] = temp1;
+                }
+
+                low++;
+                high--;
+            }
+        }
+        ////////////////////////////Q221/////////////////////////////////////////////////////////////
+        public static int MaximalSquare(char[,] matrix)
+        {
+            int n = matrix.GetLength(0);
+            int m = matrix.GetLength(1);
+
+            int[,] DP = new int[n, m];
+            int max = 0;
+            for (int i = 0; i < m; i++)
+            {
+                DP[0, i] = int.Parse(matrix[0, i].ToString());
+                if (matrix[0, i] == '1') max = 1;
+            }
+            for (int i = 0; i < n; i++)
+            {
+                DP[i, 0] = int.Parse(matrix[i, 0].ToString());
+                if (matrix[i, 0] == '1') max = 1;
+            }
+
+
+            for (int i = 1; i < n; i++)
+            {
+                for (int j = 1; j < m; j++)
+                {
+                    if (matrix[i, j] == '1')
+                    {
+                        DP[i, j] = Math.Min(DP[i - 1, j - 1], Math.Min(DP[i - 1, j], DP[i, j - 1])) + 1;
+                        max = Math.Max(max, DP[i, j]);
+                    }
+                }
+            }
+            return max * max;
+
+        }
+        ////////////////////////////Q82/////////////////////////////////////////////////////////////
+        public static Node DeleteDuplicates(Node head)
+        {
+            HashSet<int> visited = new HashSet<int>();
+
+            Node prev = null;
+            Node curr = head;
+
+            while (curr != null)
+            {
+                if (visited.Contains(curr.data))
+                {
+                    prev.next = curr.next;
+                }
+                else
+                {
+                    visited.Add(curr.data);
+                }
+                prev = curr;
+                curr = curr.next;
+            }
+            return head;
+        } //O(n) space
+        public static Node DeleteDuplicates1(Node head) //O(1) space -- Nice idea by me!
+        {
+            if (head == null) return head;
+            Node prev = head;
+            Node curr = head.next;
+
+            while (curr != null)
+            {
+                if (prev.data != curr.data)
+                    prev = curr;
+                curr = curr.next;
+                prev.next = curr;
+            }
+
+            return head;
+        }
+        ////////////////////////////Q110/////////////////////////////////////////////////////////////
+        public bool IsBalanced(Treenode root)
+        {
+            if (root == null) return true;
+
+            int left_height = Height(root.left);
+            int right_height = Height(root.right);
+
+            if (Math.Abs(left_height - right_height) > 1) return false;
+
+            return IsBalanced(root.left) & IsBalanced(root.right);
+        }
+        private int Height(Treenode root)
+        {
+            if (root == null) return 0;
+            return 1 + Math.Max(Height(root.left), Height(root.right));
+        }
+        ////////////////////////////Q241/////////////////////////////////////////////////////////////
+        public static IList<int> DiffWaysToCompute(string input)
+        {
+            IList<int> res = new List<int>();
+            for (int i = 0; i < input.Length; i++)
+            {
+                if (input[i] == '-' || input[i] == '+' || input[i] == '*')
+                {
+                    string left = input.Substring(0, i);
+                    string right = input.Substring(i + 1);
+
+                    IList<int> list1 = DiffWaysToCompute(left);
+                    IList<int> list2 = DiffWaysToCompute(right);
+
+                    for (int j = 0; j < list1.Count; j++)
+                    {
+                        for (int k = 0; k < list2.Count; k++)
+                        {
+                            int result = 0;
+                            switch (input[i])
+                            {
+                                case '+':
+                                    result = list1[j] + list2[k];
+                                    break;
+                                case '-':
+                                    result = list1[j] - list2[k];
+                                    break;
+                                case '*':
+                                    result = list1[j] * list2[k];
+                                    break;
+                            }
+                            res.Add(result);
+                        }
+                    }
+                }
+
+            }
+            if (res.Count == 0)
+                res.Add(int.Parse(input));
+            return res;
         }
     }
 }

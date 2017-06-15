@@ -8,7 +8,12 @@ namespace My_Training_Pad
 {
     static class Prints
     {
-        public static void ListofLists(List<List<int>> input)
+
+        /// <summary>
+        /// Prints a list of lists of integers.
+        /// </summary>
+        /// <param name="input"></param>
+        public static void Print(List<List<int>> input)
         {
             foreach(List<int> temp in input)
             {
@@ -19,24 +24,47 @@ namespace My_Training_Pad
                 Console.WriteLine();
             }
         }
-        public static void ListofStrings(List<string> input)
+
+
+        /// <summary>
+        /// Prints a list of strings
+        /// </summary>
+        /// <param name="input"></param>
+        public static void Print(List<string> input)
         {
             foreach (string s in input)
                 Console.WriteLine(s);
         }
-        public static void ListofIntegers(List<int> input)
+
+
+        /// <summary>
+        /// Prints list of integers.
+        /// </summary>
+        /// <param name="input"></param>
+        public static void Print(List<int> input)
         {
             foreach(int n in input)
             {
                 Console.WriteLine(n);
             }
         }
-        public static void ArrayofIntegers(int[] array)
+
+        /// <summary>
+        /// Prints array of integers 
+        /// </summary>
+        /// <param name="array"></param>
+        public static void Print(int[] array)
         {
             for (int i = 0; i < array.Length; i++)
                 Console.WriteLine(array[i]);
         }
-        public static void MatrixofIntegers(int[,]matrix)
+
+
+        /// <summary>
+        /// Prints a matrix of integers.
+        /// </summary>
+        /// <param name="matrix"></param>
+        public static void Print(int[,]matrix)
         {
             int n = matrix.GetLength(0);
             int m = matrix.GetLength(1);
@@ -48,6 +76,16 @@ namespace My_Training_Pad
                 }
                 Console.WriteLine();
             }
+        }
+
+        /// <summary>
+        /// Prints contents of a integer IList
+        /// </summary>
+        /// <param name="input"></param>
+        public static void Print(IList<int> input)
+        {
+            foreach (int n in input)
+                Console.WriteLine(n);
         }
 
     }

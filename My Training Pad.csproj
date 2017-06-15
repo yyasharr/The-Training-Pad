@@ -45,6 +45,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Data Structures\DoublyNode.cs" />
+    <Compile Include="Data Structures\LinkedList.cs" />
     <Compile Include="Temp or Misc. Classes\Frame.cs" />
     <Compile Include="Questions from Sources\EPI.cs" />
     <Compile Include="Data Structures\Graph.cs" />
