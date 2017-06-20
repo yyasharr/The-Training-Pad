@@ -1212,7 +1212,7 @@ namespace My_Training_Pad
             }
         }
         ////////////////////////////Q64/////////////////////////////////////////////////////////////
-        public static int MinPathSum(int[,] grid) //Dynamic Programming
+        public static int MinPathSum(int[,] grid) // Programming
         {
             int row = grid.GetLength(0);
             int col = grid.GetLength(1);
@@ -1524,6 +1524,328 @@ namespace My_Training_Pad
                 res.Add(int.Parse(input));
             return res;
         }
+        ////////////////////////////Q565/////////////////////////////////////////////////////////////
+        static int max_count = 0;
+        public static int ArrayNesting(int[] nums)
+        {
+            int[] General_visited = new int[nums.Length];
+
+            for (int i = 0; i < nums.Length; i++)
+            {
+                if (General_visited[i] == 0)
+                {
+                    int[] Current_visited = new int[nums.Length];
+                    ArrayNesting_helper(nums, General_visited, Current_visited, 0, i);
+                }
+            }
+            return max_count;
+        }
+        private static void ArrayNesting_helper(int[] nums, int[] general_visited, int[] current_visited, int current_count, int current_index)
+        {
+            while (current_visited[current_index] == 0)
+            {
+                current_count++;
+                max_count = Math.Max(max_count, current_count);
+                current_visited[current_index] = 1;
+                general_visited[current_index] = 1;
+                current_index = nums[current_index];
+            }
+        }
+        ////////////////////////////Q112/////////////////////////////////////////////////////////////
+        public bool HasPathSum(Treenode root, int sum)
+        {
+            if (root == null)
+                return false;
+
+            if (root.left == null && root.right == null) //if leaf
+            {
+                if (root.data == sum) return true;
+            }
+
+            return (HasPathSum(root.left, sum - root.data) || HasPathSum(root.right, sum - root.data));
+        }
+        ////////////////////////////Q113/////////////////////////////////////////////////////////////
+        public static IList<IList<int>> PathSum(Treenode root, int sum)
+        {
+            IList<IList<int>> res = new List<IList<int>>();
+            List<int> curr = new List<int>();
+
+            PathSum(root, sum, res, curr);
+
+            return res;
+
+        }
+
+        private static void PathSum(Treenode root, int sum, IList<IList<int>> res, List<int> curr)
+        {
+            if (root == null) return;
+
+            curr.Add(root.data);
+
+            PathSum(root.left, sum - root.data, res, curr);
+
+            if (root.left == null && root.right == null) //if root is leaf
+            {
+                if (sum == root.data)
+                    res.Add(new List<int>(curr));
+            }
+
+            PathSum(root.right, sum - root.data, res, curr);
+
+            curr.RemoveAt(curr.Count - 1);
+        }
+        ////////////////////////////Q107/////////////////////////////////////////////////////////////
+        static List<List<int>> Bottom_Level_Order(Treenode root)
+        {
+            List<List<int>> result = new List<List<int>>();
+            if (root == null) return result;
+            List<List<int>> temp = Bottom_Level_Order(root, 0, result);
+            temp.Reverse();
+            return temp;
+        }
+        static List<List<int>> Bottom_Level_Order(Treenode root, int level, List<List<int>> result)
+        {
+            if (result.Count <= level)
+            {
+                List<int> current = new List<int>();
+                current.Add(root.data);
+                result.Add(current);
+            }
+            else
+            {
+                List<int> current = result[level];
+                current.Add(root.data);
+            }
+            if (root.left != null) Bottom_Level_Order(root.left, level + 1, result);
+            if (root.right != null) Bottom_Level_Order(root.right, level + 1, result);
+            return result;
+        }
+        ////////////////////////////Q72/////////////////////////////////////////////////////////////
+        static int MinDistance(string word1, string word2)
+        {//wrapper class. Can call either method (recursive or tabular solution)
+            return MinDistance(word1, word2, word1.Length, word2.Length);
+            //return MinDistance_tabulation(word1, word2, word1.Length, word2.Length);
+        }
+        static int MinDistance(string word1, string word2, int ln1, int ln2)
+        {
+            if (ln1 == 0) return ln2;
+            if (ln2 == 0) return ln1;
+
+            if (word1.ElementAt(ln1 - 1) == word2.ElementAt(ln2 - 1))
+            {
+                return MinDistance(word1, word2, ln1 - 1, ln2 - 1);
+            }
+
+            return 1 + MinimumOfThree(MinDistance(word1, word2, ln1, ln2 - 1), MinDistance(word1, word2, ln1 - 1, ln2), MinDistance(word1, word2, ln1 - 1, ln2 - 1));
+        }
+        static int MinDistance_tabulation(string word1, string word2, int ln1, int ln2)
+        {
+            int[,] table = new int[ln1 + 1, ln2 + 1];
+
+            for (int i = 0; i <= ln1; i++)
+            {
+                for (int j = 0; j <= ln2; j++)
+                {
+                    if (i == 0) table[i, j] = j;
+                    else if (j == 0) table[i, j] = i;
+
+                    else if (word1[i - 1] == word2[j - 1])
+                    {
+                        return MinDistance_tabulation(word1, word2, ln1 - 1, ln2 - 1);
+                    }
+
+                    else table[i, j] = 1 + MinimumOfThree(MinDistance_tabulation(word1, word2, ln1 - 1, ln2 - 1)
+                                                      , MinDistance_tabulation(word1, word2, ln1 - 1, ln2)
+                                                      , MinDistance_tabulation(word1, word2, ln1, ln2 - 1));
+                }
+            }
+            return table[ln1, ln2];
+        }
+        static int MinimumOfThree(int i1, int i2, int i3)
+        {
+            int min = i1;
+            if (i2 < min) min = i2;
+            if (i3 < min) min = i3;
+            return min;
+        }
+        ////////////////////////////Q282/////////////////////////////////////////////////////////////        
+        static List<string> AddOperators(string num, int Target)
+        {
+            return AddOperators(num, Target, new List<string>());
+        }
+        static List<string> AddOperators(string num, int target, List<string> total_strings)
+        {
+            int n = num.Length;
+            for (int i = 1; i < Math.Pow(4, n - 1); i++)
+            {
+                string operators = Convert.ToString(i, 2).PadLeft((n - 1) * 2, '0'); //SO IMPORTANT AND F*#&ing COOL: Generating two digit codes for each operator and n-1 spots to put them between. 00: nothing; 01: '+'; 10: '*'; 11: '-'
+                string expression = num[0].ToString();
+                for (int j = 1; j <= n - 1; j++)
+                {
+                    string Operator = operators.Substring((j - 1) * 2, 2);
+                    //if (Operator == "00") SKIP; //not necessary
+                    if (Operator == "01") expression += '+';
+                    if (Operator == "10") expression += '*';
+                    if (Operator == "11") expression += '-';
+                    expression += num[j];
+                }
+                if (Calculator(expression) == target)
+                    total_strings.Add(expression);
+
+            }
+            return total_strings;
+        }
+        static int Calculator(string exp)
+        {
+            Stack<int> st = new Stack<int>();
+            int current_num = 0;
+            char sign = '+';
+            int result = 0;
+
+            for (int i = 0; i < exp.Length; i++)
+            {
+                if (char.IsDigit(exp[i]))
+                    current_num = current_num * 10 + int.Parse(exp[i].ToString());
+                if (!char.IsDigit(exp[i]) || i == exp.Length - 1)
+                {
+                    if (sign == '+')
+                        st.Push(current_num);
+                    if (sign == '-')
+                        st.Push(-1 * current_num);
+                    if (sign == '*')
+                    {
+                        int temp = st.Pop();
+                        st.Push(temp * current_num);
+                    }
+                    sign = exp[i];
+                    current_num = 0;
+                }
+            }
+            while (st.Any())
+            {
+                result += st.Pop();
+            }
+            return result;
+        }
+        ////////////////////////////Q437/////////////////////////////////////////////////////////////
+        static int result;
+        public static int PathSumIII(Treenode root, int sum)
+        {
+            int count = 0;
+            Dictionary<int, int> dict = new Dictionary<int, int>();
+            dict.Add(0, 1);
+
+            PathSumIII_helper(root, 0, sum, dict);
+
+            return result;
+        }
+        private static void PathSumIII_helper(Treenode root, int curr_sum, int target_sum, Dictionary<int, int> dict)
+        {
+            if (root == null) return;
+
+            curr_sum += root.data;
+            int find = curr_sum - target_sum;
+            if (dict.ContainsKey(find)) result += dict[find];
+
+            AddOrIncrement(dict, curr_sum);
+
+            PathSumIII_helper(root.left, curr_sum, target_sum, dict);
+            PathSumIII_helper(root.right, curr_sum, target_sum, dict);
+
+            RemoveOrDecrement(dict, curr_sum);
+            curr_sum-=root.data;
+        }
+        private static void AddOrIncrement(Dictionary<int, int> dict, int sum)
+        {
+            if (!dict.ContainsKey(sum))
+                dict.Add(sum, 0);
+            dict[sum]++;
+        }
+        private static void RemoveOrDecrement(Dictionary<int, int> dict, int curr_sum)
+        {
+            if (dict[curr_sum] == 1) dict.Remove(curr_sum);
+            else dict[curr_sum]--;
+        }
+        ////////////////////////////Q560/////////////////////////////////////////////////////////////
+        static int maxSubArraySum(int[] a)
+        {
+            if (a.Length == 0 || a == null) return int.MinValue;
+
+            int max_sum = int.MinValue;
+            int curr_sum = a[0];
+            for (int i = 1; i < a.Length; i++)
+            {
+                if (curr_sum + a[i] > 0)
+                {
+                    curr_sum += a[i];
+                    max_sum = Math.Max(max_sum, curr_sum);
+                }
+                else
+                {
+                    curr_sum = 0;
+                }
+            }
+
+            return max_sum;
+        }
+        static int countSubarraySum(int[] a, int target)//find number of subarrays that sum up to int target
+        {
+            Dictionary<int, int> dict = new Dictionary<int, int>();
+            //dict.Add(0, 1);
+            int count = 0;
+            int curr_sum = 0;
+            for (int i = 0; i < a.Length; i++)
+            {
+                curr_sum += a[i];
+                int find = curr_sum - target;
+
+                if (dict.ContainsKey(find))
+                    count += dict[find];
+
+                if (dict.ContainsKey(curr_sum))
+                    dict[curr_sum]++;
+                else
+                    dict.Add(curr_sum, 1);
+            }
+            return count;
+        }
+        ////////////////////////////Q515/////////////////////////////////////////////////////////////        
+        public IList<int> LargestValues(Treenode root)
+        {
+            IList<int> Max = new List<int>();
+            LargestValues(root, 0, Max);
+            return Max;
+        }
+        private void LargestValues(Treenode root, int level, IList<int> max)
+        {
+            if (root == null) return;
+            if (max.Count == level)
+                max.Add(root.data);
+            else
+                max[level] = Math.Max(max[level], root.data);
+
+            LargestValues(root.left, level + 1, max);
+            LargestValues(root.right, level + 1, max);
+
+        }
+        ////////////////////////////Q624/////////////////////////////////////////////////////////////
+        public int MaxDistance(IList<IList<int>> arrays)
+        {
+            int max = int.MinValue;
+            int min = int.MaxValue;
+
+            foreach(List<int>list in arrays)
+            {
+                int prev_max=
+                max = Math.Max(max, list[list.Count-1]);
+                min = Math.Min(min, list[0]);
+            }
+
+            return Math.Abs(max - min);
+        }
     }
 }
+
+
+
 ////////////////////////////Q/////////////////////////////////////////////////////////////

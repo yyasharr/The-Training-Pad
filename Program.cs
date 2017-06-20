@@ -221,7 +221,6 @@ namespace My_Training_Pad
         // Path Sum3
 
         //////////////////////////////////////////////////
-
         static int[] TwoSum(int[] array, int sum)
         {
             Dictionary<int, int> valueindexmap = new Dictionary<int, int>();
@@ -291,34 +290,7 @@ namespace My_Training_Pad
             }
             return total_subs;
         }
-        //////https://leetcode.com/problems/binary-tree-level-order-traversal-ii /////////////////////
-        static List<List<int>> Bottom_Level_Order(Treenode root)
-        {
-            List<List<int>> result = new List<List<int>>();
-            if (root == null) return result;
-            List<List<int>> temp = Bottom_Level_Order(root, 0, result);
-            temp.Reverse();
-            return temp;
-
-        }
-        static List<List<int>> Bottom_Level_Order(Treenode root, int level, List<List<int>> result)
-        {
-            if (result.Count <= level)
-            {
-                List<int> current = new List<int>();
-                current.Add(root.data);
-                result.Add(current);
-            }
-            else
-            {
-                List<int> current = result[level];
-                current.Add(root.data);
-            }
-            if (root.left != null) Bottom_Level_Order(root.left, level + 1, result);
-            if (root.right != null) Bottom_Level_Order(root.right, level + 1, result);
-            return result;
-        }
-        /// ///////////////////////////////////////////////////////////////////////////////////////////
+        //////////////////////////////////////////////////////////////////////////////////////////////
         static int minimumdepth(Treenode root)
         {
             if (root == null)
@@ -348,55 +320,6 @@ namespace My_Training_Pad
                 i++;
             }
         }
-        ///////////////////////////////////////////////////////////////////////////////////////////////////
-        static int MinDistance(string word1, string word2) //https://leetcode.com/problems/edit-distance/?tab=Description
-        {//wrapper class. Can call either method (recursive or tabular solution)
-            return MinDistance(word1, word2, word1.Length, word2.Length);
-            //return MinDistance_tabulation(word1, word2, word1.Length, word2.Length);
-        }
-        static int MinDistance(string word1, string word2, int ln1, int ln2)
-        {
-            if (ln1 == 0) return ln2;
-            if (ln2 == 0) return ln1;
-
-            if (word1.ElementAt(ln1 - 1) == word2.ElementAt(ln2 - 1))
-            {
-                return MinDistance(word1, word2, ln1 - 1, ln2 - 1);
-            }
-
-            return 1 + MinimumOfThree(MinDistance(word1, word2, ln1, ln2 - 1), MinDistance(word1, word2, ln1 - 1, ln2), MinDistance(word1, word2, ln1 - 1, ln2 - 1));
-        }
-        static int MinDistance_tabulation(string word1, string word2, int ln1, int ln2)
-        {
-            int[,] table = new int[ln1 + 1, ln2 + 1];
-
-            for (int i = 0; i <= ln1; i++)
-            {
-                for (int j = 0; j <= ln2; j++)
-                {
-                    if (i == 0) table[i, j] = j;
-                    else if (j == 0) table[i, j] = i;
-
-                    else if (word1[i - 1] == word2[j - 1])
-                    {
-                        return MinDistance_tabulation(word1, word2, ln1 - 1, ln2 - 1);
-                    }
-
-                    else table[i, j] = 1 + MinimumOfThree(MinDistance_tabulation(word1, word2, ln1 - 1, ln2 - 1)
-                                                      , MinDistance_tabulation(word1, word2, ln1 - 1, ln2)
-                                                      , MinDistance_tabulation(word1, word2, ln1, ln2 - 1));
-                }
-            }
-            return table[ln1, ln2];
-        }
-        static int MinimumOfThree(int i1, int i2, int i3)
-        {
-            int min = i1;
-            if (i2 < min) min = i2;
-            if (i3 < min) min = i3;
-            return min;
-        }
-        ////////////////////////////////////////////////////////////////////////////////////////////////////
         ////////////////////////REMOVE DUPLICATE CHARACTER////////////////////////////
         static string RemoveDuplicateChar(string str)
         {
@@ -454,66 +377,6 @@ namespace My_Training_Pad
             }
             return res;
         }
-        /////////////////////////////////////////////////////////////////////////////
-        ////////////////////////////Expression Add Operators/////////////////////////URL: https://leetcode.com/problems/expression-add-operators/
-        static List<string> AddOperators(string num, int Target)
-        {
-            return AddOperators(num, Target, new List<string>());
-        }
-        static List<string> AddOperators(string num, int target, List<string> total_strings)
-        {
-            int n = num.Length;
-            for (int i = 1; i < Math.Pow(4, n - 1); i++)
-            {
-                string operators = Convert.ToString(i, 2).PadLeft((n - 1) * 2, '0'); //SO IMPORTANT AND F*#&ing COOL: Generating two digit codes for each operator and n-1 spots to put them between. 00: nothing; 01: '+'; 10: '*'; 11: '-'
-                string expression = num[0].ToString();
-                for (int j = 1; j <= n - 1; j++)
-                {
-                    string Operator = operators.Substring((j - 1) * 2, 2);
-                    //if (Operator == "00") SKIP; //not necessary
-                    if (Operator == "01") expression += '+';
-                    if (Operator == "10") expression += '*';
-                    if (Operator == "11") expression += '-';
-                    expression += num[j];
-                }
-                if (Calculator(expression) == target)
-                    total_strings.Add(expression);
-
-            }
-            return total_strings;
-        }
-        static int Calculator(string exp)
-        {
-            Stack<int> st = new Stack<int>();
-            int current_num = 0;
-            char sign = '+';
-            int result = 0;
-
-            for (int i = 0; i < exp.Length; i++)
-            {
-                if (char.IsDigit(exp[i]))
-                    current_num = current_num * 10 + int.Parse(exp[i].ToString());
-                if (!char.IsDigit(exp[i]) || i == exp.Length - 1)
-                {
-                    if (sign == '+')
-                        st.Push(current_num);
-                    if (sign == '-')
-                        st.Push(-1 * current_num);
-                    if (sign == '*')
-                    {
-                        int temp = st.Pop();
-                        st.Push(temp * current_num);
-                    }
-                    sign = exp[i];
-                    current_num = 0;
-                }
-            }
-            while (st.Any())
-            {
-                result += st.Pop();
-            }
-            return result;
-        }
         ////////////////////↓Longest Palindromic Subsequence↓///////////////////////////
         static int LPS(string str)
         {
@@ -526,7 +389,6 @@ namespace My_Training_Pad
             if (str[start] == str[end]) return 2 + LPS(str, start + 1, end - 1);
             return Math.Max(LPS(str, start + 1, end), LPS(str, start, end - 1));
         }
-
 
         ////////////////↓longest substring without repeating characters↓////////////////
         static int longestUniqueSubsttr(string str)
@@ -625,7 +487,7 @@ namespace My_Training_Pad
             }
         }
         /////////////////////////////////Remove a node from BST/////////////////////////////////////////////
-        static Treenode DeleteNode(Treenode root,int key) //removes the given node and return the new head
+        static Treenode DeleteNode(Treenode root, int key) //removes the given node and return the new head
         {
             if (root == null) return null;
 
@@ -659,21 +521,34 @@ namespace My_Training_Pad
 
             return FindBiggest(root.right);
         }
+        
 
         static void Main(string[] args)
         {
             /////////////////////////initializers Below///////////////////////////
-            IList<int> list = new List<int>();
-            
+            Treenode ten = new Treenode(10);
+            Treenode five = new Treenode(5);
+            Treenode minus3= new Treenode(-3);
+            ten.left = five;
+            ten.right = minus3;
+            Treenode three= new Treenode(3);
+            Treenode two= new Treenode(2);
+            five.left = three;
+            five.right = two;
+            Treenode eleven= new Treenode(11);
+            minus3.right = eleven;
+            Treenode three2 = new Treenode(3);
+            Treenode minus2 = new Treenode(-2);
+            three.left = three2;
+            three.right = minus2;
+            two.right = new Treenode(1);
             /////////////////////////Start Time Below//////////////////////////////
             DateTime start = DateTime.Now;
-
             /////////////////////////Functions Below//////////////////////////////
-            list = LeetCode.DiffWaysToCompute("1+2-3*4");
+            Console.WriteLine( LeetCode.PathSumIII(ten, 8));
             /////////////////////////End Time Below///////////////////////////////
             Console.WriteLine("time: " + (DateTime.Now - start).TotalSeconds);
-            Prints.Print(list);
-            
+
             Console.ReadKey();
 
         }
