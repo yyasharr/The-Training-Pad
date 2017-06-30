@@ -389,7 +389,6 @@ namespace My_Training_Pad
             if (str[start] == str[end]) return 2 + LPS(str, start + 1, end - 1);
             return Math.Max(LPS(str, start + 1, end), LPS(str, start, end - 1));
         }
-
         ////////////////↓longest substring without repeating characters↓////////////////
         static int longestUniqueSubsttr(string str)
         {//http://www.geeksforgeeks.org/length-of-the-longest-substring-without-repeating-characters/
@@ -521,34 +520,83 @@ namespace My_Training_Pad
 
             return FindBiggest(root.right);
         }
-        
+        ///////////////////////////////Finding the shortest path in Maze using BFS///////////////////////////////////////
+        class QueueNode
+        {
+            public Point Loc; //location
+            public int Distance; //distance of the current cell from source
+            public QueueNode(Point loc, int distance)
+            {
+                Loc = loc;
+                Distance = distance;
+            }
+        }
+        static int ShortestPath(int[,] maze, Point src, Point dst)
+        {
+            int m = maze.GetLength(0);
+            int n = maze.GetLength(1);
+            if (maze == null || (m == 0 && n == 0)) return 0;
+            int[,] visited = new int[m, n];
+            Point[] dirs = { new Point(0, 1), new Point(0, -1), new Point(1, 0), new Point(-1, 0) };
+            int count = 0;
+            Queue<QueueNode> q = new Queue<QueueNode>();
+            q.Enqueue(new QueueNode(src, 0));
+            while (q.Any())
+            {
+                QueueNode qn = q.Dequeue();
+                Point curr = qn.Loc;
+                count = qn.Distance;
+                if (curr.X < 0 || curr.Y < 0 || curr.X >= m || curr.Y >= n || curr.X == 1 || visited[curr.X, curr.Y] == 1)//if current cell is not valid
+                {
+                    continue;
+                }
+                else
+                {
+                    visited[curr.X, curr.Y] = 1;
+                    count++;
+                    if (curr.X == dst.X && curr.Y == dst.Y)
+                    {
+                        return qn.Distance;
+                    }
+                    else
+                    {
+                        for (int i = 0; i < dirs.Length; i++)
+                        {
+                            q.Enqueue(new QueueNode(new Point(curr.X + dirs[i].X, curr.Y + dirs[i].Y), count));
+                        }
+                    }
+                }
+            }
+            return count;
+        }
 
         static void Main(string[] args)
         {
             /////////////////////////initializers Below///////////////////////////
-            Treenode ten = new Treenode(10);
-            Treenode five = new Treenode(5);
-            Treenode minus3= new Treenode(-3);
-            ten.left = five;
-            ten.right = minus3;
-            Treenode three= new Treenode(3);
-            Treenode two= new Treenode(2);
-            five.left = three;
-            five.right = two;
-            Treenode eleven= new Treenode(11);
-            minus3.right = eleven;
-            Treenode three2 = new Treenode(3);
-            Treenode minus2 = new Treenode(-2);
-            three.left = three2;
-            three.right = minus2;
-            two.right = new Treenode(1);
+            Excel obj = new Excel(26,'Z');
+            obj.Set(2, 'C', 4);
+            obj.Set(1, 'F', 42);
+            obj.Set(4, 'H', -8);
+            obj.Set(2, 'A', 24);
+            obj.Set(3, 'A', 4);
+            obj.Set(10, 'B', 1);
+            obj.Set(2, 'D', -12);
+            obj.Set(2, 'H', 4);
+            string[] s = { "A2", "A2:D3","F1:H4" };
+            obj.Sum(5, 'I', s);
             /////////////////////////Start Time Below//////////////////////////////
             DateTime start = DateTime.Now;
             /////////////////////////Functions Below//////////////////////////////
-            Console.WriteLine( LeetCode.PathSumIII(ten, 8));
+            for(int i=0; i<obj.grid.GetLength(0);i++)
+            {
+                for(int j=0; j<obj.grid.GetLength(1); j++)
+                {
+                    Console.Write(obj.grid[i, j].Value + "\t");
+                }
+                Console.WriteLine();
+            }
             /////////////////////////End Time Below///////////////////////////////
             Console.WriteLine("time: " + (DateTime.Now - start).TotalSeconds);
-
             Console.ReadKey();
 
         }

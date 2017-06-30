@@ -88,5 +88,22 @@ namespace My_Training_Pad
                 Console.WriteLine(n);
         }
 
+
+        /// <summary>
+        /// Prints an IList of Ilist of intergers.
+        /// </summary>
+        /// <param name="input"></param>
+        public static void Print(IList<IList<int>> input)
+        {
+            foreach (List<int> temp in input)
+            {
+                foreach (int num in temp)
+                {
+                    Console.Write(num + "\t");
+                }
+                Console.WriteLine();
+            }
+        }
+
     }
 }

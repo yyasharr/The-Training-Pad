@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 using System.Drawing;
+using System.Data.Linq;
 
 namespace My_Training_Pad
 {
@@ -1753,7 +1755,7 @@ namespace My_Training_Pad
             PathSumIII_helper(root.right, curr_sum, target_sum, dict);
 
             RemoveOrDecrement(dict, curr_sum);
-            curr_sum-=root.data;
+            curr_sum -= root.data;
         }
         private static void AddOrIncrement(Dictionary<int, int> dict, int sum)
         {
@@ -1834,18 +1836,309 @@ namespace My_Training_Pad
             int max = int.MinValue;
             int min = int.MaxValue;
 
-            foreach(List<int>list in arrays)
+            foreach (List<int> list in arrays)
             {
-                int prev_max=
-                max = Math.Max(max, list[list.Count-1]);
+                int prev_max =
+                max = Math.Max(max, list[list.Count - 1]);
                 min = Math.Min(min, list[0]);
             }
 
             return Math.Abs(max - min);
         }
+        ////////////////////////////Q623/////////////////////////////////////////////////////////////
+        public Treenode AddOneRow(Treenode root, int v, int d)
+        {
+            if (d == 1)
+            {
+                Treenode res = new Treenode(v);
+                res.left = root;
+                return res;
+            }
+            Queue<Treenode> q = new Queue<Treenode>();
+            q.Enqueue(root);
+            int level = 1;
+            while (q.Any() && level < d) //while queue is not empty
+            {
+                int count = q.Count;
+                while (count != 0) //in the same level
+                {
+                    Treenode curr = q.Dequeue();
+                    if (level == d - 1)
+                    {
+                        Treenode templeft = curr.left;
+                        Treenode tempright = curr.right;
+                        Treenode newleft = new Treenode(v);
+                        Treenode newright = new Treenode(v);
+                        newleft.left = templeft;
+                        newright.right = tempright;
+                        curr.left = newleft;
+                        curr.right = newright;
+                    }
+                    if (curr.left != null) q.Enqueue(curr.left);
+                    if (curr.right != null) q.Enqueue(curr.right);
+                    count--;
+                }
+                level++;
+            }
+            return root;
+        }
+        ////////////////////////////Q78/////////////////////////////////////////////////////////////
+        public static IList<IList<int>> Subsets(int[] nums)
+        {
+            IList<IList<int>> res = new List<IList<int>>();
+            Subsets(0, new List<int>(), nums, res);
+            return res;
+        }
+        private static void Subsets(int index, List<int> output, int[] nums, IList<IList<int>> res)
+        {
+            if (index == nums.Length)
+            {
+                res.Add(output);
+            }
+            else
+            {
+                List<int> new_output = new List<int>(output);
+                new_output.Add(nums[index]);
+                Subsets(index + 1, output, nums, res);
+                Subsets(index + 1, new_output, nums, res);
+            }
+        }
+        ////////////////////////////Q496/////////////////////////////////////////////////////////////           
+        public int[] NextGreaterElement(int[] findNums, int[] nums)
+        {
+            int i1 = 0;
+            int i2 = 0;
+            Array.Sort(findNums);
+            Array.Sort(nums);
+
+            int[] res = new int[findNums.Length];
+            while (i2 < nums.Length && nums[i2] <= findNums[i1]) i2++;
+
+            while (i1 < findNums.Length)
+            {
+                if (i2 == nums.Length)
+                {
+                    res[i1] = -1;
+                    i1++;
+                }
+                else
+                {
+                    if (nums[i2] > findNums[i1])
+                    {
+                        res[i1] = nums[i2];
+                        i1++;
+                    }
+                    else
+                    {
+                        i2++;
+                    }
+
+                }
+            }
+            return res;
+        }
+        ////////////////////////////Q121/////////////////////////////////////////////////////////////        
+        public static int maxProfit(int[] prices) //Best Time to Buy and Sell Stock
+        {
+            int[] res = new int[2]; //res[0]=Min Profit ; res[1]=Max Profit
+            res[0] = int.MaxValue;
+
+            for (int i = 0; i < prices.Length; i++)
+            {
+                if (prices[i] < res[0])
+                    res[0] = prices[i];
+                else if (prices[i] - res[0] > res[1])
+                    res[1] = prices[i] - res[0];
+            }
+            return res[1];
+        }
+        ////////////////////////////Q122/////////////////////////////////////////////////////////////
+        public static int MaxProfitII(int[] prices)
+        {
+            int total = 0;
+            for (int i = 0; i < prices.Length - 1; i++)
+            {
+                if (prices[i + 1] > prices[i]) total += prices[i + 1] - prices[i];
+            }
+
+            return total;
+        }
+        ////////////////////////////Q375/////////////////////////////////////////////////////////////
+        public int GetMoneyAmount(int n)
+        {
+            if (n == 1) return 0;
+            return GetMoneyAmount(1, n);
+        }
+        private int GetMoneyAmount(int first, int last)
+        {
+            if (last - first == 1 || last == first) return last;
+
+            int mid = (first + last) / 2;
+
+            return mid + GetMoneyAmount(mid, last);
+        }
+        ////////////////////////////Q451/////////////////////////////////////////////////////////////
+        public static string FrequencySort(string s)
+        {
+            Dictionary<char, int> dict = new Dictionary<char, int>();
+            List<char>[] list = new List<char>[s.Length + 1];
+
+            for (int i = 0; i < s.Length; i++)
+            {
+                char c = s[i];
+                if (dict.ContainsKey(c)) //if already exists, needs to be updated in dict, removed from current list, and added to the new list
+                {
+                    //remove from the previous list.
+                    int n = dict[c];
+                    RemoveFromList(list, n, c);
+                    //add to new list
+                    AddtoList(list, n + 1, c);
+                    //update dict
+                    dict[c]++;
+                }
+                else
+                {
+                    dict.Add(c, 1);
+                    AddtoList(list, 1, c);
+                }
+            }
+            string res = "";
+            for (int i = list.Length - 1; i >= 1; i--)
+            {
+                if (list[i] != null)
+                {
+                    List<char> l = list[i];
+                    foreach (char ch in l)
+                    {
+                        for (int j = 0; j < i; j++)
+                        {
+                            res += ch;
+                        }
+                    }
+                }
+            }
+
+            return res;
+        }
+        private static void AddtoList(List<char>[] list, int n, char c)
+        {
+            if (list[n] == null)
+                list[n] = new List<char>();
+            list[n].Add(c);
+        }
+        private static void RemoveFromList(List<char>[] list, int n, char c)
+        {
+            if (list[n].Count == 1) list[n] = null;
+            else
+                list[n].Remove(c);
+        }
+        public static string FrequencySortII(string s) //Trying Lambda
+        {
+            int[] chars = new int[128];
+            Dictionary<int, List<char>> dict = new Dictionary<int, List<char>>();
+
+            foreach (char c in s)
+            {
+                int count = chars[c];
+                //if this char has already been seen, needs to be removed from previous count
+                if (count > 0)
+                {
+                    dict[count].Remove(c);
+                }
+                count++;
+                chars[c] = count;
+                //adding this char to it's new number in dict
+                if (dict.ContainsKey(count))
+                {
+                    dict[count].Add(c);
+                }
+                else
+                {
+                    List<char> nl = new List<char>();
+                    nl.Add(c);
+                    dict.Add(count, nl);
+                }
+            }
+            string res = "";
+            Array.Sort(chars);
+            int i = 127;
+            while (chars[i] > 0)
+            {
+                int eachchar = chars[i];
+                char curr = dict[eachchar][0];
+                dict[eachchar].RemoveAt(0);
+                for (int j = 0; j < eachchar; j++)
+                {
+                    res += curr;
+                }
+                i--;
+            }
+            return res;
+        }
+        ////////////////////////////Q/////////////////////////////////////////////////////////////
+        public int MaximumProduct(int[] nums) //Attemp1: Accepted: 279 ms - beats 15%
+        {
+            Array.Sort(nums);
+            return Math.Max(nums[0] * nums[1] * nums[nums.Length - 1], nums[nums.Length - 1] * nums[nums.Length - 2] * nums[nums.Length - 3]);
+        }
+        public static int MaximumProductII(int[] nums) //Attemp2: Accepted: ? ms - beats 80%
+        {
+            int[] MinMax = new int[5];
+            MinMax[0] = int.MaxValue;
+            MinMax[1] = int.MaxValue;
+            MinMax[2] = int.MinValue;
+            MinMax[3] = int.MinValue;
+            MinMax[4] = int.MinValue;
+
+            for (int i = 0; i < nums.Length; i++)
+            {
+                int n = nums[i];
+                //comparing with big numbers
+                if (n >= MinMax[4]) //greater than all
+                {
+                    MinMax[2] = MinMax[3];
+                    MinMax[3] = MinMax[4];
+                    MinMax[4] = n;
+                }
+                else if (n >= MinMax[3])
+                {
+                    MinMax[2] = MinMax[3];
+                    MinMax[3] = n;
+                }
+                else if (n >= MinMax[2])
+                {
+                    MinMax[2] = n;
+                }
+                //comparing with small numbers
+                if(n<=MinMax[0])
+                {
+                    MinMax[1] = MinMax[0];
+                    MinMax[0] = n;
+                }
+                else if(n<=MinMax[1])
+                {
+                    MinMax[1] = n;
+                }
+            }
+            return Math.Max(MinMax[0] * MinMax[1] * MinMax[4], MinMax[4] * MinMax[3]* MinMax[2]);
+        }
+        ////////////////////////////Q70/////////////////////////////////////////////////////////////
+        public int ClimbStairs(int n)
+        {
+            int[] Memo = new int[n+1];
+            return ClimbStairs(0,n, Memo);
+        }
+        private int ClimbStairs(int curr,int n, int[] memo)
+        {
+            if (curr == n)
+                return 1;
+            if (curr > n)
+                return 0;
+            if (memo[curr] > 0)
+                return memo[curr];
+            memo[curr] = ClimbStairs(curr + 1, n, memo) + ClimbStairs(curr + 2, n, memo);
+            return memo[curr];
+        }
     }
 }
-
-
-
 ////////////////////////////Q/////////////////////////////////////////////////////////////
