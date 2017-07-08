@@ -47,9 +47,10 @@
   <ItemGroup>
     <Compile Include="Data Structures\DoublyNode.cs" />
     <Compile Include="Data Structures\LinkedList.cs" />
+    <Compile Include="Desgin\LogSystem.cs" />
     <Compile Include="Questions from Sources\MyInterviews.cs" />
-    <Compile Include="Temp or Misc. Classes\Excel.cs" />
-    <Compile Include="Temp or Misc. Classes\Frame.cs" />
+    <Compile Include="Desgin\Excel.cs" />
+    <Compile Include="Desgin\Frame.cs" />
     <Compile Include="Questions from Sources\EPI.cs" />
     <Compile Include="Data Structures\Graph.cs" />
     <Compile Include="Questions from Sources\LeetCode.cs" />
@@ -63,6 +64,9 @@
     <Compile Include="Data Structures\Treenode.cs" />
     <Compile Include="Data Structures\Trie.cs" />
     <Compile Include="Data Structures\Trienode.cs" />
+    <Compile Include="Temp Classes\RandomListNode.cs" />
+    <Compile Include="Temp Classes\Shuffling.cs" />
+    <Compile Include="Temp Classes\Storage.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

@@ -35,27 +35,45 @@ namespace My_Training_Pad
             Cell curr = grid[row, col];
             //if this current cell used to be sum of other cells
             //then it should be removed from dependencies of other cells
-            while (curr.ItsSumOf.Count > 0)
+            if (curr.ItsSumOf.Count > 0)
             {
-                Cell n = curr.ItsSumOf[0];
-                n.ItsPartOf.Remove(curr);
-                curr.ItsSumOf.Remove(n);
+                RemoveSumofDependency(curr);
             }
             //if this current cell is used in a sum in another cell
             //the sum of the other cell should be updated by this new value
             if (curr.ItsPartOf.Count > 0)
             {
                 int diff = v - curr.Value;
-                foreach (Cell n in curr.ItsPartOf)
-                {
-                    n.Value += diff;
-                }
+                UpdatePartofSumDependency(curr, diff);
             }
             curr.Value = v;
             //check this later:
             grid[row, col] = curr;
         }
-
+        void RemoveSumofDependency(Cell curr)
+        {
+            while(curr.ItsSumOf.Count>0)
+            {
+                while(curr.ItsSumOf.Count>0)
+                {
+                    Cell c = curr.ItsSumOf[0];
+                    c.ItsPartOf.Remove(curr);
+                    RemoveSumofDependency(c);
+                    curr.ItsSumOf.Remove(c);
+                }
+            }
+        }
+        void UpdatePartofSumDependency(Cell curr, int diff)
+        {
+            if (curr.ItsPartOf.Count > 0)
+            {
+                foreach(Cell c in curr.ItsPartOf)
+                {
+                    c.Value += diff;
+                    UpdatePartofSumDependency(c, diff);
+                }
+            }
+        }
         public int Get(int r, char c)
         {
             int[] loc = GetLocation(r, c);
@@ -98,16 +116,34 @@ namespace My_Training_Pad
             {
                 for (int j = locstart[1]; j <= locend[1]; j++)
                 {
-                    //adding the dependencies
-                    grid[i, j].ItsPartOf.Add(grid[row, col]);
-                    if (!grid[row, col].ItsSumOf.Contains(grid[i, j]))
-                    {
-                        grid[row, col].ItsSumOf.Add(grid[i, j]);
-                    }
                     sum += grid[i, j].Value;
+                    //adding the dependencies
+                    AddingSumDependencies(grid[i, j], grid[row, col]);
+                    //if(grid[i,j].ItsSumOf.Count>0)
+                    //{
+                    //    foreach(Cell c in grid[i,j].ItsSumOf)
+                    //    {
+                    //        AddingSumDependencies(c, grid[row, col]);
+                    //    }
+                    //}
                 }
             }
             return sum;
+        }
+        void AddingSumDependencies(Cell partofsum, Cell sum)
+        {
+            partofsum.ItsPartOf.Add(sum);
+            if(!sum.ItsSumOf.Contains(partofsum))
+            {
+                sum.ItsSumOf.Add(partofsum);
+            }
+            //if(partofsum.ItsSumOf.Count>0)
+            //{
+            //    foreach(Cell p in partofsum.ItsSumOf)
+            //    {
+            //        AddingSumDependencies(p, sum);
+            //    }
+            //}
         }
         private int[] GetLocation(int r, char c)
         {
@@ -139,5 +175,50 @@ namespace My_Training_Pad
             _itspartof = new List<Cell>();
             _itssumof = new List<Cell>();
         }
+
+
+        
+
     }
+
+    //public class Excel //For Q631 from Leetcode: https://leetcode.com/problems/design-excel-sum-formula/#/description
+    //{
+    //    public Excel(int H, char W)
+    //    {
+
+    //    }
+
+    //    public void Set(int r, char c, int v)
+    //    {
+
+    //    }
+
+    //    public int Get(int r, char c)
+    //    {
+
+    //    }
+
+    //    public int Sum(int r, char c, string[] strs)
+    //    {
+
+    //    }
+    //}
+    //public class Cell
+    //{
+    //    public Location loc;
+    //    public int value;
+
+    //}
+    //public class Location
+    //{
+    //    public int row;
+    //    public int col;
+
+    //    public Location(int Row, int Col)
+    //    {
+    //        row = Row;
+    //        col = Col;
+    //    }
+    //}
 }
+

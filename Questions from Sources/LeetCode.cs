@@ -9,39 +9,7 @@ using System.Data.Linq;
 
 namespace My_Training_Pad
 {
-    ////////////////////////////Q384/////////////////////////////////////////////////////////////
-    public class Shuffling
-    {
-        int[] input;
-        public Shuffling(int[] nums)
-        {
-            input = nums;
-        }
-        /** Resets the array to its original configuration and return it. */
-        public int[] Reset()
-        {
-            return input;
-        }
-        /** Returns a random shuffling of the array. */
-        public int[] Shuffle()
-        {
-            List<int> inputlist = new List<int>(input);
-            return shuffle_helper(inputlist, new int[input.Count()], 0);
-        }
-        int[] shuffle_helper(List<int> inputlist, int[] output, int index)
-        {
-            if (inputlist.Count == 0)
-                return output;
-            Random rnd = new Random();
-            int num = rnd.Next(0, inputlist.Count - 1);
 
-            output[index] = inputlist[num];
-            inputlist.RemoveAt(num);
-            shuffle_helper(inputlist, output, index + 1);
-
-            return output;
-        }
-    }
     class LeetCode //Questions from Leetcode.com
     {
         ////////////////////////////Q206/////////////////////////////////////////////////////////////
@@ -660,11 +628,6 @@ namespace My_Training_Pad
             return false;
         }
         ////////////////////////////Q513/////////////////////////////////////////////////////////////
-        class storage
-        {
-            public static int maxlevel = 0;
-            public static int bottomleftvalue = 0;
-        }
         public static int FindBottomLeftValue(Treenode root)
         {
             FindBottomLeftValue(root, 1);
@@ -938,7 +901,6 @@ namespace My_Training_Pad
         public static List<int> BoundaryOfBinaryTree1(Treenode root) //Has bug
         {
             if (root == null) return new List<int>();
-            int level = 0;
             Queue<Treenode> queue = new Queue<Treenode>();
             Stack<int> rightSide = new Stack<int>();
             List<int> leaves = new List<int>();
@@ -1214,7 +1176,7 @@ namespace My_Training_Pad
             }
         }
         ////////////////////////////Q64/////////////////////////////////////////////////////////////
-        public static int MinPathSum(int[,] grid) // Programming
+        public static int MinPathSum(int[,] grid) //Dynamic Programming
         {
             int row = grid.GetLength(0);
             int col = grid.GetLength(1);
@@ -1733,7 +1695,6 @@ namespace My_Training_Pad
         static int result;
         public static int PathSumIII(Treenode root, int sum)
         {
-            int count = 0;
             Dictionary<int, int> dict = new Dictionary<int, int>();
             dict.Add(0, 1);
 
@@ -2110,25 +2071,25 @@ namespace My_Training_Pad
                     MinMax[2] = n;
                 }
                 //comparing with small numbers
-                if(n<=MinMax[0])
+                if (n <= MinMax[0])
                 {
                     MinMax[1] = MinMax[0];
                     MinMax[0] = n;
                 }
-                else if(n<=MinMax[1])
+                else if (n <= MinMax[1])
                 {
                     MinMax[1] = n;
                 }
             }
-            return Math.Max(MinMax[0] * MinMax[1] * MinMax[4], MinMax[4] * MinMax[3]* MinMax[2]);
+            return Math.Max(MinMax[0] * MinMax[1] * MinMax[4], MinMax[4] * MinMax[3] * MinMax[2]);
         }
         ////////////////////////////Q70/////////////////////////////////////////////////////////////
         public int ClimbStairs(int n)
         {
-            int[] Memo = new int[n+1];
-            return ClimbStairs(0,n, Memo);
+            int[] Memo = new int[n + 1];
+            return ClimbStairs(0, n, Memo);
         }
-        private int ClimbStairs(int curr,int n, int[] memo)
+        private int ClimbStairs(int curr, int n, int[] memo)
         {
             if (curr == n)
                 return 1;
@@ -2139,6 +2100,226 @@ namespace My_Training_Pad
             memo[curr] = ClimbStairs(curr + 1, n, memo) + ClimbStairs(curr + 2, n, memo);
             return memo[curr];
         }
+        ////////////////////////////Q101/////////////////////////////////////////////////////////////
+        public bool IsSymmetric(Treenode root) //Recursive
+        {
+            if (root == null) return true;
+            return IsSymmetric(root.left, root.right);
+        }
+        private bool IsSymmetric(Treenode left, Treenode right)
+        {
+            if (left == null && right == null) return true;
+            if (left == null || right == null) return false;
+
+            return left.data == right.data && IsSymmetric(left.left, right.right) && IsSymmetric(right.left, left.right);
+        }
+        public bool IsSymmetricII(Treenode root) //Iterative
+        {
+            if (root == null) return true;
+
+            Queue<Treenode> q = new Queue<Treenode>();
+            q.Enqueue(root);
+            q.Enqueue(root);
+
+            while (q.Any())
+            {
+                Treenode t1 = q.Dequeue();
+                Treenode t2 = q.Dequeue();
+                if (t1 == null && t2 == null) continue;
+                if (t1 == null || t2 == null || t1.data != t2.data) return false;
+
+                q.Enqueue(t1.left);
+                q.Enqueue(t2.right);
+                q.Enqueue(t1.right);
+                q.Enqueue(t2.left);
+            }
+            return true;
+        }
+        ////////////////////////////Q236///////////////////////////////////////////////////////////// 
+        public static Treenode LowestCommonAncestor(Treenode root, Treenode p, Treenode q)
+        {
+            if (!FindTreeNode(root, p) || !FindTreeNode(root, q)) return null;
+            return LowestCommonAncestor_Helper(root, p, q);
+        }
+        private static Treenode LowestCommonAncestor_Helper(Treenode root, Treenode p, Treenode q)
+        {
+            if (root == null) return null;
+
+            if (root.data == q.data)
+                return q;
+            if (root.data == p.data)
+                return p;
+
+            bool IsPLeft = FindTreeNode(root.left, p);
+            bool IsQLeft = FindTreeNode(root.left, q);
+
+            if (IsPLeft == true)
+            {
+                if (IsQLeft == true) //if both left
+                    return LowestCommonAncestor_Helper(root.left, p, q);
+                else return root;
+            }
+            else //if IsPLeft==false
+            {
+                if (IsQLeft == false) //if both right
+                    return LowestCommonAncestor_Helper(root.right, p, q);
+                else return root;
+            }
+        }
+        private static bool FindTreeNode(Treenode root, Treenode value)
+        {
+            if (root == null) return false;
+            if (root == value) return true;
+            return FindTreeNode(root.left, value) || FindTreeNode(root.right, value);
+        }
+        ////////////////////////////Q138/////////////////////////////////////////////////////////////Mock interview
+        public RandomListNode CopyRandomList(RandomListNode head)
+        {
+            if (head == null) return head;
+            Dictionary<int, RandomListNode> dic = new Dictionary<int, RandomListNode>();
+            RandomListNode Dummy = new RandomListNode(0);
+            RandomListNode res = Dummy;
+            while (head != null)
+            {
+                RandomListNode current;
+                if (dic.ContainsKey(head.label))
+                {
+                    current = dic[head.label];
+                }
+                else
+                {
+                    current = new RandomListNode(head.label);
+                    dic.Add(current.label, current);
+                }
+                RandomListNode currentrandom;
+                if (head.random == null)
+                {
+                    currentrandom = null;
+                }
+                else if (dic.ContainsKey(head.random.label))
+                {
+                    currentrandom = dic[head.random.label];
+                }
+                else
+                {
+                    currentrandom = new RandomListNode(head.random.label);
+                    dic.Add(currentrandom.label, currentrandom);
+                }
+                res.next = current;
+                current.random = currentrandom;
+                res = res.next;
+                head = head.next;
+            }
+            return Dummy.next;
+        }
+        ////////////////////////////Q94///////////////////////////////////////////////////////////// 
+        public IList<int> InorderTraversal_Iterative(Treenode root)
+        {
+            Queue<Treenode> q = new Queue<Treenode>();
+            Stack<Treenode> stack = new Stack<Treenode>();
+            List<int> order = new List<int>();
+
+            if (root == null) return order;
+
+            q.Enqueue(root);
+
+            while (q.Any() || stack.Any())
+            {
+
+                if (q.Any())
+                {
+                    Treenode temp = q.Dequeue();
+                    if (temp.left == null)
+                    {
+                        order.Add(temp.data);
+                        if (temp.right != null)
+                            q.Enqueue(temp.right);
+                    }
+                    else
+                    {
+                        stack.Push(temp);
+                        q.Enqueue(temp.left);
+                    }
+                }
+                else if (stack.Any())
+                {
+                    Treenode temp = stack.Pop();
+                    order.Add(temp.data);
+                    if (temp.right != null)
+                        q.Enqueue(temp.right);
+                }
+            }
+            return order;
+
+        }
+        ////////////////////////////Q88///////////////////////////////////////////////////////////// 
+        public void Merge(int[] nums1, int m, int[] nums2, int n)
+        {
+            int i = m - 1;
+            int j = n - 1;
+            int k = m + n - 1;
+
+            while (i >= 0 && j >= 0)
+            {
+                if (nums1[i] > nums2[j])
+                {
+                    nums1[k] = nums1[i];
+                    i--;
+                }
+                else
+                {
+                    nums1[k] = nums2[j];
+                    j--;
+                }
+                k--;
+            }
+            while (i >= 0)
+            {
+                nums1[k] = nums1[i];
+                i--;
+                k--;
+            }
+            while (j >= 0)
+            {
+                nums1[k] = nums2[j];
+                j--;
+                k--;
+            }
+        }
+        ////////////////////////////Q75///////////////////////////////////////////////////////////// 
+        public void SortColors(int[] nums)
+        {
+            //first pass: move zeros to front
+            int start = 0; int end = nums.Length - 1;
+
+            while (start < end)
+            {
+                while (start < end && nums[start] == 0) start++;
+                while (end > start && nums[end] != 0) end--;
+                if (nums[end] == 0 && nums[start] != 0)
+                {
+                    int temp = nums[start];
+                    nums[start] = nums[end];
+                    nums[end] = temp;
+                    start++; end--;
+                }
+            }
+            start = 0; end = nums.Length - 1;
+            while (start < end)
+            {
+                while (end > start && nums[end] == 2) end--;
+                while (start < end && nums[start] != 2) start++;
+                if (nums[end] != 2 && nums[start] == 2)
+                {
+                    int temp = nums[start];
+                    nums[start] = nums[end];
+                    nums[end] = temp;
+                    start++; end--;
+                }
+            }
+        }
     }
+
 }
-////////////////////////////Q/////////////////////////////////////////////////////////////
+
+////////////////////////////Q///////////////////////////////////////////////////////////// 

@@ -573,30 +573,20 @@ namespace My_Training_Pad
         static void Main(string[] args)
         {
             /////////////////////////initializers Below///////////////////////////
-            Excel obj = new Excel(26,'Z');
-            obj.Set(2, 'C', 4);
-            obj.Set(1, 'F', 42);
-            obj.Set(4, 'H', -8);
-            obj.Set(2, 'A', 24);
-            obj.Set(3, 'A', 4);
-            obj.Set(10, 'B', 1);
-            obj.Set(2, 'D', -12);
-            obj.Set(2, 'H', 4);
-            string[] s = { "A2", "A2:D3","F1:H4" };
-            obj.Sum(5, 'I', s);
+            Treenode one = new Treenode(1);
+            Treenode two = new Treenode(2);
+            Treenode three = new Treenode(3);
+            one.left = two;
+            one.right = three;
             /////////////////////////Start Time Below//////////////////////////////
             DateTime start = DateTime.Now;
             /////////////////////////Functions Below//////////////////////////////
-            for(int i=0; i<obj.grid.GetLength(0);i++)
-            {
-                for(int j=0; j<obj.grid.GetLength(1); j++)
-                {
-                    Console.Write(obj.grid[i, j].Value + "\t");
-                }
-                Console.WriteLine();
-            }
+            Console.WriteLine(LeetCode.LowestCommonAncestor(one, two, three).data);
             /////////////////////////End Time Below///////////////////////////////
             Console.WriteLine("time: " + (DateTime.Now - start).TotalSeconds);
+
+            
+            
             Console.ReadKey();
 
         }
