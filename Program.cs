@@ -9,6 +9,88 @@ namespace My_Training_Pad
 {
     class Program
     {
+        /////////////////////////////////////////////Print////////////////////////////////////////////////////////
+        public static void Print(List<List<int>> input)
+        {
+            foreach (List<int> temp in input)
+            {
+                foreach (int num in temp)
+                {
+                    Console.Write(num + "\t");
+                }
+                Console.WriteLine();
+            }
+        }
+        public static void Print(List<string> input)
+        {
+            foreach (string s in input)
+                Console.WriteLine(s);
+        }
+        public static void Print(List<int> input)
+        {
+            foreach (int n in input)
+            {
+                Console.WriteLine(n);
+            }
+        }
+        public static void Print(int[] array)
+        {
+            for (int i = 0; i < array.Length; i++)
+                Console.WriteLine(array[i]);
+        }
+        public static void Print(IEnumerable<int> list)
+        {
+            foreach (int i in list)
+            {
+                Console.WriteLine(i);
+            }
+        }
+        public static void Print(int[,] matrix)
+        {
+            int n = matrix.GetLength(0);
+            int m = matrix.GetLength(1);
+            for (int i = 0; i < n; i++)
+            {
+                for (int j = 0; j < m; j++)
+                {
+                    Console.Write(matrix[i, j] + "\t");
+                }
+                Console.WriteLine();
+            }
+        }
+        public static void Print(IList<int> input)
+        {
+            foreach (int n in input)
+                Console.WriteLine(n);
+        }
+        public static void Print(IList<IList<int>> input)
+        {
+            foreach (List<int> temp in input)
+            {
+                foreach (int num in temp)
+                {
+                    Console.Write(num + "\t");
+                }
+                Console.WriteLine();
+            }
+        }
+        public static void Print(Node head)
+        {
+            while (head != null)
+            {
+                Console.Write(head.data + "->");
+                head = head.next;
+            }
+            Console.WriteLine("null");
+            //Or recursive below:
+            //if (head == null) return;
+            //string rest = "";
+            //rest = (head.next == null) ? "->null\n" : "->";
+            //Console.Write(head.data+rest);
+            
+            //Print(head.next);
+        }
+        /////////////////////////////////////////////////////////////////////////////////////////////////////////
         static bool Search(int num, int[,] matrix, int m, int n) //m: number of rows, n: number of columns
         {
             if (num < matrix[0, 0] || num > matrix[m - 1, n - 1]) return false;
@@ -52,7 +134,6 @@ namespace My_Training_Pad
             return false;
 
         }
-
         ///////////////////////////////Linked Lists/////////////////////////////////////////
         static void remove_duplicate(Node head)
         {
@@ -86,8 +167,6 @@ namespace My_Training_Pad
             Next.next = head;
             return rest;
         }
-        //Swap 2 nodes given as int values
-
         ///////////////////////////////Trees/////////////////////////////////////////
         //↓Find Path: find the path between root and a given node in binary tree, empty list if doesn't exist
         static bool FindPath(Treenode root, int val, List<Treenode> path)
@@ -572,21 +651,24 @@ namespace My_Training_Pad
 
         static void Main(string[] args)
         {
-            /////////////////////////initializers Below///////////////////////////
-            Treenode one = new Treenode(1);
-            Treenode two = new Treenode(2);
-            Treenode three = new Treenode(3);
-            one.left = two;
-            one.right = three;
+
+            MedianFinder mf = new MedianFinder();
             /////////////////////////Start Time Below//////////////////////////////
             DateTime start = DateTime.Now;
-            /////////////////////////Functions Below//////////////////////////////
-            Console.WriteLine(LeetCode.LowestCommonAncestor(one, two, three).data);
-            /////////////////////////End Time Below///////////////////////////////
+            /////////////////////////Functions Below///////////////////////////////
+
+            string input = "";
+            while(input!="exit")
+            {
+                Console.Write("Add: ");
+                input=Console.ReadLine();
+                mf.AddNum(int.Parse(input));
+                Console.WriteLine("Median: "+mf.FindMedian());
+            }
+
+            /////////////////////////End Time Below////////////////////////////////
             Console.WriteLine("time: " + (DateTime.Now - start).TotalSeconds);
 
-            
-            
             Console.ReadKey();
 
         }

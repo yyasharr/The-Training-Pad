@@ -31,7 +31,7 @@ namespace My_Training_Pad
             data = d;
         }
 
-        public Node Reverse()
+        public Node ReverseIterative()
         {
             Node head = this;
             if (head == null || head.next == null) return head;
@@ -46,6 +46,16 @@ namespace My_Training_Pad
                 head = next;
             }
             return prev;
+        }
+        public Node Reverse()
+        {
+            if (this.next == null || this==null) return this;
+            Node head = this;
+            Node next = head.next;
+            head.next = null;
+            Node rest = next.Reverse();
+            next.next = head;
+            return rest;
         }
         public void RemoveKthFromEnd(int k)
         {
@@ -73,6 +83,7 @@ namespace My_Training_Pad
             }
             temp.next = new_node;
         }
+
     }
 
 

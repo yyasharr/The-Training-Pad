@@ -2318,7 +2318,87 @@ namespace My_Training_Pad
                 }
             }
         }
+        ////////////////////////////Q105///////////////////////////////////////////////////////////// 
+        public Treenode BuildTree1(int[] preorder, int[] inorder)
+        {
+            if (preorder.Length == 0 || preorder == null || inorder.Length == 0 || inorder == null) return null;
+
+            Treenode root = new Treenode(preorder[0]);
+
+            int LocationofRoot = RootLocation(root.data, inorder); //finding the location of root node in inorder traversal
+
+            int[] leftinorder = BuildSubArray(0, LocationofRoot - 1, inorder);
+            int[] rightinorder = BuildSubArray(LocationofRoot + 1, inorder.Length - 1, inorder);
+            int[] leftpreorder = BuildSubArray(1, leftinorder.Length, preorder);
+            int[] rightpreorder = BuildSubArray(leftinorder.Length + 1, preorder.Length - 1, preorder);
+
+            root.left = BuildTree(leftpreorder, leftinorder);
+            root.right = BuildTree(rightpreorder, rightinorder);
+
+            return root;
+        }
+        private int[] BuildSubArray(int start, int end, int[] Array)
+        {
+            int[] res = new int[end - start + 1];
+            for (int i = 0; i < res.Length; i++)
+            {
+                res[i] = Array[start + i];
+            }
+            return res;
+        }
+        private int RootLocation(int data, int[] list)
+        {
+            for (int i = 0; i < list.Length; i++)
+                if (list[i] == data) return i;
+            return -1;
+        }
+        ////////////////////////////Q106/////////////////////////////////////////////////////////////
+        public static Treenode BuildTree(int[] inorder, int[] postorder)
+        {
+            Dictionary<int, int> inorderindices = new Dictionary<int, int>();
+            for (int i = 0; i < inorder.Length; i++)
+            {
+                inorderindices.Add(inorder[i], i);
+            }
+            return BuildTree(inorder, 0, inorder.Length - 1, postorder, 0, postorder.Length - 1, inorderindices);
+        }
+        private static Treenode BuildTree(int[] inorder, int startinorder, int endinorder, int[] postorder, int startpostorder, int endpostorder, Dictionary<int, int> inorderindices)
+        {
+            if (startinorder > endinorder || startpostorder > endpostorder) return null;
+            if (startinorder == endinorder) return new Treenode(inorder[startinorder]);
+
+            Treenode root = new Treenode(postorder[endpostorder]);
+            int rootlocation = inorderindices[root.data];
+
+            root.left = BuildTree(inorder, startinorder, rootlocation - 1, postorder, startpostorder, rootlocation - 1, inorderindices);
+            root.right = BuildTree(inorder, rootlocation + 1, endinorder, postorder, rootlocation, endpostorder - 1, inorderindices);
+
+            return root;
+        }
+        ////////////////////////////Q637///////////////////////////////////////////////////////////// 
+        public IList<double> AverageOfLevels(Treenode root)
+        {
+            List<double> res = new List<double>();
+            if (root == null) return res;
+            Queue<Treenode> q = new Queue<Treenode>();
+            q.Enqueue(root);
+            while (q.Any())//while q is not empty
+            {
+                int count = q.Count;
+                double sum = 0;
+                for (int i = 0; i < count; i++)
+                {
+                    Treenode curr = q.Dequeue();
+                    sum += curr.data;
+                    if (curr.left != null) q.Enqueue(curr.left);
+                    if (curr.right!= null) q.Enqueue(curr.right);
+                }
+                res.Add(sum/count);
+            }
+            return res;
+        }
     }
+
 
 }
 

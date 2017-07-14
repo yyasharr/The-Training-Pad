@@ -59,7 +59,7 @@ namespace My_Training_Pad
         /// Returns the Maximum integar of the Max Heap, removes the max and reforms the heap. Throws an error if empty.
         /// </summary>
         /// <returns></returns>
-        public int ExtractMin()
+        public int ExtractMax()
         {
             if (Heap.Count == 0) throw new NullReferenceException("There is no integar in the list!");
             else

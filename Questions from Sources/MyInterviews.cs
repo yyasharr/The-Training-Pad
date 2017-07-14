@@ -44,5 +44,32 @@ namespace My_Training_Pad
             }
             return Paths[Frog.X,Frog.Y];
         }
+        //Microsoft Mobile Interview 7/12/17 (https://onedrive.live.com/?cid=FB43B40742F9A0FC&id=FB43B40742F9A0FC%213583&parId=FB43B40742F9A0FC%213582&o=OneUp)
+        public static int[,] Scaler(int[] items, int height, int width, int scale)
+        {
+            if (items.Length != height * width) return null;
+
+            int[,] res = new int[height * scale, width * scale];
+            int counter = 0;
+
+            for(int i=0; i<height; i++)
+            {
+                for(int j=0; j<width; j++)
+                {
+                    int num = items[counter];
+                    int startrow = i * height;
+                    int startcol = j * width;
+                    for (int k = startrow; k <= startrow + scale- 1; k++)
+                    {
+                        for (int l = startcol; l <= startcol + scale - 1; l++)
+                        {
+                            res[k, l] = num;
+                        }
+                    }
+                    counter++;
+                }
+            }
+            return res;
+        }
     }
 }

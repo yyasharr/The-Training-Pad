@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace My_Training_Pad
 {
-    class Treenode
+    public class Treenode : IComparable
     {
         public int data;
         public Treenode left;
@@ -26,12 +26,108 @@ namespace My_Training_Pad
         /// <returns></returns>
         public static int Height(Treenode root)
         {
-            if (root == null || (root.left == null && root.right == null))
+            if (root == null)
                 return 0;
-            return Math.Max(Height(root.left),Height(root.right)) + 1;
+            return Math.Max(Height(root.left), Height(root.right)) + 1;
+        }
+
+        public void Visualize()
+        {
+            if (this == null) return;
+            int height = Height(this);
+            PerfectTree perfecttree = new PerfectTree(height);
+            PerfectTreeNode proot = perfecttree.root;
+            PrintComplete(this, proot);
+        }
+        public class PerfectTree
+        {
+            int height;
+            public PerfectTreeNode root;
+            public PerfectTree(int h)
+            {
+                height = h;
+                root = BuildPerfectTree(h); //build an empty perfect tree
+
+            }
+            PerfectTreeNode BuildPerfectTree(int h)
+            {
+                if (h == 0)
+                    return null;
+                int increasecol = Convert.ToInt32(Math.Pow(2, h));
+                PerfectTreeNode root = new PerfectTreeNode();
+                Queue<PerfectTreeNode> q = new Queue<PerfectTreeNode>();
+                q.Enqueue(root);
+                int level = 1;
+                while (level <= h)
+                {
+                    int startcol = Convert.ToInt32(Math.Pow(2, (h - level)) - 1); //2^(h-level)-1;
+                    int r = (level - 1) * 2;
+                    int count = q.Count;
+                    while (count > 0)
+                    {
+                        PerfectTreeNode curr = q.Dequeue();
+                        curr.row = r;
+                        curr.col = startcol;
+                        PerfectTreeNode left = new PerfectTreeNode();
+                        PerfectTreeNode right = new PerfectTreeNode();
+                        curr.left = left;
+                        curr.right = right;
+                        q.Enqueue(left);
+                        q.Enqueue(right);
+                        count--;
+                        startcol += increasecol;
+                        increasecol /= 2;
+
+                    }
+                    level++;
+                }
+                return root;
+            }
+            
+        }
+        public void PrintComplete(Treenode broot, PerfectTreeNode proot) //Print BinaryTree elements with corresponding spots from complete tree
+        {
+            if (broot == null) return;
+
+            //proot.value = broot.data.ToString();
+
+            Console.SetCursorPosition(proot.col, proot.row);
+            Console.Write(broot.data);
+
+            PrintComplete(broot.left, proot.right);
+            PrintComplete(broot.right, proot.right);
+        }
+        public class PerfectTreeNode
+        {
+            public string value = "";
+            public PerfectTreeNode left;
+            public PerfectTreeNode right;
+            public int row = 0;
+            public int col = 0;
+            public PerfectTreeNode()
+            {
+            }
+
+        }
+
+
+        public override string ToString()
+        {
+            return this.data.ToString();
+        }
+
+        public int CompareTo(object obj)
+        {
+            return data.CompareTo(obj);
+        }
+        public int CompareTo(Treenode obj)
+        {
+            return data.CompareTo(obj.data);
         }
     }
+
 }
+
 //Sample initializers:
 ///////////////////////////////////↓↓↓↓Sample Initializer1///////////////////////////////////↓↓↓↓
 //Treenode one = new Treenode(1);
