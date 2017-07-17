@@ -652,22 +652,13 @@ namespace My_Training_Pad
         static void Main(string[] args)
         {
 
-            MedianFinder mf = new MedianFinder();
+            
             /////////////////////////Start Time Below//////////////////////////////
             DateTime start = DateTime.Now;
             /////////////////////////Functions Below///////////////////////////////
 
-            string input = "";
-            while (input != "exit")
-            {
-                Console.Write("Add: ");
-                input = Console.ReadLine();
-                mf.AddNum(int.Parse(input));
-                Console.WriteLine("Median: " + mf.FindMedian());
-            }
             
-
-
+            
             /////////////////////////End Time Below////////////////////////////////
             Console.WriteLine("time: " + (DateTime.Now - start).TotalSeconds);
 

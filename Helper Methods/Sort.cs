@@ -6,69 +6,20 @@ using System.Threading.Tasks;
 
 namespace My_Training_Pad
 {
-    static class Sort
+    static class Sort<T> where T:IComparable<T>
     {
         /////////////////////Heap Sort////////////////////////////
-        public static int[] HeapSort(int[] array)
+        public static void HeapSort(T[] array) 
         {
-            List<int> heap = new List<int>();
-            int[] sorted = new int[array.Length];
-            for (int i = 0; i < array.Length; i++)
+            MinHeap<T> minheap = new MinHeap<T>();
+            for(int i=0; i<array.Length; i++)
             {
-                insert(heap, array[i]);
+                minheap.Insert(array[i]);
             }
-            for (int i = 0; i < sorted.Length; i++)
+            for(int i=0; i<array.Length; i++)
             {
-                sorted[i] = delete(heap);
+                array[i] = minheap.ExtractMin();
             }
-
-            return sorted;
-        }
-        private static void insert(List<int> heap, int n)
-        {
-            heap.Add(n);
-            int index = heap.Count - 1;
-
-            while (index > 0 && heap[index] < heap[(index - 1) / 2])
-            {
-                int parent = (index - 1) / 2;
-                Swap(heap, parent, index);
-                parent = (parent - 1) / 2;
-            }
-        }
-        private static int delete(List<int> heap)
-        {
-            int min = heap[0];
-            if (heap.Count == 1 || heap.Count == 2)
-                heap.RemoveAt(0);
-            else
-            {
-                heap[0] = heap[heap.Count - 1];
-                heap.RemoveAt(heap.Count - 1);
-
-                int p = 0;
-                while (2 * p + 2 <= heap.Count && (heap[p] > heap[2 * p + 1] || heap[p] > heap[2 * p + 2]))
-                {
-                    if (heap[2 * p + 1] < heap[2 * p + 2])
-                    {
-                        Swap(heap, p, 2 * p + 1);
-                        p = 2 * p + 1;
-                    }
-                    else
-                    {
-                        Swap(heap, p, 2 * p + 2);
-                        p = 2 * p + 2;
-                    }
-
-                }
-            }
-            return min;
-        }
-        private static void Swap(List<int> heap, int i, int j)
-        {
-            int temp = heap[i];
-            heap[i] = heap[j];
-            heap[j] = temp;
         }
 
         /////////////////////Merge Sort////////////////////////////
