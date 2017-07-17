@@ -6,22 +6,16 @@ using System.Threading.Tasks;
 
 namespace My_Training_Pad
 {
-    class MaxHeap
+    class MaxHeap<T> where T:IComparable<T>
     {
-        private List<int> Heap;
+        private List<T> Heap;
 
-        /// <summary>
-        /// Returns the number of the integars in the Min Heap.
-        /// </summary>
-        public int Count
+        public MaxHeap()
         {
-            get { return Heap.Count; }
+            Heap = new List<T>();
         }
 
-        /// <summary>
-        /// Returns the Maximum element of the heap without removing it. Throws an error if empty.
-        /// </summary>
-        public int Max
+        public T Max
         {
             get
             {
@@ -29,90 +23,77 @@ namespace My_Training_Pad
                 else return Heap[0];
             }
         }
-
-        /// <summary>
-        /// Constructs an empty Max Heap.
-        /// </summary>
-        public MaxHeap()
+        public bool IsEmpty()
         {
-            Heap = new List<int>();
+            return Heap == null || Heap.Count == 0;
         }
 
-        /// <summary>
-        /// Inserts a new integar to the Max Heap and reforms the heap.
-        /// </summary>
-        /// <param name="n"></param>
-        public void Insert(int n)
+        public int Count
         {
-            Heap.Add(n);
-            int childindex = Heap.Count - 1;
-            int parentindex = (childindex - 1) / 2;
-            while (parentindex >= 0 && Heap[childindex] > Heap[parentindex])
+            get
             {
-                Swap(childindex, parentindex);
-                childindex = parentindex;
-                parentindex = (childindex - 1) / 2;
-            }
-        }
-
-        /// <summary>
-        /// Returns the Maximum integar of the Max Heap, removes the max and reforms the heap. Throws an error if empty.
-        /// </summary>
-        /// <returns></returns>
-        public int ExtractMax()
-        {
-            if (Heap.Count == 0) throw new NullReferenceException("There is no integar in the list!");
-            else
-            {
-                int max = Heap[0];
-                Heap[0] = Heap[Heap.Count - 1];
-                Heap.RemoveAt(Heap.Count - 1);
-                int parentindex = 0;
-                if (Heap.Count > 1)
+                if (Heap == null) return 0;
+                else
                 {
-                    while (2 * parentindex + 1 < Heap.Count)
-                    {
-                        if (Heap[parentindex] < Heap[parentindex * 2 + 1] || Heap[parentindex] < Heap[parentindex * 2 + 2])
-                        {
-                            if (parentindex * 2 + 2 <= Heap.Count - 1)
-                            {
-                                if (Heap[parentindex * 2 + 1] > Heap[parentindex * 2 + 2])
-                                {
-                                    Swap(parentindex, parentindex * 2 + 1);
-                                    parentindex = parentindex * 2 + 1;
-                                }
-                                else
-                                {
-                                    Swap(parentindex, parentindex * 2 + 2);
-                                    parentindex = parentindex * 2 + 2;
-                                }
-                            }
-                            else
-                            {
-                                Swap(parentindex, parentindex * 2 + 1);
-                                parentindex = parentindex * 2 + 1;
-                            }
-                        }
-                    }
+                    return Heap.Count;
                 }
-                return max;
             }
         }
 
-        /// <summary>
-        /// Returns the list of integars in the Max Heap.
-        /// </summary>
-        /// <returns></returns>
-        public List<int> GetHeap()
+        public void Insert(T data)
         {
-            return Heap;
+            Heap.Add(data);
+
+            int ch = Heap.Count - 1; //ch for child
+            while (ch > 0)
+            {
+                int p = (ch - 1) / 2; //p for parent
+
+                if (Heap[ch].CompareTo(Heap[p]) > 0) //meaning child is bigger than parent -> Swap'm
+                {
+                    Swap(p, ch);
+                    ch = p;
+                }
+                else
+                    break;
+            }
         }
 
-        private void Swap(int index1, int index2)
+        private void Swap(int p, int ch)
         {
-            int temp = Heap[index1];
-            Heap[index1] = Heap[index2];
-            Heap[index2] = temp;
+            T temp = Heap[p];
+            Heap[p] = Heap[ch];
+            Heap[ch] = temp;
+        }
+
+        public T ExtractMax()
+        {
+            if (Heap == null || Heap.Count == 0) throw new NullReferenceException();
+            T ret = Heap[0];
+
+            Heap[0] = Heap[Heap.Count - 1];
+            Heap.RemoveAt(Heap.Count - 1);
+
+            Heapify(0);
+
+            return ret;
+        }
+        private void Heapify(int i) //i is parent
+        {
+            int ch1 = 2 * i + 1; //left child
+            int ch2 = 2 * i + 2; // right child
+
+            if (ch1 >= Heap.Count && ch2 >= Heap.Count) return;
+
+            int bigger = (ch2 >= Heap.Count) ? ch1 : (Heap[ch1].CompareTo(Heap[ch2]) > 0) ? ch1 : ch2;
+            //if ch2 is out of boundary, ch1 is bigger, don't check rest, otherwise, see which one has bigger data
+
+            if (Heap[i].CompareTo(Heap[bigger]) < 0)
+            {
+                Swap(i, bigger);
+                Heapify(bigger);
+            }
+
         }
     }
 }

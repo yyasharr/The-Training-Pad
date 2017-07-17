@@ -47,6 +47,8 @@
   <ItemGroup>
     <Compile Include="Data Structures\DoublyNode.cs" />
     <Compile Include="Data Structures\LinkedList.cs" />
+    <Compile Include="Data Structures\MaxHeap.cs" />
+    <Compile Include="Data Structures\MinHeap.cs" />
     <Compile Include="Desgin\BSTIterator.cs" />
     <Compile Include="Desgin\Codec.cs" />
     <Compile Include="Desgin\LogSystem.cs" />
@@ -61,8 +63,6 @@
     <Compile Include="Questions from Sources\EPI.cs" />
     <Compile Include="Data Structures\Graph.cs" />
     <Compile Include="Questions from Sources\LeetCode.cs" />
-    <Compile Include="Data Structures\MaxHeap.cs" />
-    <Compile Include="Data Structures\MinHeap.cs" />
     <Compile Include="Data Structures\Node.cs" />
     <Compile Include="Helper Methods\Prints.cs" />
     <Compile Include="Program.cs" />
@@ -77,7 +77,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
-    <None Include="ClassDiagram1.cd" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

@@ -658,13 +658,15 @@ namespace My_Training_Pad
             /////////////////////////Functions Below///////////////////////////////
 
             string input = "";
-            while(input!="exit")
+            while (input != "exit")
             {
                 Console.Write("Add: ");
-                input=Console.ReadLine();
+                input = Console.ReadLine();
                 mf.AddNum(int.Parse(input));
-                Console.WriteLine("Median: "+mf.FindMedian());
+                Console.WriteLine("Median: " + mf.FindMedian());
             }
+            
+
 
             /////////////////////////End Time Below////////////////////////////////
             Console.WriteLine("time: " + (DateTime.Now - start).TotalSeconds);

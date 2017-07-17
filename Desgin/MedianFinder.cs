@@ -8,14 +8,14 @@ namespace My_Training_Pad //Q295 from LeetCode
 {
     public class MedianFinder
     {
-        MinHeap minheap;
-        MaxHeap maxheap;
+        MinHeap<int> minheap;
+        MaxHeap<int> maxheap;
         
         /** initialize your data structure here. */
         public MedianFinder()
         {
-            minheap = new MinHeap();
-            maxheap = new MaxHeap(); ;
+            minheap = new MinHeap<int>();
+            maxheap = new MaxHeap<int>(); ;
         }
 
         public void AddNum(int num) //Always trying to keep maxheap.Count>=minheap.Count
