@@ -2397,6 +2397,26 @@ namespace My_Training_Pad
             }
             return res;
         }
+        ////////////////////////////Q643///////////////////////////////////////////////////////////// 
+        public double FindMaxAverage(int[] nums, int k)
+        {
+            int currsum = 0;
+            for(int i=0; i<k; i++)
+            {
+                currsum += nums[i];
+            }
+            int maxsum = currsum;
+            int start = 0;
+            int end = k - 1;
+            while(end<nums.Length-1)
+            {
+                currsum -= nums[start];
+                currsum += nums[end + 1];
+                maxsum = Math.Max(maxsum, currsum);
+                start++; end++;
+            }
+            return maxsum / (double)k;
+        }
     }
 
 

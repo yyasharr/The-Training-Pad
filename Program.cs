@@ -87,7 +87,7 @@ namespace My_Training_Pad
             //string rest = "";
             //rest = (head.next == null) ? "->null\n" : "->";
             //Console.Write(head.data+rest);
-            
+
             //Print(head.next);
         }
         /////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -652,13 +652,40 @@ namespace My_Training_Pad
         static void Main(string[] args)
         {
 
-            
+
             /////////////////////////Start Time Below//////////////////////////////
             DateTime start = DateTime.Now;
             /////////////////////////Functions Below///////////////////////////////
+            Desgin.Trie trie = new Desgin.Trie();
+            trie.Insert("yashar");
+            trie.Insert("yield");
+            trie.Insert("yaghoub");
+            trie.Insert("yalda");
+            trie.Insert("yadollah");
+            trie.Insert("yasser");
+            trie.Insert("yalan");
+            trie.Insert("yousef");
+            trie.Insert("yanamna");
+            trie.Insert("apple");
+            trie.Insert("applet");
+            trie.Insert("applause");
+            trie.Insert("apologize");
+            trie.Insert("appear");
+            trie.Insert("apes");
+            trie.Insert("api");
+            trie.Insert("adidas");
 
-            
-            
+            string pref = "";
+            while(true)
+            {
+                Console.SetCursorPosition(0,0);
+                Console.Write(pref);
+                pref += Console.ReadKey().KeyChar;
+                Console.Clear();
+                Console.SetCursorPosition(0, 1);
+                Print(trie.Suggestions(pref));
+            }
+
             /////////////////////////End Time Below////////////////////////////////
             Console.WriteLine("time: " + (DateTime.Now - start).TotalSeconds);
 
