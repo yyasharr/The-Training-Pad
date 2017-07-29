@@ -58,6 +58,7 @@
     <Compile Include="Desgin\MyQueue.cs" />
     <Compile Include="Desgin\NestedIterator.cs" />
     <Compile Include="Desgin\Trie.cs" />
+    <Compile Include="Desgin\WordDistance.cs" />
     <Compile Include="Desgin\ZigzagIterator.cs" />
     <Compile Include="Desgin\ZigzagIteratorII.cs" />
     <Compile Include="Questions from Sources\MyInterviews.cs" />
@@ -77,6 +78,7 @@
     <Compile Include="Temp Classes\RandomListNode.cs" />
     <Compile Include="Temp Classes\Shuffling.cs" />
     <Compile Include="Temp Classes\Storage.cs" />
+    <Compile Include="Temp Classes\TwoDArray.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace My_Training_Pad
 {
-    static class Prints
+    public static class Prints
     {
 
         /// <summary>
@@ -58,8 +58,7 @@ namespace My_Training_Pad
             for (int i = 0; i < array.Length; i++)
                 Console.WriteLine(array[i]);
         }
-
-
+        
         /// <summary>
         /// Prints a matrix of integers.
         /// </summary>

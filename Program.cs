@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Linq.Expressions;
-using System.Text;
-using System.Threading.Tasks;
 using System.Drawing;
+using System.IO;
+using System.Net;
+
 namespace My_Training_Pad
 {
     class Program
@@ -656,39 +656,15 @@ namespace My_Training_Pad
             /////////////////////////Start Time Below//////////////////////////////
             DateTime start = DateTime.Now;
             /////////////////////////Functions Below///////////////////////////////
-            Desgin.Trie trie = new Desgin.Trie();
-            trie.Insert("yashar");
-            trie.Insert("yield");
-            trie.Insert("yaghoub");
-            trie.Insert("yalda");
-            trie.Insert("yadollah");
-            trie.Insert("yasser");
-            trie.Insert("yalan");
-            trie.Insert("yousef");
-            trie.Insert("yanamna");
-            trie.Insert("apple");
-            trie.Insert("applet");
-            trie.Insert("applause");
-            trie.Insert("apologize");
-            trie.Insert("appear");
-            trie.Insert("apes");
-            trie.Insert("api");
-            trie.Insert("adidas");
 
-            string pref = "";
-            while(true)
-            {
-                Console.SetCursorPosition(0,0);
-                Console.Write(pref);
-                pref += Console.ReadKey().KeyChar;
-                Console.Clear();
-                Console.SetCursorPosition(0, 1);
-                Print(trie.Suggestions(pref));
-            }
+            //["cat", "bat", "rat"]
+            IList<string> list = new List<string> { "cat", "bat", "rat" };
+            string sentence = "the cattle was rattled by the battery";
+            Console.WriteLine(LeetCode.ReplaceWords1(list, sentence));
+
 
             /////////////////////////End Time Below////////////////////////////////
             Console.WriteLine("time: " + (DateTime.Now - start).TotalSeconds);
-
             Console.ReadKey();
 
         }

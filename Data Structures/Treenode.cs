@@ -18,6 +18,67 @@ namespace My_Training_Pad
             left = null;
             right = null;
         }
+        //Traversals:
+        public List<int> InOrderTraversal()
+        {
+            List<int> nodes = new List<int>();
+            this.InOrderTraversal_Helper(nodes);
+            return nodes;
+        }
+        private void InOrderTraversal_Helper(List<int> nodes)
+        {
+            if (this == null) return;
+
+            if (this.left != null)
+                this.left.InOrderTraversal_Helper(nodes);
+
+            nodes.Add(this.data);
+
+            if (this.right != null)
+                this.right.InOrderTraversal_Helper(nodes);
+
+        }
+
+        public List<int> PreOrderTraversal()
+        {
+            List<int> nodes = new List<int>();
+            this.PreOrderTraversal_Helper(nodes);
+            return nodes;
+        }
+
+        private void PreOrderTraversal_Helper(List<int> nodes)
+        {
+            if (this == null) return;
+
+            nodes.Add(this.data);
+
+            if (this.left != null)
+                this.left.PreOrderTraversal_Helper(nodes);
+
+            if (this.right != null)
+                this.right.PreOrderTraversal_Helper(nodes);
+        }
+
+        public List<int> PostOrderTraversal()
+        {
+            List<int> nodes = new List<int>();
+            this.PostOrderTraversal_Helper(nodes);
+            return nodes;
+        }
+
+        private void PostOrderTraversal_Helper(List<int> nodes)
+        {
+            if (this == null)
+                return;
+
+            if (this.left != null)
+                this.left.PostOrderTraversal_Helper(nodes);
+
+            if (this.right != null)
+                this.right.PostOrderTraversal_Helper(nodes);
+
+            nodes.Add(this.data);
+        }
 
         /// <summary>
         /// Returns hegiht of a given Treenode.
@@ -29,6 +90,11 @@ namespace My_Training_Pad
             if (root == null)
                 return 0;
             return Math.Max(Height(root.left), Height(root.right)) + 1;
+        }
+
+        public int Height()
+        {
+            return Treenode.Height(this);
         }
 
         public void Visualize()
@@ -83,7 +149,7 @@ namespace My_Training_Pad
                 }
                 return root;
             }
-            
+
         }
         public void PrintComplete(Treenode broot, PerfectTreeNode proot) //Print BinaryTree elements with corresponding spots from complete tree
         {
@@ -110,6 +176,52 @@ namespace My_Training_Pad
 
         }
 
+        /// <summary>
+        /// Returns true if the tree starting at this Treenode is a Binary Search Tree.
+        /// </summary>
+        /// <returns></returns>
+        public bool ValidateBST()
+        {
+            return ValidateBST(this, int.MinValue, int.MaxValue);
+        }
+        private bool ValidateBST(Treenode root, int minValue, int maxValue)
+        {
+            if (root == null) return true;
+
+            if (root.data >= maxValue || root.data < minValue) return false;
+
+            return ValidateBST(root.left, minValue, root.data) && ValidateBST(root.right, root.data, maxValue);
+        }
+        public Treenode DeleteNode_BST(int key)
+        {
+            if (this == null || this.ValidateBST() == false) return this;
+
+            if (key > this.data)
+                this.right = this.right.DeleteNode_BST(key);
+
+            else if (key < this.data)
+                this.left = this.left.DeleteNode_BST(key);
+
+            else
+            {
+                if (this.left == null)
+                    return this.right;
+
+                if (this.right == null)
+                    return this.left;
+
+                this.data = this.left.FindBiggestOnLeft();
+
+                this.left = this.left.DeleteNode_BST(this.data);
+            }
+            return this;
+        }
+        private int FindBiggestOnLeft()
+        {
+            if (this.right == null) return this.data;
+
+            return this.right.FindBiggestOnLeft();
+        }
 
         public override string ToString()
         {
@@ -124,13 +236,33 @@ namespace My_Training_Pad
         {
             return data.CompareTo(obj.data);
         }
+        public int Diameter()
+        {
+            return Diameter(0);
+        }
+        private int Diameter(int max)
+        {
+            if (this == null) return 0;
+
+            int leftheight = (this.left != null) ? this.left.Height() : 0;
+            int rightheight = (this.right != null) ? this.right.Height() : 0;
+
+            max = Math.Max(max, leftheight + rightheight);
+
+            if (this.left!=null) this.left.Diameter(max);
+            if (this.right!=null) this.right.Diameter(max);
+
+            return max;
+        }
     }
+
+
 
 }
 
-//Sample initializers:
-///////////////////////////////////↓↓↓↓Sample Initializer1///////////////////////////////////↓↓↓↓
-//Treenode one = new Treenode(1);
+#region sample initializers
+#region Sample Treenode 1
+//treenode one = new Treenode(1);
 //Treenode two = new Treenode(2);
 //Treenode three = new Treenode(3);
 //Treenode four = new Treenode(4);
@@ -145,7 +277,8 @@ namespace My_Training_Pad
 //three.right = four;
 //seven.left = six;
 //seven.right = eight;
-//six.left = one;
+//six.left=one;
+
 
 //         __5__
 //        /     \
@@ -154,9 +287,9 @@ namespace My_Training_Pad
 //     2   4   6   8
 //            /
 //           1
-
-///////////////////////////////////↓↓↓↓Sample Initializer2///////////////////////////////////↓↓↓↓
-//reenode one = new Treenode(1);
+#endregion
+#region Sample Treenode 2
+//Treenode one = new Treenode(1);
 //Treenode two = new Treenode(2);
 //Treenode three = new Treenode(3);
 //Treenode four = new Treenode(4);
@@ -199,4 +332,5 @@ namespace My_Training_Pad
 //        /             \
 //       4               13
 //
-
+#endregion
+#endregion

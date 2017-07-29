@@ -61,6 +61,7 @@ namespace My_Training_Pad.Desgin
             }
             return false;
         }
+        
 
         public List<string> Suggestions(string prefix)
         {
@@ -150,37 +151,47 @@ namespace My_Training_Pad.Desgin
             Children = new TrieNode[26];
         }
     }
-    
+
 
 }
 //******* FOR TRYING SUGGESTION SYSTEM, YOU CAN TRY THE BELOW SAMPLE INITIALIZER IN program.cs FILE ******
+#region sample Test
 //Desgin.Trie trie = new Desgin.Trie();
 //trie.Insert("yashar");
-//trie.Insert("yield");
-//trie.Insert("yaghoub");
-//trie.Insert("yalda");
-//trie.Insert("yadollah");
-//trie.Insert("yasser");
-//trie.Insert("yalan");
-//trie.Insert("yousef");
-//trie.Insert("yanamna");
-//trie.Insert("apple");
-//trie.Insert("applet");
-//trie.Insert("applause");
-//trie.Insert("apologize");
-//trie.Insert("appear");
-//trie.Insert("apes");
-//trie.Insert("api");
-//trie.Insert("adidas");
+//            trie.Insert("yield");
+//            trie.Insert("yaghoub");
+//            trie.Insert("yalda");
+//            trie.Insert("yadollah");
+//            trie.Insert("yasser");
+//            trie.Insert("yalan");
+//            trie.Insert("yousef");
+//            trie.Insert("yanamna");
+//            trie.Insert("apple");
+//            trie.Insert("applet");
+//            trie.Insert("applause");
+//            trie.Insert("apologize");
+//            trie.Insert("appear");
+//            trie.Insert("apes");
+//            trie.Insert("api");
+//            trie.Insert("adidas");
 
-//string pref = "";
-//while(true)
-//{
-//    Console.SetCursorPosition(0,0);
-//    Console.Write(pref);
-//    pref += Console.ReadKey().KeyChar;
-//    Console.Clear();
-//    Console.SetCursorPosition(0, 1);
-//    Print(trie.Suggestions(pref));
+//            string pref = "";
+//            while(true)
+//            {
+//                Console.SetCursorPosition(0,0);
+//                Console.Write(pref);
 
+//                ConsoleKeyInfo key = Console.ReadKey();
+//                if (key.Key == ConsoleKey.Backspace)
+//                {
+//                    if (pref != "")
+//                        pref = pref.Substring(0, pref.Length - 1);
+//                }
+//                else
+//                    pref += key.KeyChar;
 
+//                Console.Clear();
+//                Console.SetCursorPosition(0, 1);
+//                Print(trie.Suggestions(pref));
+//            }
+#endregion

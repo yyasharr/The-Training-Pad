@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Drawing;
 using System.Data.Linq;
+using System.Collections;
 
 namespace My_Training_Pad
 {
@@ -2391,9 +2392,9 @@ namespace My_Training_Pad
                     Treenode curr = q.Dequeue();
                     sum += curr.data;
                     if (curr.left != null) q.Enqueue(curr.left);
-                    if (curr.right!= null) q.Enqueue(curr.right);
+                    if (curr.right != null) q.Enqueue(curr.right);
                 }
-                res.Add(sum/count);
+                res.Add(sum / count);
             }
             return res;
         }
@@ -2401,14 +2402,14 @@ namespace My_Training_Pad
         public double FindMaxAverage(int[] nums, int k)
         {
             int currsum = 0;
-            for(int i=0; i<k; i++)
+            for (int i = 0; i < k; i++)
             {
                 currsum += nums[i];
             }
             int maxsum = currsum;
             int start = 0;
             int end = k - 1;
-            while(end<nums.Length-1)
+            while (end < nums.Length - 1)
             {
                 currsum -= nums[start];
                 currsum += nums[end + 1];
@@ -2417,9 +2418,192 @@ namespace My_Training_Pad
             }
             return maxsum / (double)k;
         }
+        ////////////////////////////Q62///////////////////////////////////////////////////////////// 
+        public static int UniquePaths(int m, int n)
+        {
+            int[,] DP = new int[m, n];
+            DP[m - 1, n - 1] = 1;
+
+            for (int i = 0; i < m - 1; i++)
+            {
+                DP[i, n - 1] = 1;
+            }
+            for (int i = 0; i < n - 1; i++)
+            {
+                DP[m - 1, i] = 1;
+            }
+
+            for (int i = m - 2; i >= 0; i--)
+            {
+                for (int j = n - 2; j >= 0; j--)
+                {
+                    DP[i, j] = DP[i, j + 1] + DP[i + 1, j];
+                }
+            }
+            return DP[0, 0];
+        }
+        ////////////////////////////Q63///////////////////////////////////////////////////////////// 
+        public static int UniquePathsWithObstacles(int[,] obstacleGrid)
+        {
+            if (obstacleGrid[0, 0] == 1) return 0;
+
+            int m = obstacleGrid.GetLength(0);
+            int n = obstacleGrid.GetLength(1);
+
+            int[,] dp = new int[m, n];
+
+            for (int i = m - 1; i >=0; i--)
+            {
+                if(obstacleGrid[i,n-1]==0)
+                {
+                    dp[i, n - 1] = 1;
+                }
+                else
+                {
+                    break;
+                }
+            }
+
+            for(int i=n-1; i>=0; i--)
+            {
+                if(obstacleGrid[m-1,i]==0)
+                {
+                    dp[m - 1, i] = 1;
+                }
+                else
+                {
+                    break;
+                }
+            }
+
+            for(int i=m-2; i>=0; i--)
+            {
+                for(int j=n-2; j>=0; j--)
+                {
+                    if(obstacleGrid[i,j]==1)
+                    {
+                        dp[i, j] = 0;
+                    }
+                    else
+                    {
+                        int n1 = 0;
+                        int n2 = 0;
+                        if(i+1<m)
+                            n1 = dp[i + 1, j];
+                        if (j + 1 < n)
+                            n2 = dp[i, j + 1];
+                        dp[i, j] = n1 + n2;
+                    }
+                }
+            }
+            return dp[0, 0];
+        }
+        ////////////////////////////Q646///////////////////////////////////////////////////////////// 
+        public static int FindLongestChain(int[,] pairs)
+        {
+            int n = pairs.GetLength(0);
+            int[] dp = new int[pairs.Length];
+            for(int i=0; i<n; i++)
+            {
+                dp[i] = 1;
+            }
+            #region Sorting the pairs array!!!
+            TwoDArray[] temparray = new TwoDArray[n];
+            for(int i=0; i<n; i++)
+            {
+                temparray[i] = new TwoDArray(new int[] { pairs[i, 0] , pairs[i, 1] });
+            }
+            Array.Sort(temparray);
+            for (int i = 0; i < n; i++)
+            {
+                pairs[i, 0] = temparray[i].TheArray[0];
+                pairs[i, 1] = temparray[i].TheArray[1];
+            }
+            #endregion
+            int max = 1;
+            for(int i=1; i<n; i++)
+            {
+                for(int j=0; j<i; j++)
+                {
+                    if(pairs[j,1]<pairs[i,0] && dp[i]<=dp[j])
+                    {
+                        dp[i] = dp[j] + 1;
+                        max = Math.Max(max, dp[i]);
+                    }
+                }
+            }
+
+            return max;
+        }
+        ////////////////////////////Q648///////////////////////////////////////////////////////////// 
+        public static string ReplaceWords(IList<string> dict, string sentence)
+        {
+            HashSet<string> set = new HashSet<string>();
+            foreach (var item in dict)
+            {
+                set.Add(item);
+            }
+
+            string[] words = sentence.Split(' ');
+
+            for(int i=0;i<words.Length;i++)
+            {
+                string checker = WordValidater(words[i], set);
+                if (checker != null)
+                    words[i] = checker;
+                if (i < words.Length - 1)
+                    words[i] += " ";
+            }
+            return string.Join("", words);
+        }
+
+        private static string WordValidater(string word, HashSet<string> set)
+        {
+            string s = "";
+            for(int i=0; i<word.Length; i++)
+            {
+                s += word[i];
+                if (set.Contains(s))
+                    return s;
+            }
+            return null;
+        }
+        public static string ReplaceWords1(IList<string> dict, string sentence)//Second solution using trie
+        {
+            Trie trie = new Trie();
+            foreach (var item in dict)
+            {
+                trie.AddWord(item);
+            }
+
+            string[] words = sentence.Split(' ');
+
+            for (int i = 0; i < words.Length; i++)
+            {
+                string checker = SearchInTrie(words[i], trie);
+                if (checker != null)
+                    words[i] = checker;
+                if (i < words.Length - 1)
+                    words[i] += " ";
+            }
+            return string.Join("", words);
+
+
+        }
+
+        static string SearchInTrie(string word, Trie trie)
+        {
+            string s = "";
+            for (int i = 0; i < word.Length; i++)
+            {
+                s += word[i];
+                if (trie.Search(s))
+                    return s;
+            }
+            return null;
+        }
     }
 
-
+   
 }
-
 ////////////////////////////Q///////////////////////////////////////////////////////////// 
