@@ -2452,9 +2452,9 @@ namespace My_Training_Pad
 
             int[,] dp = new int[m, n];
 
-            for (int i = m - 1; i >=0; i--)
+            for (int i = m - 1; i >= 0; i--)
             {
-                if(obstacleGrid[i,n-1]==0)
+                if (obstacleGrid[i, n - 1] == 0)
                 {
                     dp[i, n - 1] = 1;
                 }
@@ -2464,9 +2464,9 @@ namespace My_Training_Pad
                 }
             }
 
-            for(int i=n-1; i>=0; i--)
+            for (int i = n - 1; i >= 0; i--)
             {
-                if(obstacleGrid[m-1,i]==0)
+                if (obstacleGrid[m - 1, i] == 0)
                 {
                     dp[m - 1, i] = 1;
                 }
@@ -2476,11 +2476,11 @@ namespace My_Training_Pad
                 }
             }
 
-            for(int i=m-2; i>=0; i--)
+            for (int i = m - 2; i >= 0; i--)
             {
-                for(int j=n-2; j>=0; j--)
+                for (int j = n - 2; j >= 0; j--)
                 {
-                    if(obstacleGrid[i,j]==1)
+                    if (obstacleGrid[i, j] == 1)
                     {
                         dp[i, j] = 0;
                     }
@@ -2488,7 +2488,7 @@ namespace My_Training_Pad
                     {
                         int n1 = 0;
                         int n2 = 0;
-                        if(i+1<m)
+                        if (i + 1 < m)
                             n1 = dp[i + 1, j];
                         if (j + 1 < n)
                             n2 = dp[i, j + 1];
@@ -2503,15 +2503,15 @@ namespace My_Training_Pad
         {
             int n = pairs.GetLength(0);
             int[] dp = new int[pairs.Length];
-            for(int i=0; i<n; i++)
+            for (int i = 0; i < n; i++)
             {
                 dp[i] = 1;
             }
             #region Sorting the pairs array!!!
             TwoDArray[] temparray = new TwoDArray[n];
-            for(int i=0; i<n; i++)
+            for (int i = 0; i < n; i++)
             {
-                temparray[i] = new TwoDArray(new int[] { pairs[i, 0] , pairs[i, 1] });
+                temparray[i] = new TwoDArray(new int[] { pairs[i, 0], pairs[i, 1] });
             }
             Array.Sort(temparray);
             for (int i = 0; i < n; i++)
@@ -2521,11 +2521,11 @@ namespace My_Training_Pad
             }
             #endregion
             int max = 1;
-            for(int i=1; i<n; i++)
+            for (int i = 1; i < n; i++)
             {
-                for(int j=0; j<i; j++)
+                for (int j = 0; j < i; j++)
                 {
-                    if(pairs[j,1]<pairs[i,0] && dp[i]<=dp[j])
+                    if (pairs[j, 1] < pairs[i, 0] && dp[i] <= dp[j])
                     {
                         dp[i] = dp[j] + 1;
                         max = Math.Max(max, dp[i]);
@@ -2546,7 +2546,7 @@ namespace My_Training_Pad
 
             string[] words = sentence.Split(' ');
 
-            for(int i=0;i<words.Length;i++)
+            for (int i = 0; i < words.Length; i++)
             {
                 string checker = WordValidater(words[i], set);
                 if (checker != null)
@@ -2560,7 +2560,7 @@ namespace My_Training_Pad
         private static string WordValidater(string word, HashSet<string> set)
         {
             string s = "";
-            for(int i=0; i<word.Length; i++)
+            for (int i = 0; i < word.Length; i++)
             {
                 s += word[i];
                 if (set.Contains(s))
@@ -2602,8 +2602,453 @@ namespace My_Training_Pad
             }
             return null;
         }
-    }
+        ////////////////////////////Q649///////////////////////////////////////////////////////////// 
+        public static string PredictPartyVictory(string senate)
+        {
+            List<char> list = senate.ToList<char>();
+            int index = 0;
+            while (true)
+            {
+                if (list[index] == 'R')
+                {
+                    int nextD = FindNext('D', index, list);
+                    if (nextD == -1) return "Radiant";
+                    list.RemoveAt(nextD);
+                }
+                else //found D
+                {
+                    int NextR = FindNext('R', index, list);
+                    if (NextR == -1) return "Dire";
+                    list.RemoveAt(NextR);
+                }
+                index = (index >= list.Count - 1) ? 0 : index + 1;
+            }
+        }
 
-   
+        private static int FindNext(char c, int index, List<char> list)
+        {
+            int count = list.Count;
+            while (count > 0)
+            {
+                if (list[index] == c)
+                    return index;
+                else
+                {
+                    index = (index >= list.Count - 1) ? 0 : index + 1;
+                }
+                count--;
+            }
+            return -1; //not found;
+        }
+        ////////////////////////////Q127/////////////////////////////////////////////////////////////         
+        public int LadderLength(string beginWord, string endWord, IList<string> wordList)
+        {
+            Queue<string> q = new Queue<string>();
+            HashSet<string> set = new HashSet<string>();
+            foreach (var item in wordList)
+            {
+                set.Add(item);
+            }
+            q.Enqueue(beginWord);
+            set.Remove(beginWord);
+
+            int level = 2;
+
+            while (q.Any())
+            {
+                int size = q.Count;
+
+                for (int i = size; i > 0; i--)
+                {
+                    string curr = q.Dequeue();
+
+                    List<string> templist = new List<string>();
+
+                    foreach (var item in set)
+                    {
+                        if (HaveOneDifference(curr, item))
+                        {
+                            if (item == endWord)
+                                return level;
+                            q.Enqueue(item);
+                            templist.Add(item);
+                        }
+
+                    }
+                    foreach (var item in templist)
+                    {
+                        set.Remove(item);
+                    }
+                }
+                level++;
+            }
+
+            return 0;
+        }
+
+        private bool HaveOneDifference(string str1, string str2)
+        {
+            bool seen = false;
+            for (int i = 0; i < str1.Length; i++)
+            {
+                if (str1[i] != str2[i])
+                {
+                    if (seen == true)
+                        return false;
+                    seen = true;
+                }
+            }
+            return true;
+        }
+        ////////////////////////////Q616///////////////////////////////////////////////////////////// 
+        public string AddBoldTag(string s, string[] dict)
+        {
+            Trie trie = FillTrie(dict); //Creates a Trie with given strings
+            int[] ToBeBold = BoldRangeCreater(trie, s); //Creates a 0/1 array to show whether or not the ith character should be bold.
+            return AddTagsToString(s, ToBeBold); //Creates the final string by adding tags when it's necessary.
+        }
+        private string AddTagsToString(string s, int[] ToBeBold)
+        {
+            string result = "";
+            string curr = "";
+            for (int i = 0; i < s.Length; i++)
+            {
+                if (ToBeBold[i] == 1)
+                {
+                    curr += s[i];
+                    if (i == s.Length - 1)
+                        result += Boldize(curr);
+                }
+                else
+                {
+                    if (curr != "")
+                    {
+                        result += Boldize(curr);
+                        curr = "";
+                    }
+                    result += s[i];
+                }
+            }
+            return result;
+        }
+        private int[] BoldRangeCreater(Trie trie, string s)
+        {
+            int[] ToBeBold = new int[s.Length];
+            for (int i = 0; i < s.Length; i++)
+            {
+                if (trie.StartsWith(s[i].ToString()))
+                {
+                    int[] array = SubsequenceFound(trie, s, i);
+                    if (array != null)
+                    {
+                        for (int j = array[0]; j <= array[1]; j++)
+                            ToBeBold[j] = 1;
+                    }
+                }
+            }
+            return ToBeBold;
+        }
+        private string Boldize(string curr)
+        {
+            return "<b>" + curr + "</b>";
+        }
+        private int[] SubsequenceFound(Trie trie, string s, int i)
+        {
+            if (trie.Search(s)) return new int[] { i, s.Length - 1 };
+            int right = i;
+            string str = "";
+            while (right < s.Length)
+            {
+                str += s[right];
+                if (trie.StartsWith(str))
+                {
+                    if (trie.Search(str))
+                    {
+                        return new int[] { i, right };
+                    }
+
+                }
+                else
+                    return null;
+                right++;
+            }
+            return null;
+        }
+        private Trie FillTrie(string[] dict)
+        {
+            Trie trie = new Trie();
+            foreach (var item in dict)
+            {
+                trie.AddWord(item);
+            }
+            return trie;
+
+        }
+        ////////////////////////////Q388///////////////////////////////////////////////////////////// 
+        public int LengthLongestPath(string input)
+        {
+            List<List<int>> levelPathCount = new List<List<int>>();
+            int level = 0;
+            string current = "";
+            bool isCurrentStringFile = false;
+            int max = 0;
+            for (int i = 0; i < input.Length; i++)
+            {
+                if (i == input.Length - 1 || input[i] == '\n')
+                {
+                    if (i == input.Length - 1) current += input[i];
+                    if (level >= levelPathCount.Count) levelPathCount.Add(new List<int>());
+                    int currentLength = (level == 0) ? current.Length : levelPathCount[level - 1][levelPathCount[level - 1].Count - 1] + current.Length + 1;
+                    if (isCurrentStringFile == true)
+                        max = Math.Max(max, currentLength);
+                    levelPathCount[level].Add(currentLength);
+
+                    level = 0;
+                    i += 1;
+                    while (i < input.Length && input[i] == '\t')
+                    {
+                        level++;
+                        i += 1;
+                    }
+                    i--;
+                    current = "";
+                    isCurrentStringFile = false;
+                }
+                else
+                {
+                    current += input[i];
+                    if (input[i] == '.')
+                        isCurrentStringFile = true;
+                }
+            }
+            return max;
+        }
+        public int LengthLongestPath1(string input)
+        {
+            string[] dirs = input.Split('\n');
+            List<int> levels = new List<int>();
+            levels.Add(dirs[0].Length);
+            int max = 0;
+
+            for (int i = 1; i < dirs.Length; i++)
+            {
+                int level = FindLevel(dirs[i]);
+                int currentLength = (level == 0) ? dirs[i].Length : levels[level - 1] + dirs[i].Length - level + 1;
+                if (level >= levels.Count) levels.Add(currentLength);
+                else levels[level] = currentLength;
+                if (dirs[i].Contains('.'))
+                {
+                    max = Math.Max(max, currentLength);
+                }
+            }
+            return max;
+        }
+
+        private int FindLevel(string s)
+        {
+            int level = 0;
+            for (int i = 0; i < s.Length; i++)
+            {
+                if (s[i] == '\t') level++;
+                else break;
+            }
+            return level;
+        }
+        ////////////////////////////Q482///////////////////////////////////////////////////////////// 
+        public string LicenseKeyFormatting(string S, int K)
+        {
+            if (S == "-") return "";
+            string withOutDashes = RemoveDashes(S);
+            int d = withOutDashes.Length % K;
+            int counter = d;
+            StringBuilder res = new StringBuilder();
+            for (int i = 0; i < withOutDashes.Length; i++)
+            {
+                if (i == counter)
+                {
+                    if (i != 0)
+                        res.Append("-");
+                    counter += K;
+                }
+                res.Append(withOutDashes[i]);
+            }
+            return res.ToString().ToUpper();
+        }
+        private string RemoveDashes(string s)
+        {
+            string result = "";
+            for (int i = 0; i < s.Length; i++)
+            {
+                if (s[i] != '-') result += s[i];
+            }
+            return result;
+        }
+        ////////////////////////////Q298///////////////////////////////////////////////////////////// 
+        int MaximumSequence = 1;
+        public int LongestConsecutive(Treenode root)
+        {
+            if (root == null) return 0;
+            LongestConsecutive(root, null, 1);
+            return MaximumSequence;
+        }
+        private void LongestConsecutive(Treenode root, Treenode prev, int currSeq)
+        {
+            if (root == null) return;
+
+            currSeq = (prev != null && root.data - prev.data == 1) ? currSeq + 1 : 1;
+
+            MaximumSequence = Math.Max(MaximumSequence, currSeq);
+
+            LongestConsecutive(root.left, root, currSeq);
+            LongestConsecutive(root.right, root, currSeq);
+        }
+        ////////////////////////////Q/////////////////////////////////////////////////////////////Contest 8/5/17 (Brute Force)
+        IList<int> resultList = new List<int>();
+        int minCoins = int.MaxValue;
+        public IList<int> CheapestJump(int[] A, int B)
+        {
+            DFS(A, B, 0, 0, new List<int>());
+            return resultList;
+        }
+        private void DFS(int[] A, int B, int startIndex, int currentCoins, List<int> currentPath)
+        {
+            List<int> newlist = new List<int>(currentPath);
+            newlist.Add(startIndex + 1);
+            currentCoins += A[startIndex];
+
+            if (startIndex == A.Length - 1)
+            {
+                if (currentCoins < minCoins)
+                {
+                    minCoins = currentCoins;
+                    resultList = newlist;
+                }
+            }
+            else
+            {
+                for (int i = startIndex + 1; i <= startIndex + B; i++)
+                {
+                    if (i >= A.Length || A[i] == -1) continue;
+
+                    DFS(A, B, i, currentCoins + A[i], newlist);
+                }
+            }
+
+        }
+        ////////////////////////////Q467///////////////////////////////////////////////////////////// 
+        public int CountSubstrings(String s)
+        {
+            int count = 0;
+            if (s == null || s.Length == 0) return count;
+
+            for (int i = 0; i < s.Length; i++)
+            {
+                count += CheckForPalindrome(i, i, s) + CheckForPalindrome(i, i + 1, s);
+            }
+            return count;
+        }
+        private int CheckForPalindrome(int start, int end, string s)
+        {
+            int count = 0;
+            while (start >= 0 && end < s.Length && s[start] == s[end])
+            {
+                count++;
+                start--;
+                end++;
+            }
+            return count;
+        }
+        ////////////////////////////Q653/////////////////////////////////////////////////////////////Contest 8/5/17
+        public bool FindTarget(Treenode root, int k)
+        {
+            if (root == null) return false;
+            HashSet<int> set = new HashSet<int>();
+            Queue<Treenode> q = new Queue<Treenode>();
+            q.Enqueue(root);
+
+            while (q.Any())
+            {
+                Treenode temp = q.Dequeue();
+                int required = k - temp.data;
+                if (set.Contains(required)) return true;
+                else set.Add(temp.data);
+                if (temp.left != null) q.Enqueue(temp.left);
+                if (temp.right != null) q.Enqueue(temp.right);
+            }
+            return false;
+        }
+        ////////////////////////////Q654/////////////////////////////////////////////////////////////Contest 8/5/17
+        public Treenode ConstructMaximumBinaryTree(int[] nums)
+        {
+            return ConstructMaximumBinaryTree(nums, 0, nums.Length - 1);
+        }
+        private Treenode ConstructMaximumBinaryTree(int[] nums, int start, int end)
+        {
+            if (start > end) return null;
+
+            int maxIndex = FindMaxIndex(nums, start, end);
+
+            Treenode root = new Treenode(nums[maxIndex]);
+
+            root.left = ConstructMaximumBinaryTree(nums, start, maxIndex - 1);
+            root.right = ConstructMaximumBinaryTree(nums, maxIndex + 1, end);
+
+            return root;
+        }
+        private int FindMaxIndex(int[] nums, int start, int end)
+        {
+            int maxIndex = -1;
+            int max = int.MinValue;
+            for (int i = start; i <= end; i++)
+            {
+                if (nums[i] >= max)
+                {
+                    max = nums[i];
+                    maxIndex = i;
+                }
+            }
+            return maxIndex;
+        }
+        ////////////////////////////Q655/////////////////////////////////////////////////////////////Contest 8/5/17
+        public IList<IList<string>> PrintTree(Treenode root)
+        {
+            int m = Height(root);
+            int n = (m == 1) ? 1 : (int)Math.Pow(2, m) - 1;
+
+            IList<IList<string>> lists = CreateLists(m, n);
+
+            FillLists(root, 0, 0, n - 1, lists);
+
+            return lists;
+        }
+        private IList<IList<string>> CreateLists(int m, int n)
+        {
+            IList<IList<string>> lists = new List<IList<string>>();
+
+            for (int i = 0; i < m; i++)
+            {
+                lists.Add(new List<string>());
+                for (int j = 0; j < n; j++)
+                {
+                    lists[i].Add("");
+                }
+            }
+            return lists;
+        }
+        private void FillLists(Treenode root, int index, int start, int end, IList<IList<string>> lists)
+        {
+            if (root == null) return;
+
+            int mid = (start + end) / 2;
+
+            lists[index][mid] = root.data.ToString();
+
+            if (root.left != null)
+                FillLists(root.left, index + 1, start, mid - 1, lists);
+            if (root.right != null)
+                FillLists(root.right, index + 1, mid + 1, end, lists);
+        }
+    }
 }
+
 ////////////////////////////Q///////////////////////////////////////////////////////////// 

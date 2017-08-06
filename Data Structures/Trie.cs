@@ -60,5 +60,21 @@ namespace My_Training_Pad
                 return true;
             return false;
         }
+
+        public bool StartsWith(string s)
+        {
+            Trienode node = Root;
+            for (int i = 0; i < s.Length; i++)
+            {
+                Dictionary<char, Trienode> Children = node.Children;
+                if (!Children.ContainsKey(s[i])) return false;
+                else
+                {
+                    if (i == s.Length - 1) return true;
+                }
+                node= Children[s[i]];
+            }
+            return false;
+        }
     }
 }

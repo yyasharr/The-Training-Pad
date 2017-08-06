@@ -61,6 +61,7 @@
     <Compile Include="Desgin\WordDistance.cs" />
     <Compile Include="Desgin\ZigzagIterator.cs" />
     <Compile Include="Desgin\ZigzagIteratorII.cs" />
+    <Compile Include="Questions from Sources\Misc. Questions.cs" />
     <Compile Include="Questions from Sources\MyInterviews.cs" />
     <Compile Include="Desgin\Excel.cs" />
     <Compile Include="Desgin\Frame.cs" />
@@ -75,6 +76,7 @@
     <Compile Include="Data Structures\Treenode.cs" />
     <Compile Include="Data Structures\Trie.cs" />
     <Compile Include="Data Structures\Trienode.cs" />
+    <Compile Include="Temp Classes\FindShortestAtoB.cs" />
     <Compile Include="Temp Classes\RandomListNode.cs" />
     <Compile Include="Temp Classes\Shuffling.cs" />
     <Compile Include="Temp Classes\Storage.cs" />
