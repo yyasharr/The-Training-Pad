@@ -57,7 +57,9 @@
     <Compile Include="Desgin\MinStack.cs" />
     <Compile Include="Desgin\MyQueue.cs" />
     <Compile Include="Desgin\NestedIterator.cs" />
+    <Compile Include="Desgin\StringCodec.cs" />
     <Compile Include="Desgin\Trie.cs" />
+    <Compile Include="Desgin\ValidWordAbbr.cs" />
     <Compile Include="Desgin\WordDistance.cs" />
     <Compile Include="Desgin\ZigzagIterator.cs" />
     <Compile Include="Desgin\ZigzagIteratorII.cs" />

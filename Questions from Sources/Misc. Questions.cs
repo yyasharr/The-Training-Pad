@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Drawing;
 
-namespace My_Training_Pad.Questions_from_Sources
+namespace My_Training_Pad
 {
     class MiscQuestions
     {
@@ -107,7 +107,7 @@ namespace My_Training_Pad.Questions_from_Sources
         }
 
         ////////////////// STRING PRINTS /////////////////////
-        static void Permutations(string input, string output)
+        public static void Permutations(string input, string output)
         {
             if (input == "")
                 Console.WriteLine(output);
@@ -119,7 +119,7 @@ namespace My_Training_Pad.Questions_from_Sources
                 Permutations(next_input, next_output);
             }
         }
-        static void Subsets(string input, string output)
+        public static void Subsets(string input, string output)
         {
             if (input == "")
                 Console.WriteLine(output);
@@ -131,7 +131,7 @@ namespace My_Training_Pad.Questions_from_Sources
                 Subsets(input.Substring(1), output);
             }
         }
-        static void Place_Spaces(string input, string output)
+        public static void Place_Spaces(string input, string output)
         {
             if (input == "")
                 return;
@@ -567,8 +567,26 @@ namespace My_Training_Pad.Questions_from_Sources
             }
             return count;
         }
-        //////////////////////////////////////////////////////////////////////////////////////////////////
-        
+        ///////Count Negatives in Matrix (http://www.geeksforgeeks.org/count-negative-numbers-in-a-column-wise-row-wise-sorted-matrix/)/////////////////
+        public int CountNegatives(int[,] matrix)
+        {
+            if (matrix == null) return 0;
+
+            int m = matrix.GetLength(0);
+            int n = matrix.GetLength(1);
+
+            int colIndex = n - 1;
+            int count = 0;
+
+            for(int i=0; i<m; i++)
+            {
+                while (colIndex > 0 && matrix[i, colIndex] >= 0)
+                    colIndex--;
+
+                count += (matrix[i, colIndex] >= 0) ? 0 : colIndex + 1;
+            }
+            return count;
+        }
 
     }
 }

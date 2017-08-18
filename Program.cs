@@ -93,16 +93,13 @@ namespace My_Training_Pad
         #endregion
         static void Main(string[] args)
         {
-
-
             /////////////////////////Start Time Below//////////////////////////////
             LeetCode lc = new LeetCode();
+            
             DateTime start = DateTime.Now;
             /////////////////////////Functions Below///////////////////////////////
+            Console.WriteLine(lc.MinDistance("zoologicoarchaeologist","zoogeologist"));
 
-            int[] array = { 1, 2, 4, -1, 2 };
-            IList<int> l= lc.CheapestJump(array, 2);
-            Print(l);
             /////////////////////////End Time Below////////////////////////////////
             Console.WriteLine("time: " + (DateTime.Now - start).TotalSeconds);
             Console.ReadKey();

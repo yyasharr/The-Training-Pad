@@ -1586,7 +1586,7 @@ namespace My_Training_Pad
             return result;
         }
         ////////////////////////////Q72/////////////////////////////////////////////////////////////
-        static int MinDistance(string word1, string word2)
+        static int MinDistanceBF(string word1, string word2)//Brute Force, DP solution down
         {//wrapper class. Can call either method (recursive or tabular solution)
             return MinDistance(word1, word2, word1.Length, word2.Length);
             //return MinDistance_tabulation(word1, word2, word1.Length, word2.Length);
@@ -1634,28 +1634,36 @@ namespace My_Training_Pad
             return min;
         }
         ////////////////////////////Q282/////////////////////////////////////////////////////////////        
-        static List<string> AddOperators(string num, int Target)
+        public IList<string> AddOperators(string num, int Target)
         {
             return AddOperators(num, Target, new List<string>());
         }
-        static List<string> AddOperators(string num, int target, List<string> total_strings)
+        List<string> AddOperators(string num, int target, List<string> total_strings)
         {
             int n = num.Length;
             for (int i = 1; i < Math.Pow(4, n - 1); i++)
             {
                 string operators = Convert.ToString(i, 2).PadLeft((n - 1) * 2, '0'); //SO IMPORTANT AND F*#&ing COOL: Generating two digit codes for each operator and n-1 spots to put them between. 00: nothing; 01: '+'; 10: '*'; 11: '-'
-                string expression = num[0].ToString();
+                StringBuilder exp = new StringBuilder();
+                exp.Append(num[0]);
                 for (int j = 1; j <= n - 1; j++)
                 {
                     string Operator = operators.Substring((j - 1) * 2, 2);
                     //if (Operator == "00") SKIP; //not necessary
-                    if (Operator == "01") expression += '+';
-                    if (Operator == "10") expression += '*';
-                    if (Operator == "11") expression += '-';
-                    expression += num[j];
+                    if (Operator == "01") exp.Append('+');
+                    if (Operator == "10") exp.Append('*');
+                    if (Operator == "11") exp.Append('-');
+
+                    if (exp[exp.Length - 1] == '0')
+                    {
+                        exp.Remove(exp.Length - 1, 1);
+                    }
+                    else
+                        exp.Append(num[j]);
                 }
-                if (Calculator(expression) == target)
-                    total_strings.Add(expression);
+
+                if (Calculator(exp.ToString()) == target)
+                    total_strings.Add(exp.ToString());
 
             }
             return total_strings;
@@ -2876,12 +2884,12 @@ namespace My_Training_Pad
         }
         private string RemoveDashes(string s)
         {
-            string result = "";
+            StringBuilder str = new StringBuilder();
             for (int i = 0; i < s.Length; i++)
             {
-                if (s[i] != '-') result += s[i];
+                if (s[i] != '-') str.Append(s[i]);
             }
-            return result;
+            return str.ToString();
         }
         ////////////////////////////Q298///////////////////////////////////////////////////////////// 
         int MaximumSequence = 1;
@@ -3047,6 +3055,374 @@ namespace My_Training_Pad
                 FillLists(root.left, index + 1, start, mid - 1, lists);
             if (root.right != null)
                 FillLists(root.right, index + 1, mid + 1, end, lists);
+        }
+        ////////////////////////////Q79/////////////////////////////////////////////////////////////Brute Force (time out)      
+        bool wordSearchResult = false;
+        public bool Exist(char[,] board, string word)
+        {
+            if ((board.GetLength(0) == 0 && board.GetLength(1) == 0) || board == null) return false;
+
+            for (int i = 0; i < board.GetLength(0); i++)
+            {
+                for (int j = 0; j < board.GetLength(1); j++)
+                {
+                    if (word[0] == board[i, j])
+                    {
+                        WordSearchDFS(i, j, word, 0, board, new bool[board.GetLength(0), board.GetLength(1)]);
+                        if (wordSearchResult == true) return true;
+                    }
+                }
+            }
+            return false;
+        }
+        private void WordSearchDFS(int i, int j, string word, int index, char[,] board, bool[,] visited)
+        {
+            if (i < 0 || i >= board.GetLength(0) || j < 0 || j >= board.GetLength(1) || board[i, j] != word[index] || visited[i, j] == true)
+                return;
+
+            if (index == word.Length - 1)
+            {
+                wordSearchResult = true;
+                return;
+            }
+
+            visited[i, j] = true;
+            int[,] directions = { { 1, 0 }, { -1, 0 }, { 0, -1 }, { 0, 1 } };
+
+            for (int k = 0; k < directions.GetLength(0); k++)
+            {
+                WordSearchDFS(i + directions[k, 0], j + directions[k, 1], word, index + 1, board, visited);
+            }
+
+        }
+        ////////////////////////////Q79/////////////////////////////////////////////////////////////Without visited, using stack for keeping track of visiteds.
+        public bool ExistII(char[,] board, string word)
+        {
+            if (word == null || board == null || (board.GetLength(0) == 0 && board.GetLength(1) == 0) || word.Length == 0) return false;
+
+            for (int i = 0; i < board.GetLength(0); i++)
+            {
+                for (int j = 0; j < board.GetLength(1); j++)
+                {
+                    if (word[0] == board[i, j])
+                        if (DFSWordSearch(board, i, j, 0, word))
+                            return true;
+                }
+            }
+
+            return false;
+        }
+        Stack<char> tempCharStack = new Stack<char>();
+        private bool DFSWordSearch(char[,] board, int i, int j, int index, string word)
+        {
+            if (index == word.Length)
+                return true;
+
+            if (i < 0 || j < 0 || i == board.GetLength(0) || j == board.GetLength(1) || word[index] != board[i, j])
+                return false;
+
+            tempCharStack.Push(board[i, j]);
+            board[i, j] = '\n';
+
+            bool check = DFSWordSearch(board, i, j + 1, index + 1, word) ||
+                        DFSWordSearch(board, i + 1, j, index + 1, word) ||
+                        DFSWordSearch(board, i, j - 1, index + 1, word) ||
+                        DFSWordSearch(board, i - 1, j, index + 1, word);
+
+            board[i, j] = tempCharStack.Pop();
+
+            if (check == true)
+                return true;
+
+            return check;
+        }
+        ////////////////////////////Q209///////////////////////////////////////////////////////////// 
+        public int MinSubArrayLen(int s, int[] nums)
+        {
+            if (s == 0 || nums.Length == 0)
+                return 0;
+
+            int sum = 0, min = int.MaxValue, left = 0;
+
+            for (int i = 0; i < nums.Length; i++)
+            {
+                sum += nums[i];
+
+                while (sum >= s)
+                {
+                    min = Math.Min(min, i - left + 1);
+                    sum -= nums[left];
+                    left++;
+                }
+            }
+
+            return (min == int.MaxValue) ? 0 : min;
+        }
+        ////////////////////////////Q418///////////////////////////////////////////////////////////// 
+        public int WordsTyping(string[] sentence, int rows, int cols)
+        {
+            int index = 0, count = 0, currRow = 0, currCol = 0;
+
+            while (currRow < rows)
+            {
+                int currLength = sentence[index].Length;
+
+                if (currCol + currLength <= cols) //it fits in the current row
+                {
+                    if (index == sentence.Length - 1)//if last word
+                    {
+                        count++;
+                        index = 0;
+                    }
+                    else
+                    {
+                        index++;
+                    }
+
+                    if (currCol + currLength - 1 >= cols - 2) //filled until the last postition in this row or one less than last.
+                    {
+                        currRow++;
+                        currCol = 0;
+                    }
+                    else
+                    {
+                        currCol = currCol + currLength + 1;
+                    }
+                }
+                else
+                {
+                    currCol = 0;
+                    currRow++;
+                }
+
+            }
+            return count;
+        }
+        ////////////////////////////Q657///////////////////////////////////////////////////////////// 
+        public bool JudgeCircle(string moves)
+        {
+            if (moves == null || moves.Length == 0) return false;
+
+            int dirs = 0;
+
+            for (int i = 0; i < moves.Length; i++)
+            {
+                switch (moves[i])
+                {
+                    case 'U':
+                        dirs += 2;
+                        break;
+                    case 'D':
+                        dirs -= 2;
+                        break;
+                    case 'R':
+                        dirs += 1;
+                        break;
+                    case 'L':
+                        dirs -= 1;
+                        break;
+                    default:
+                        break;
+                }
+            }
+            return (dirs == 0);
+        }
+        ////////////////////////////Q658///////////////////////////////////////////////////////////// 
+        //public IList<int> FindClosestElements(IList<int> arr, int k, int x)
+        //{
+        //    List<int> res = new List<int>();
+
+        //    int index = 0;
+        //    while (x<arr.Count-1 && arr[index] < x) index++;
+
+        //    int right = index + 1;
+        //    int left = index - 1;
+
+        //    res.Add(arr[index]);
+
+        //    int count = k-1;
+        //    while(count>0)
+        //    {
+        //        if(right>arr.Count-1)
+        //        {
+        //            res.Add(arr[left]);
+        //            left--;
+        //        }
+        //        else if(left<0)
+        //        {
+        //            res.Add(arr[right]);
+        //            right++;
+        //        }
+        //        else
+        //        {
+        //            if(Math.Abs(arr[left]-x)<Math.Abs(arr[right]-x))
+        //            {
+        //                res.Add(arr[left]);
+        //                left--;
+        //            }
+        //            else
+        //            {
+        //                res.Add(arr[right]);
+        //                right++;
+        //            }
+        //        }
+        //        count--;
+        //    }
+
+        //    res.Sort();
+        //    return res;
+        //}
+
+        public IList<int> FindClosestElements(IList<int> arr, int k, int x)
+        {
+            while (arr.Count > k)
+            {
+                int first = 0;
+                int last = arr.Count - 1;
+                if (Math.Abs(arr[first] - x) <= Math.Abs(arr[last] - x))
+                    arr.RemoveAt(last);
+                else
+                    arr.RemoveAt(first);
+            }
+            return arr;
+        }
+        ////////////////////////////Q659///////////////////////////////////////////////////////////// 
+        public bool IsPossible(int[] nums)
+        {
+            Dictionary<int, int> lastOfSeq = new Dictionary<int, int>();
+            List<int> checkLater = new List<int>();
+            List<int> currSeqList = new List<int>(); //only stores the first 2 numbers of the sequnce:
+            //uses: 1)to check last nums, 2)if the last sequence is unfinished.
+
+            for (int i = 0; i < nums.Length; i++)
+            {
+                int currNum = nums[i];
+                if (currSeqList.Count == 0) //first number in current sequence
+                {
+                    currSeqList.Add(currNum);
+                }
+                else
+                {
+                    int lastNum = currSeqList.Last<int>();
+
+                    if (lastNum == currNum) //duplicate in current sequence
+                    {
+                        checkLater.Add(currNum);
+                    }
+                    else
+                        if (currNum - lastNum > 1) return false;
+                    else
+                    {
+                        if (currSeqList.Count == 2) //current number is the last number in current sequence
+                        {
+                            if (lastOfSeq.ContainsKey(currNum)) lastOfSeq[currNum]++;
+                            else lastOfSeq.Add(currNum, 1);
+
+                            currSeqList = new List<int>();
+                        }
+                        else //if it's second number in current sequence
+                        {
+                            currSeqList.Add(currNum);
+                        }
+                    }
+
+                }
+            }
+            foreach (int n in currSeqList)
+                checkLater.Add(n);
+
+            foreach (int n in checkLater)
+            {
+                if (lastOfSeq.ContainsKey(n - 1) && lastOfSeq[n - 1] > 0)
+                {
+                    lastOfSeq[n - 1]--;
+                    if (lastOfSeq.ContainsKey(n)) lastOfSeq[n]++;
+                    else lastOfSeq.Add(n, 1);
+                }
+                else return false;
+            }
+
+            return true;
+        }
+        ////////////////////////////Q163///////////////////////////////////////////////////////////// 
+        public IList<string> FindMissingRanges(int[] nums, int lower, int upper)
+        {
+            IList<string> res = new List<string>();
+            if (nums.Length == 0 || nums == null)
+            {
+                res.Add((lower == upper) ? upper.ToString() : lower + "->" + upper);
+            }
+
+            int find = lower;
+
+            for (int i = 0; i < nums.Length; i++)
+            {
+                if (i > 0 && nums[i] == nums[i - 1]) continue;
+
+                if (find != nums[i])
+                    res.Add((nums[i] - find == 1) ? (find).ToString() : find + "->" + (nums[i] - 1));
+
+                find = nums[i] + 1;
+
+                if (i == nums.Length - 1 && nums[i] != upper)
+                    res.Add((find == upper) ? upper.ToString() : find + "->" + upper);
+            }
+
+            return res;
+        }
+        ////////////////////////////Q66///////////////////////////////////////////////////////////// 
+        public int[] PlusOne(int[] digits)
+        {
+            int n = digits.Length;
+
+            for (int i = n - 1; i >= 0; i--)
+            {
+                if (digits[i] < 9)
+                {
+                    digits[i]++;
+                    return digits;
+                }
+                digits[i] = 0;
+            }
+            int[] ret = new int[n + 1];
+            ret[0] = 1;
+
+            return ret;
+        }
+        ////////////////////////////Q72///////////////////////////////////////////////////////////// 
+        public class Solution
+        {
+            public int MinDistance(string word1, string word2)
+            {
+                if (word1.Length == 0) return word2.Length;
+                if (word2.Length == 0) return word1.Length;
+
+                int m = word1.Length + 1;
+                int n = word2.Length + 1;
+
+                int[,] DP = new int[m, n];
+
+                DP[0, 0] = 0;
+
+                for (int i = 1; i < m; i++)
+                    DP[i, 0] = i;
+
+                for (int i = 1; i < n; i++)
+                    DP[0, i] = i;
+
+                for (int i = 1; i < m; i++)
+                {
+                    for (int j = 1; j < n; j++)
+                    {
+                        int min = Math.Min(DP[i - 1, j - 1], Math.Min(DP[i - 1, j], DP[i, j - 1]));
+                        if (word1[i - 1] == word2[j - 1])
+                            DP[i, j] = DP[i - 1, j - 1];
+                        else
+                            DP[i, j] = min + 1;
+                    }
+                }
+                return DP[m - 1, n - 1];
+            }
         }
     }
 }
