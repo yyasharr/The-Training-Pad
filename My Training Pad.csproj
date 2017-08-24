@@ -79,6 +79,7 @@
     <Compile Include="Data Structures\Trie.cs" />
     <Compile Include="Data Structures\Trienode.cs" />
     <Compile Include="Temp Classes\FindShortestAtoB.cs" />
+    <Compile Include="Temp Classes\Interval.cs" />
     <Compile Include="Temp Classes\RandomListNode.cs" />
     <Compile Include="Temp Classes\Shuffling.cs" />
     <Compile Include="Temp Classes\Storage.cs" />

@@ -547,13 +547,6 @@ namespace My_Training_Pad
             return result;
         }
         ////////////////////////////Q56/////////////////////////////////////////////////////////////
-        public class Interval
-        {
-            public int start;
-            public int end;
-            public Interval() { start = 0; end = 0; }
-            public Interval(int s, int e) { start = s; end = e; }
-        }
         public static IList<Interval> Merge(IList<Interval> intervals)
         {
             if (intervals.Count < 2) return intervals;
@@ -3390,39 +3383,223 @@ namespace My_Training_Pad
             return ret;
         }
         ////////////////////////////Q72///////////////////////////////////////////////////////////// 
-        public class Solution
+        public int MinDistance(string word1, string word2)
         {
-            public int MinDistance(string word1, string word2)
+            if (word1.Length == 0) return word2.Length;
+            if (word2.Length == 0) return word1.Length;
+
+            int m = word1.Length + 1;
+            int n = word2.Length + 1;
+
+            int[,] DP = new int[m, n];
+
+            DP[0, 0] = 0;
+
+            for (int i = 1; i < m; i++)
+                DP[i, 0] = i;
+
+            for (int i = 1; i < n; i++)
+                DP[0, i] = i;
+
+            for (int i = 1; i < m; i++)
             {
-                if (word1.Length == 0) return word2.Length;
-                if (word2.Length == 0) return word1.Length;
-
-                int m = word1.Length + 1;
-                int n = word2.Length + 1;
-
-                int[,] DP = new int[m, n];
-
-                DP[0, 0] = 0;
-
-                for (int i = 1; i < m; i++)
-                    DP[i, 0] = i;
-
-                for (int i = 1; i < n; i++)
-                    DP[0, i] = i;
-
-                for (int i = 1; i < m; i++)
+                for (int j = 1; j < n; j++)
                 {
-                    for (int j = 1; j < n; j++)
-                    {
-                        int min = Math.Min(DP[i - 1, j - 1], Math.Min(DP[i - 1, j], DP[i, j - 1]));
-                        if (word1[i - 1] == word2[j - 1])
-                            DP[i, j] = DP[i - 1, j - 1];
-                        else
-                            DP[i, j] = min + 1;
-                    }
+                    int min = Math.Min(DP[i - 1, j - 1], Math.Min(DP[i - 1, j], DP[i, j - 1]));
+                    if (word1[i - 1] == word2[j - 1])
+                        DP[i, j] = DP[i - 1, j - 1];
+                    else
+                        DP[i, j] = min + 1;
                 }
-                return DP[m - 1, n - 1];
             }
+            return DP[m - 1, n - 1];
+        }
+        ////////////////////////////Q47///////////////////////////////////////////////////////////// 
+        public IList<IList<int>> PermuteUnique(int[] nums)
+        {
+            List<IList<int>> res = new List<IList<int>>();
+            List<int> input = nums.ToList<int>();
+            PermuteUnique(input, new List<int>(), res);
+            return res;
+        }
+        private void PermuteUnique(List<int> input, List<int> output, List<IList<int>> res)
+        {
+            if (input.Count == 0)
+            {
+                res.Add(output);
+            }
+            else
+            {
+                HashSet<int> set = new HashSet<int>();
+                int count = input.Count;
+                for (int i = 0; i < count; i++)
+                {
+                    if (!set.Add(input[i])) continue;
+                    List<int> new_input = new List<int>(input);
+                    List<int> new_output = new List<int>(output);
+                    new_output.Add(input[i]);
+                    new_input.RemoveAt(i);
+                    PermuteUnique(new_input, new_output, res);
+                }
+            }
+        }
+        ////////////////////////////Q662/////////////////////////////////////////////////////////////Contest 8/19/17
+        public int WidthOfBinaryTree(Treenode root)
+        {
+            if (root == null) return 0;
+            Queue<Treenode> Q = new Queue<Treenode>();
+            int max = 0;
+
+            Q.Enqueue(root);
+
+            while (Q.Any()) //while Q is not empty
+            {
+                int currLevelCount = Q.Count;
+                int pendingNullCount = 0;
+                int actualLevelCount = 0;
+                bool notNullSeen = false;
+
+                while (currLevelCount > 0)
+                {
+                    Treenode currNode = Q.Dequeue();
+
+                    if (currNode == null)
+                    {
+                        if (notNullSeen == true)
+                        {
+                            pendingNullCount++;
+                            Q.Enqueue(null);
+                            Q.Enqueue(null);
+                        }
+                    }
+                    else
+                    {
+                        notNullSeen = true;
+                        actualLevelCount += pendingNullCount + 1;
+                        pendingNullCount = 0;
+
+                        Q.Enqueue(currNode.left);
+                        Q.Enqueue(currNode.right);
+                    }
+                    currLevelCount--;
+                }
+                if (notNullSeen == false) break;
+                max = Math.Max(actualLevelCount, max);
+            }
+            return max;
+        }
+        ////////////////////////////Q663/////////////////////////////////////////////////////////////Contest 8/19/17
+        public bool CheckEqualTree(Treenode root)
+        {
+            UpdateTreeSumDFS(root);
+            return CheckEqualDFS(root, root.data);
+        }
+        private void UpdateTreeSumDFS(Treenode root)
+        {
+            if (root == null) return;
+
+            UpdateTreeSumDFS(root.left);
+            UpdateTreeSumDFS(root.right);
+
+            if (root.left != null)
+                root.data += root.left.data;
+
+            if (root.right != null)
+                root.data += root.right.data;
+        }
+        private bool CheckEqualDFS(Treenode root, int rootSum)
+        {
+            if (root == null) return false;
+
+            if (root.left != null)
+            {
+                if (rootSum - root.left.data == root.left.data)
+                    return true;
+            }
+
+            if (root.right != null)
+            {
+                if (rootSum - root.right.data == root.right.data)
+                    return true;
+            }
+
+            return CheckEqualDFS(root.left, rootSum) || CheckEqualDFS(root.right, rootSum);
+
+        }
+        ////////////////////////////Q661/////////////////////////////////////////////////////////////Contest 8/19/17
+        public int[,] ImageSmoother(int[,] M)
+        {
+            int m = M.GetLength(0);
+            int n = M.GetLength(1);
+
+            int[,] Avg = new int[m, n];
+
+            for (int i = 0; i < m; i++)
+            {
+                for (int j = 0; j < n; j++)
+                {
+                    int startI = (i - 1 >= 0) ? i - 1 : i;
+                    int endI = (i + 1 < m) ? i + 1 : i;
+                    int startJ = (j - 1 >= 0) ? j - 1 : j;
+                    int endJ = (j + 1 < n) ? j + 1 : j;
+
+                    Avg[i, j] = FindAverage(M, startI, endI, startJ, endJ);
+                }
+            }
+            return Avg;
+        }
+        private int FindAverage(int[,] m, int startI, int endI, int startJ, int endJ)
+        {
+            int count = 0;
+            int sum = 0;
+            for (int i = startI; i <= endI; i++)
+            {
+                for (int j = startJ; j <= endJ; j++)
+                {
+                    sum += m[i, j];
+                    count++;
+                }
+            }
+            return sum / count;
+        }
+        ////////////////////////////Q///////////////////////////////////////////////////////////// 
+        public IList<Interval> MergeII(IList<Interval> intervals)
+        {
+            List<Interval> res = new List<Interval>();
+            if (intervals == null || intervals.Count == 0) return res;
+
+            int[] starts = new int[intervals.Count];
+            int[] ends = new int[intervals.Count];
+
+            for (int i = 0; i < intervals.Count; i++)
+            {
+                starts[i] = intervals[i].start;
+                ends[i] = intervals[i].end;
+            }
+
+            Array.Sort(starts);
+            Array.Sort(ends);
+
+            List<int> order = new List<int>();
+
+            for (int i = 1; i < starts.Length; i++)
+            {
+                if(ends[i-1]+2<=starts[i])
+                {
+                    order.Add(ends[i - 1]);
+                    order.Add(starts[i]);
+                }
+            }
+
+            res.Add(new Interval(starts[0], order[0]));
+
+            for (int i = 1; i < order.Count-1; i+=2)
+            {
+                res.Add(new Interval(order[i], order[i + 1]));
+            }
+
+            res.Add(new Interval(order[order.Count - 1], ends[ends.Length - 1]));
+            return res;
         }
     }
 }

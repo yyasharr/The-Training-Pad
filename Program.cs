@@ -98,7 +98,14 @@ namespace My_Training_Pad
             
             DateTime start = DateTime.Now;
             /////////////////////////Functions Below///////////////////////////////
-            Console.WriteLine(lc.MinDistance("zoologicoarchaeologist","zoogeologist"));
+            List<Interval> res = new List<Interval>();
+            res.Add(new Interval(1,3));
+            res.Add(new Interval(2,6));
+            res.Add(new Interval(8,10));
+            res.Add(new Interval(15,18));
+
+            IList<Interval> s = lc.MergeII(res);
+            Console.WriteLine();
 
             /////////////////////////End Time Below////////////////////////////////
             Console.WriteLine("time: " + (DateTime.Now - start).TotalSeconds);
