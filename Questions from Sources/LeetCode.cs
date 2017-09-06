@@ -3584,7 +3584,7 @@ namespace My_Training_Pad
 
             for (int i = 1; i < starts.Length; i++)
             {
-                if(ends[i-1]+2<=starts[i])
+                if (ends[i - 1] + 2 <= starts[i])
                 {
                     order.Add(ends[i - 1]);
                     order.Add(starts[i]);
@@ -3593,12 +3593,240 @@ namespace My_Training_Pad
 
             res.Add(new Interval(starts[0], order[0]));
 
-            for (int i = 1; i < order.Count-1; i+=2)
+            for (int i = 1; i < order.Count - 1; i += 2)
             {
                 res.Add(new Interval(order[i], order[i + 1]));
             }
 
             res.Add(new Interval(order[order.Count - 1], ends[ends.Length - 1]));
+            return res;
+        }
+        ////////////////////////////Q85///////////////////////////////////////////////////////////// 
+        public int MaximalRectangle(char[,] matrix)
+        {
+            int m = matrix.GetLength(0);
+            int n = matrix.GetLength(1);
+
+            if (m == 0 || n == 0) return 0;
+
+            CellTracker[,] DP = new CellTracker[m, n];
+
+            DP[0, 0] = new CellTracker();
+            DP[0, 0].R = (matrix[0, 0] == '1') ? 1 : 0;
+            DP[0, 0].D = (matrix[0, 0] == '1') ? 1 : 0;
+            int max = (matrix[0, 0] == '1') ? 1 : 0;
+
+            for (int i = 1; i < n; i++)
+            {
+                DP[0, i] = new CellTracker();
+                DP[0, i].R = (matrix[0, i] == '0') ? 0 : DP[0, i - 1].R + 1;
+                DP[0, i].D = (matrix[0, i] == '0') ? 0 : 1;
+                max = Math.Max(DP[0, i].R, max);
+            }
+
+            for (int j = 1; j < m; j++)
+            {
+                DP[j, 0] = new CellTracker();
+                DP[j, 0].D = (matrix[j, 0] == '0') ? 0 : DP[j - 1, 0].D + 1;
+                DP[j, 0].R = (matrix[j, 0] == '0') ? 0 : 1;
+                max = Math.Max(DP[j, 0].D, max);
+            }
+
+            for (int i = 1; i < m; i++)
+            {
+                for (int j = 1; j < n; j++)
+                {
+                    DP[i, j] = new CellTracker();
+                    if (matrix[i, j] == '0')
+                        continue;
+
+                    DP[i, j].R = DP[i, j - 1].R + 1;
+                    DP[i, j].D = DP[i - 1, j].D + 1;
+
+                    int down = (DP[i, j - 1].D == 0) ? DP[i, j].D : Math.Min(DP[i, j].D, DP[i, j - 1].D);
+                    int right = (DP[i - 1, j].R == 0) ? DP[i, j].R : Math.Min(DP[i, j].R, DP[i - 1, j].R);
+
+                    max = Math.Max(max, down * right);
+                }
+            }
+
+            return max;
+        }
+        ////////////////////////////Q665///////////////////////////////////////////////////////////// 
+        public bool CheckPossibility(int[] nums)
+        {
+            if (nums.Length == 0 || nums == null) return false;
+            if (nums.Length == 1) return true;
+
+            bool changed = false;
+
+            for (int i = 0; i < nums.Length - 1; i++)
+            {
+                if (nums[i] > nums[i + 1])
+                {
+                    if (changed) return false;
+                    changed = true;
+
+                    if (i > 0 && nums[i + 1] < nums[i - 1])
+                        nums[i + 1] = nums[i];
+                    else nums[i] = nums[i + 1];
+                }
+            }
+            return true;
+        }
+        ////////////////////////////Q666///////////////////////////////////////////////////////////// 
+        public int PathSum2(int[] nums)
+        {
+            if (nums.Length == 0 || nums == null) return 0;
+
+            List<int[]> currentSum = new List<int[]>();
+            int totalSum = nums[0] % 10; //value of the root
+            currentSum.Add(new int[1]);
+            currentSum[0][0] = nums[0] % 10;
+
+            for (int i = 1; i < nums.Length; i++)
+            {
+                int level = (nums[i] / 100) % 10;
+                int pos = nums[i] / 10 % 10 - 1;
+                int val = nums[i] % 10;
+
+                if (level > currentSum.Count) //new level
+                {
+                    int[] array = new int[(int)Math.Pow(2, level - 1)];
+                    int pathSum = currentSum[level - 2][pos / 2] + val;
+                    array[pos] = pathSum;
+                    currentSum.Add(array);
+                    totalSum += val;
+                }
+                else //level already exist, so new path
+                {
+                    int[] array = currentSum[level - 1];
+                    int pathSum = currentSum[level - 2][pos / 2] + val;
+                    array[pos] = pathSum;
+                    totalSum += pathSum;
+                }
+            }
+
+            return totalSum;
+        }
+        public int PathSum(int[] nums)
+        {
+            if (nums.Length == 0 || nums == null) return 0;
+            List<int[]> sumSoFar = new List<int[]>();
+            int totalSum = 0;
+            string lastParent = "No Parent!";
+
+            for (int i = 0; i < nums.Length; i++)
+            {
+                int level = (nums[i] / 100) % 10 - 1;
+                int pos = nums[i] / 10 % 10 - 1;
+                int val = nums[i] % 10;
+                int parentLevel = level - 1;
+                int parentPosition = pos / 2;
+                int[] currentLevelSum = null;
+
+                if (sumSoFar.Count == level)
+                {
+                    currentLevelSum = new int[(int)Math.Pow(2, level)];
+                    sumSoFar.Add(currentLevelSum);
+                }
+                else
+                    currentLevelSum = sumSoFar[level];
+
+                int currentPathSum = (i == 0) ? val : val + sumSoFar[parentLevel][parentPosition];
+
+                currentLevelSum[pos] = parentPosition;
+
+                if (lastParent != "" + parentLevel + parentPosition)
+                    totalSum += val;
+                else
+                    totalSum += currentPathSum;
+
+                lastParent = "" + parentLevel + parentPosition;
+            }
+            return totalSum;
+        }
+        /////////////////////////////////////////Q671////////////////////////////////////////////////////////////////////////////////////Contest 9/2/2017
+        public int FindSecondMinimumValue(Treenode root)
+        {
+            int rootVal = root.data;
+            int secondSmall = int.MaxValue;
+            bool diffFound = false;
+            Queue<Treenode> Q = new Queue<Treenode>();
+            Q.Enqueue(root);
+
+            while (Q.Any()) //while Q is not empty
+            {
+                Treenode curr = Q.Dequeue();
+                if (curr.data != rootVal && curr.data <= secondSmall)
+                {
+                    secondSmall = curr.data;
+                    diffFound = true;
+                }
+                if (curr.left != null)
+                {
+                    Q.Enqueue(curr.left);
+                    Q.Enqueue(curr.right);
+                }
+            }
+            return (secondSmall == int.MaxValue && !diffFound) ? -1 : secondSmall;
+        }
+        ////////////////////////////Q672/////////////////////////////////////////////////////////////Contest 9/2/2017
+        public Treenode TrimBST(Treenode root, int L, int R)
+        {
+            if (root == null) return null;
+
+            if (root.data < L)
+                return TrimBST(root.right, L, R);
+            if (root.data > R)
+                return TrimBST(root.left, L, R);
+
+            root.left = TrimBST(root.left, L, R);
+            root.right = TrimBST(root.right, L, R);
+
+            return root;
+        }
+        ////////////////////////////Q673/////////////////////////////////////////////////////////////Contest 9/2/2017
+        public int MaximumSwap(int num)
+        {
+            int[] digits = new int[num.ToString().Length];
+
+            for (int i = 0; i < digits.Length; i++)
+            {
+                digits[digits.Length - 1 - i] = num % 10;
+                num /= 10;
+            }
+
+            int[] sortedDigits = new int[digits.Length];
+            digits.CopyTo(sortedDigits, 0);
+            Array.Sort(sortedDigits);
+            Array.Reverse(sortedDigits);
+
+            for (int i = 0; i < digits.Length; i++)
+            {
+                if (digits[i] != sortedDigits[i])
+                {
+                    int j = digits.Length - 1;
+                    while (j > i && digits[j] != sortedDigits[i])
+                    {
+                        j--;
+                    }
+
+                    if (j > i)
+                    {
+                        int temp = digits[j];
+                        digits[j] = digits[i];
+                        digits[i] = temp;
+                    }
+                    break;
+                }
+            }
+            int res = 0;
+            for (int i = 0; i < digits.Length; i++)
+            {
+                res += digits[digits.Length - i - 1] * (int)Math.Pow(10, i);
+            }
+
             return res;
         }
     }

@@ -98,15 +98,9 @@ namespace My_Training_Pad
             
             DateTime start = DateTime.Now;
             /////////////////////////Functions Below///////////////////////////////
-            List<Interval> res = new List<Interval>();
-            res.Add(new Interval(1,3));
-            res.Add(new Interval(2,6));
-            res.Add(new Interval(8,10));
-            res.Add(new Interval(15,18));
-
-            IList<Interval> s = lc.MergeII(res);
-            Console.WriteLine();
-
+            int[] test = { 2, 3, 4, 5, 6, 4, 3, 2, 5, 65, 67, 788, 5, 3, 2, 56, 2, 34, 34, 645, 7, 452, 3453, 564, 67, 425, 234, 5, 656, 86, 745, 63,34, 43, 65, 45, 6, 2342, 123, 245, 467, 57, 45, 213, 1, 3456, 467, 68  };
+            Sort<int>.MergeSort(test);
+            Print(test);
             /////////////////////////End Time Below////////////////////////////////
             Console.WriteLine("time: " + (DateTime.Now - start).TotalSeconds);
             Console.ReadKey();

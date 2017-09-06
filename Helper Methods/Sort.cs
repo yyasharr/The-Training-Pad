@@ -6,47 +6,49 @@ using System.Threading.Tasks;
 
 namespace My_Training_Pad
 {
-    static class Sort<T> where T:IComparable<T>
+    static class Sort<T> where T : IComparable<T>
     {
         /////////////////////Heap Sort////////////////////////////
-        public static void HeapSort(T[] array) 
+        public static void HeapSort(T[] array)
         {
             MinHeap<T> minheap = new MinHeap<T>();
-            for(int i=0; i<array.Length; i++)
+            for (int i = 0; i < array.Length; i++)
             {
                 minheap.Insert(array[i]);
             }
-            for(int i=0; i<array.Length; i++)
+            for (int i = 0; i < array.Length; i++)
             {
                 array[i] = minheap.ExtractMin();
             }
         }
-
-        /////////////////////Merge Sort////////////////////////////
+        /////////////////////Merge Sort - Fixing the issues////////////////////////////
         public static void MergeSort(int[] array)
         {
+            if (array == null || array.Length < 2) return;
+
             int n = array.Length;
-            if (n < 2) return;
+
             int mid = n / 2;
             int[] left = new int[mid];
             int[] right = new int[n - mid];
 
-            for (int i = 0; i < mid; i++)
-            {
-                left[i] = array[i];
-            }
-            for (int i = mid; i < n; i++)
-            {
-                right[i - mid] = array[i];
-            }
+            int i;
 
-            MergeSort(right);
+            for (i = 0; i < left.Length; i++)
+                left[i] = array[i];
+
+            for (i = mid; i < array.Length; i++)
+                right[i - mid] = array[i];
+
             MergeSort(left);
+            MergeSort(right);
+
             Merge(left, right, array);
+
         }
         private static void Merge(int[] left, int[] right, int[] array)
         {
-            int i = 0; int j = 0; int k = 0;
+            int i = 0, j = 0, k = 0;
 
             while (i < left.Length && j < right.Length)
             {
@@ -61,25 +63,18 @@ namespace My_Training_Pad
                     j++; k++;
                 }
             }
-            if (i >= left.Length)
-            {
-                while (j < right.Length)
-                {
-                    array[k] = right[j];
-                    j++; k++;
-                }
-            }
 
-            if (j >= right.Length)
+            while (i < left.Length)
             {
-                while (i < left.Length)
-                {
-                    array[k] = left[i];
-                    i++; k++;
-                }
+                array[k] = left[i];
+                i++; k++;
+            }
+            while (j < right.Length)
+            {
+                array[k] = right[j];
+                j++; k++;
             }
         }
-
         /////////////////////Quick Sort////////////////////////////
         public static void QuickSort(int[] array)
         {
@@ -88,25 +83,25 @@ namespace My_Training_Pad
         private static void QuickSort(int[] array, int min, int max)
         {
             int index = Partition(array, min, max);
-            if (min < index-1)
+            if (min < index - 1)
                 QuickSort(array, 0, index - 1);
             if (max > index)
                 QuickSort(array, index + 1, max);
         }
-        private static int Partition(int [] array, int min, int max)
+        private static int Partition(int[] array, int min, int max)
         {
             int pivot = array[(min + max) / 2];
-            while(min<=max)
+            while (min <= max)
             {
-                while(array[min]<pivot)
+                while (array[min] < pivot)
                 {
                     min++;
                 }
-                while(array[max]>pivot)
+                while (array[max] > pivot)
                 {
                     max--;
                 }
-                if(min<=max)
+                if (min <= max)
                 {
                     Swap(array, min, max);
                     min++;
@@ -115,12 +110,13 @@ namespace My_Training_Pad
             }
             return min;
         }
-        private static void Swap(int[]array, int n1, int n2)
+        private static void Swap(int[] array, int n1, int n2)
         {
             int temp = array[n1];
             array[n1] = array[n2];
             array[n2] = temp;
         }
+        
     }
 }
 

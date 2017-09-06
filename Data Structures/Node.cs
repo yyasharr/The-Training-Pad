@@ -10,7 +10,7 @@ namespace My_Training_Pad
     {
         public int data;
         public Node next = null;
-        
+
         /// <summary>
         /// Prints the LinkedList
         /// </summary>
@@ -38,7 +38,7 @@ namespace My_Training_Pad
 
             Node prev = null;
 
-            while(head!=null)
+            while (head != null)
             {
                 Node next = head.next;
                 head.next = prev;
@@ -49,7 +49,7 @@ namespace My_Training_Pad
         }
         public Node Reverse()
         {
-            if (this.next == null || this==null) return this;
+            if (this.next == null || this == null) return this;
             Node head = this;
             Node next = head.next;
             head.next = null;
@@ -82,6 +82,42 @@ namespace My_Training_Pad
                 temp = temp.next;
             }
             temp.next = new_node;
+        }
+        public Node Swap(int a, int b)
+        {
+            Node A = this;
+            Node B = this;
+
+            Node prevA = null;
+            while (A != null && A.data != a)
+            {
+                prevA = A;
+                A = A.next;
+            }
+
+            Node prevB = null;
+            while (B != null && B.data != b)
+            {
+                prevB = B;
+                B = B.next;
+            }
+
+            if (B == null || A == null) return this;
+            Node ret = this;
+
+            if (prevA != null)
+                prevA.next = B;
+            else ret = B;
+
+            if (prevB != null)
+                prevB.next = A;
+            else ret = A;
+
+            Node temp = A.next;
+            A.next = B.next;
+            B.next = temp;
+
+            return ret;
         }
 
     }
